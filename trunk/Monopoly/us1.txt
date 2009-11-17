@@ -1,0 +1,23 @@
+# USER STORY 1 - START A NEW GAME
+
+##########################
+# Setup error conditions #
+##########################
+
+####################################
+# Creating a game with two players #
+####################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+expect 2 getNumberOfPlayers
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+expect 40 getPlayerPosition playerName="player1"
+expect 40 getPlayerPosition playerName="player2"
+expect {} getPlayerDeeds playerName="player1"
+expect {} getPlayerDeeds playerName="player2"
+expect "player1" getCurrentPlayer
+expect {roll,status,quit} getCommands
