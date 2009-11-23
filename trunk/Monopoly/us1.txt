@@ -4,6 +4,19 @@
 # Setup error conditions #
 ##########################
 
+expecterror "Invalid number of players" createGame numPlayers=1 playerNames={player1} tokenColors={black}
+expecterror "Invalid number of players" createGame numPlayers=9 playerNames={player1,player2,player3,player4,player5,player6,player7,player8,player9} tokenColors={black,white,red,green,blue,orange,yellow,pink,brown}
+expecterror "Too many player names" createGame numPlayers=2 playerNames={player1,player2,player3} tokenColors={black,white}
+expecterror "Too few player names" createGame numPlayers=2 playerNames={player1} tokenColors={black,white}
+expecterror "Too many token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white,red}
+expecterror "Too few token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black}
+expecterror "There mustn't be repeated player names" createGame numPlayers=2 playerNames={player1,player1} tokenColors={black,white}
+expecterror "There mustn't be repeated token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,black}
+# player name can't be "bank" - bank may be returned as owner of a place
+expecterror "Invalid player name" createGame numPlayers=2 playerNames={bank,player1} tokenColors={black,white}
+expecterror "Invalid token color" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,abcde}
+expecterror "There's no game to quit" quitGame
+
 ####################################
 # Creating a game with two players #
 ####################################

@@ -1,6 +1,7 @@
 package Monopoly;
 
 
+import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class Jogo {
 
      static List<Jogador> listaJogador = new ArrayList();
+     static List<String> cores = new ArrayList();
+     static boolean status = false;
 
      static private int vez = 0;
 
@@ -25,31 +28,35 @@ public class Jogo {
 
 
 
-    public Jogo(List<Jogador> Jogadores) {
+    public Jogo(int quantidade, List<Jogador> Jogadores,List<String> cores) throws Exception {
+
+     
+        if((Jogadores.size()==1&&quantidade==1)||(Jogadores.size()>8&&quantidade>8))
+            throw new Exception("Invalid number of players");
+
+       
+
+        if(Jogadores.size()<quantidade){
+            throw new Exception("Too few player names");}
+
+         if(Jogadores.size()>quantidade)
+            throw new Exception("Too many player names");
+
+        
+
         this.Jogadores = (ArrayList<Jogador>) Jogadores;
 
     }
 
 
-    public static void main(String[] args) {
-        listaJogador.add(new Jogador("maria", "rosa"));
-        listaJogador.add(new Jogador("maria2", "preto"));
-
-        Jogo jogo = new Jogo(listaJogador);
-        System.out.println(jogo.getNumberOfPlayers());
-        System.out.println(jogo.jogadorAtual());
-    }
-
+   
     public void StartJogo() {
-        System.out.println("O jogo Monopoly foi iniciado.");
-        System.out.println("A jogada de " + Jogadores.get(0).getNome() + " começou:");
-  
-        System.out.print("Comandos disponíveis: ");
-        cmds.showComandos();
+       
     }
 
-    public void QuitJogo(){
-        System.exit(0);
+    public void QuitJogo() throws Exception{
+       if(status==false)
+            throw new Exception("There's no game to quit");
     }
 
     public int getNumberOfPlayers(){

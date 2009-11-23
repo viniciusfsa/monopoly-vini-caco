@@ -4,6 +4,7 @@
  */
 package easy;
 
+import Monopoly.Comandos;
 import Monopoly.Jogador;
 import Monopoly.Jogo;
 import java.util.ArrayList;
@@ -17,21 +18,36 @@ import java.util.List;
 public class facade {
 
     static List<Jogador> listaJogador = new ArrayList();
+    static List<String> listaCores = new ArrayList();
     static Jogo jogo = null;
+    int numPlayer =0;
 
-    public void createGame(int numPlayers, String playerNames, String tokenColors) {
+    
+
+    public void createGame(int num, String playerNames, String tokenColors) throws Exception {
+       
         playerNames = playerNames.substring(1, playerNames.length() - 1);
         tokenColors = tokenColors.substring(1, tokenColors.length() - 1);
         String nome[] = playerNames.split(",");
         String corPeao[] = tokenColors.split(",");
-
+        listaCores.clear();
+        listaJogador.clear();
+        numPlayer = num;
+        
        
 
-        for (int i = 0; i < numPlayers; i++) {
+        for (int i = 0; i < nome.length; i++) {
             listaJogador.add(new Jogador(nome[i], corPeao[i]));
         }
+        for (int i = 0; i < corPeao.length; i++) {
+            listaCores.add(corPeao[i]);
+        }
 
-        jogo = new Jogo(listaJogador);        
+       
+        
+
+        System.out.println("q "+numPlayer + "  nomes "+playerNames);
+        jogo = new Jogo(numPlayer,listaJogador,listaCores);
         jogo.StartJogo();
 
     }
@@ -95,5 +111,25 @@ public class facade {
         }
 
         return null;
+    }
+
+    public String getCommands(){
+        Comandos comandos = new Comandos();
+        List a = comandos.getCmds();
+        Iterator<String> it = a.iterator();        
+        String b = "{";
+        while(it.hasNext()){
+            b = b+it.next()+",";
+            if(!it.hasNext()){
+                b = b.substring(0, b.length()-1);
+                b=b+"}";}}
+        
+        return b;
+
+        
+    }
+
+    public void quitGame() throws Exception{
+        jogo.QuitJogo();
     }
 }
