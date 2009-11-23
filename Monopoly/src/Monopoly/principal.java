@@ -16,8 +16,9 @@ import java.util.Scanner;
 public class principal {
 
     static List<Jogador> listaJogador = new ArrayList();
+    static List<String> cores = new ArrayList();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Entre com o número de jogadores [2-8]:");
         int n = Integer.parseInt(scanner.nextLine());
@@ -41,7 +42,7 @@ public class principal {
 
         }
 
-        Jogo jogo = new Jogo(listaJogador);
+        Jogo jogo = new Jogo(listaJogador.size(),listaJogador,cores);
         jogo.StartJogo();
 
     }

@@ -16,18 +16,41 @@ import java.util.List;
  */
 public class Comandos {
 
+
+   
+
     static List<String> cmds = new ArrayList<String>();
 
-    public Comandos() {
-        cmds.add("Jogar");
-        cmds.add("Sair");
+    public static void main(String[] args) {
+        Comandos c = new Comandos();
+        System.out.println(c.getCmds());
+         Iterator<String> it = cmds.iterator();
+         while(it.hasNext())
+            System.out.println(it.next());
+    }
 
+    public Comandos() {
+        cmds.clear();
+        initComandos();
+    }
+
+
+
+    public static void initComandos(){
+        cmds.add("roll");
+        cmds.add("status");
+        cmds.add("quit");
     }
 
     
-    public List<String> getCmds() {
+  
+    public List getCmds() {
         return cmds;
+      
+
     }
+
+
 
     public void showComandos(){
         Iterator<String> a = cmds.iterator();
