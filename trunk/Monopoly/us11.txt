@@ -1,0 +1,263 @@
+# user story 11 - unmortgaging
+
+##########################################
+# unmortgage error conditions and values #
+##########################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+# command activateUnMortgage allows properties, railroads and utilities to be unmortgaged
+activateUnMortgage
+activateMortgage
+activateUtilityPlaces
+# if player has no deeds mortgaged, the command must be unavailable
+expecterror "Unavailable command" unmortgage placeID=1
+# buying all deeds
+giveCashToPlayer playerName="player1" cash=1500
+giveCashToPlayer playerName="player2" cash=1500
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=3 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+# what has been bought:
+# player1: 3,6,9,12,14,16,19,23,25,27,29,32,35,39 for a total of $2830
+# player2: 5,8,11,13,15,18,21,24,26,28,31,34,37,1 for a total of $2860
+expect 170 getPlayerMoney playerName="player1"
+expect 340 getPlayerMoney playerName="player2"
+# player1's turn
+expect "{roll,status,quit,mortgage}" getCommands
+mortgage placeID=3
+expect true isMortgaged placeID=3
+expect 200 getPlayerMoney playerName="player1"
+mortgage placeID=6
+expect true isMortgaged placeID=6
+expect 250 getPlayerMoney playerName="player1"
+mortgage placeID=9
+expect true isMortgaged placeID=9
+expect 310 getPlayerMoney playerName="player1"
+mortgage placeID=12
+expect true isMortgaged placeID=12
+expect 385 getPlayerMoney playerName="player1"
+mortgage placeID=14
+expect true isMortgaged placeID=14
+expect 465 getPlayerMoney playerName="player1"
+mortgage placeID=16
+expect true isMortgaged placeID=16
+expect 555 getPlayerMoney playerName="player1"
+mortgage placeID=19
+expect true isMortgaged placeID=19
+expect 655 getPlayerMoney playerName="player1"
+mortgage placeID=23
+expect true isMortgaged placeID=23
+expect 765 getPlayerMoney playerName="player1"
+mortgage placeID=25
+expect true isMortgaged placeID=25
+expect 865 getPlayerMoney playerName="player1"
+mortgage placeID=27
+expect true isMortgaged placeID=27
+expect 995 getPlayerMoney playerName="player1"
+mortgage placeID=29
+expect true isMortgaged placeID=29
+expect 1135 getPlayerMoney playerName="player1"
+mortgage placeID=32
+expect true isMortgaged placeID=32
+expect 1285 getPlayerMoney playerName="player1"
+mortgage placeID=35
+expect true isMortgaged placeID=35
+expect 1385 getPlayerMoney playerName="player1"
+mortgage placeID=39
+expect true isMortgaged placeID=39
+expect 1585 getPlayerMoney playerName="player1"
+rollDice firstDieResult=6 secondDieResult=5
+# player2's turn
+mortgage placeID=1
+expect true isMortgaged placeID=1
+expect 370 getPlayerMoney playerName="player2"
+mortgage placeID=5
+expect true isMortgaged placeID=5
+expect 470 getPlayerMoney playerName="player2"
+mortgage placeID=8
+expect true isMortgaged placeID=8
+expect 520 getPlayerMoney playerName="player2"
+mortgage placeID=11
+expect true isMortgaged placeID=11
+expect 590 getPlayerMoney playerName="player2"
+mortgage placeID=13
+expect true isMortgaged placeID=13
+expect 660 getPlayerMoney playerName="player2"
+mortgage placeID=15
+expect true isMortgaged placeID=15
+expect 760 getPlayerMoney playerName="player2"
+mortgage placeID=18
+expect true isMortgaged placeID=18
+expect 850  getPlayerMoney playerName="player2"
+mortgage placeID=21
+expect true isMortgaged placeID=21
+expect 960 getPlayerMoney playerName="player2"
+mortgage placeID=24
+expect true isMortgaged placeID=24
+expect 1080 getPlayerMoney playerName="player2"
+mortgage placeID=26
+expect true isMortgaged placeID=26
+expect 1210 getPlayerMoney playerName="player2"
+mortgage placeID=28
+expect true isMortgaged placeID=28
+expect 1285 getPlayerMoney playerName="player2"
+mortgage placeID=31
+expect true isMortgaged placeID=31
+expect 1435 getPlayerMoney playerName="player2"
+mortgage placeID=34
+expect true isMortgaged placeID=34
+expect 1595 getPlayerMoney playerName="player2"
+mortgage placeID=37
+expect true isMortgaged placeID=37
+expect 1770 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=4
+# now let's try to unmortgage places; players must pay mortgage value + 10%
+# Caution!!! Round up to the next greater integer value (e.g. 10% of 75 = 8)
+# player1's turn
+expecterror "Unavailable command" mortgage placeID=1
+expect "{roll,status,quit,unmortgage}" getCommands
+expect 1785 getPlayerMoney playerName="player1"
+unmortgage placeID=3
+expecterror "Deed is not mortgaged" unmortgage placeID=3
+expect false isMortgaged placeID=3
+expect 1752 getPlayerMoney playerName="player1"
+unmortgage placeID=6
+expect false isMortgaged placeID=6
+expect 1697 getPlayerMoney playerName="player1"
+unmortgage placeID=9
+expect false isMortgaged placeID=9
+expect 1631 getPlayerMoney playerName="player1"
+unmortgage placeID=12
+expect false isMortgaged placeID=12
+expect 1548 getPlayerMoney playerName="player1"
+unmortgage placeID=14
+expect false isMortgaged placeID=14
+expect 1460 getPlayerMoney playerName="player1"
+unmortgage placeID=16
+expect false isMortgaged placeID=16
+expect 1361 getPlayerMoney playerName="player1"
+unmortgage placeID=19
+expect false isMortgaged placeID=19
+expect 1251 getPlayerMoney playerName="player1"
+unmortgage placeID=23
+expect false isMortgaged placeID=23
+expect 1130 getPlayerMoney playerName="player1"
+unmortgage placeID=25
+expect false isMortgaged placeID=25
+expect 1020 getPlayerMoney playerName="player1"
+unmortgage placeID=27
+expect false isMortgaged placeID=27
+expect 877 getPlayerMoney playerName="player1"
+unmortgage placeID=29
+expect false isMortgaged placeID=29
+expect 723 getPlayerMoney playerName="player1"
+unmortgage placeID=32
+expect false isMortgaged placeID=32
+expect 558 getPlayerMoney playerName="player1"
+unmortgage placeID=35
+expect false isMortgaged placeID=35
+expect 448 getPlayerMoney playerName="player1"
+unmortgage placeID=39
+expect false isMortgaged placeID=39
+expect 228 getPlayerMoney playerName="player1"
+expecterror "Unavailable command" unmortgage placeID=1
+expect "{roll,status,quit,mortgage}" getCommands
+rollDice firstDieResult=5 secondDieResult=5
+# player2's turn
+expect 1770 getPlayerMoney playerName="player2"
+unmortgage placeID=1
+expect false isMortgaged placeID=1
+expect 1737 getPlayerMoney playerName="player2"
+unmortgage placeID=5
+expect false isMortgaged placeID=5
+expect 1627 getPlayerMoney playerName="player2"
+unmortgage placeID=8
+expect false isMortgaged placeID=8
+expect 1572 getPlayerMoney playerName="player2"
+unmortgage placeID=11
+expect false isMortgaged placeID=11
+expect 1495 getPlayerMoney playerName="player2"
+unmortgage placeID=13
+expect false isMortgaged placeID=13
+expect 1418 getPlayerMoney playerName="player2"
+unmortgage placeID=15
+expect false isMortgaged placeID=15
+expect 1308 getPlayerMoney playerName="player2"
+unmortgage placeID=18
+expect false isMortgaged placeID=18
+expect 1209 getPlayerMoney playerName="player2"
+unmortgage placeID=21
+expect false isMortgaged placeID=21
+expect 1088 getPlayerMoney playerName="player2"
+unmortgage placeID=24
+expect false isMortgaged placeID=24
+expect 956 getPlayerMoney playerName="player2"
+unmortgage placeID=26
+expect false isMortgaged placeID=26
+expect 813 getPlayerMoney playerName="player2"
+unmortgage placeID=28
+expect false isMortgaged placeID=28
+expect 730 getPlayerMoney playerName="player2"
+unmortgage placeID=31
+expect false isMortgaged placeID=31
+expect 565 getPlayerMoney playerName="player2"
+unmortgage placeID=34
+expect false isMortgaged placeID=34
+expect 389 getPlayerMoney playerName="player2"
+unmortgage placeID=37
+expect false isMortgaged placeID=37
+expect 196 getPlayerMoney playerName="player2"
+quitGame

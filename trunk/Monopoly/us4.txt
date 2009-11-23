@@ -1,0 +1,384 @@
+# User story 4 - Buying
+
+###########################################
+# Buying all places up to Illinois Avenue #
+###########################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+expect 2 getNumberOfPlayers
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+expect 40 getPlayerPosition playerName="player1"
+expect 40 getPlayerPosition playerName="player2"
+expect {} getPlayerDeeds playerName="player1"
+expect {} getPlayerDeeds playerName="player2"
+expect "player1" getCurrentPlayer
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 2 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=2
+expect 3 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 4 getPlayerPosition playerName="player1"
+expect 1300 getPlayerMoney playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 5 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 6 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 7 getPlayerPosition playerName="player2"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 8 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 9 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 10 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 11 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 12 getPlayerPosition playerName="player1"
+expecterror "Deed for this place is not for sale" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 13 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 14 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 15 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 16 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 17 getPlayerPosition playerName="player2"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 18 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 19 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 20 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 21 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 22 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 23 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 24 getPlayerPosition playerName="player1"
+buy
+
+# Player 2 must not be able to buy B & O Railroad, since he doesn't have enough money (has 0)
+rollDice firstDieResult=1 secondDieResult=1
+expect 25 getPlayerPosition playerName="player2"
+expecterror "Not enough money" buy
+# Player 2 has 0 money - he must not have been excluded from the game
+expect false gameIsOver
+expect "bank" getPlaceOwner placeID=25
+
+expect "{Oriental Avenue,Vermont Avenue,Virginia Avenue,St. James Place,Tennessee Avenue,Illinois Avenue}" getPlayerDeeds playerName="player1"
+expect 340 getPlayerMoney playerName="player1"
+
+expect "{Baltic Avenue,Reading Railroad,Connecticut Avenue,St. Charles Place,States Avenue,Pennsylvania Railroad,New York Avenue,Kentucky Avenue,Indiana Avenue}" getPlayerDeeds playerName="player2"
+expect 0 getPlayerMoney playerName="player2"
+
+expect "bank" getPlaceOwner placeID=1
+expect "player1" getPlaceOwner placeID=6
+expect "player1" getPlaceOwner placeID=8
+expect "bank" getPlaceOwner placeID=12
+expect "player1" getPlaceOwner placeID=14
+expect "player1" getPlaceOwner placeID=16
+expect "player1" getPlaceOwner placeID=18
+expect "player1" getPlaceOwner placeID=24
+expect "player2" getPlaceOwner placeID=3
+expect "player2" getPlaceOwner placeID=5
+expect "player2" getPlaceOwner placeID=9
+expect "player2" getPlaceOwner placeID=11
+expect "player2" getPlaceOwner placeID=13
+expect "player2" getPlaceOwner placeID=15
+expect "player2" getPlaceOwner placeID=19
+expect "player2" getPlaceOwner placeID=21
+expect "player2" getPlaceOwner placeID=23
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 26 getPlayerPosition playerName="player1"
+
+# Let's make player2, who has money 0, fall on Luxury Tax
+rollDice firstDieResult=6 secondDieResult=5
+expect 36 getPlayerPosition playerName="player2"
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 28 getPlayerPosition playerName="player1"
+
+rollDice firstDieResult=1 secondDieResult=1
+
+# having fallen on Luxury Tax, player2 must have been excluded from the game
+expecterror "Player no longer in the game" getPlayerPosition playerName="player2"
+
+expect true gameIsOver
+
+quitGame
+
+#################################################
+# Buying all places from B & O Railroad onwards #
+#################################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+expect 2 getNumberOfPlayers
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+expect 40 getPlayerPosition playerName="player1"
+expect 40 getPlayerPosition playerName="player2"
+expect {} getPlayerDeeds playerName="player1"
+expect {} getPlayerDeeds playerName="player2"
+expect "player1" getCurrentPlayer
+
+rollDice firstDieResult=6 secondDieResult=6
+expect 12 getPlayerPosition playerName="player1"
+
+rollDice firstDieResult=6 secondDieResult=6
+expect 12 getPlayerPosition playerName="player2"
+
+rollDice firstDieResult=6 secondDieResult=6
+expect 24 getPlayerPosition playerName="player1"
+
+rollDice firstDieResult=6 secondDieResult=5
+expect 23 getPlayerPosition playerName="player2"
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 26 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 25 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 28 getPlayerPosition playerName="player1"
+expecterror "Deed for this place is not for sale" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 27 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 30 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 29 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 32 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 31 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 34 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 33 getPlayerPosition playerName="player2"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 36 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 35 getPlayerPosition playerName="player2"
+buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 38 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 37 getPlayerPosition playerName="player2"
+expecterror "Not enough money" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 40 getPlayerPosition playerName="player1"
+expecterror "Place doesn't have a deed to be bought" buy
+
+rollDice firstDieResult=1 secondDieResult=1
+expect 39 getPlayerPosition playerName="player2"
+expecterror "Not enough money" buy
+
+expect "{Atlantic Avenue,North Carolina Avenue,Pennsylvania Avenue}" getPlayerDeeds playerName="player1"
+expect 745 getPlayerMoney playerName="player1"
+
+expect "{B & O Railroad,Ventnor Avenue,Marvin Gardens,Pacific Avenue,Short Line Railroad}" getPlayerDeeds playerName="player2"
+expect 260 getPlayerMoney playerName="player2"
+
+expect "player1" getPlaceOwner placeID=26
+expect "player1" getPlaceOwner placeID=32
+expect "player1" getPlaceOwner placeID=34
+expect "player2" getPlaceOwner placeID=25
+expect "player2" getPlaceOwner placeID=27
+expect "player2" getPlaceOwner placeID=29
+expect "player2" getPlaceOwner placeID=31
+expect "player2" getPlaceOwner placeID=35
+expect "bank" getPlaceOwner placeID=23
+expect "bank" getPlaceOwner placeID=24
+expect "bank" getPlaceOwner placeID=37
+expect "bank" getPlaceOwner placeID=39
+
+# Not enough money to buy Boardwalk and Park Place; let's make the tokens cycle around the board once more
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+rollDice firstDieResult=5 secondDieResult=2
+expect 37 getPlayerPosition playerName="player1"
+buy
+
+rollDice firstDieResult=5 secondDieResult=4
+expect 39 getPlayerPosition playerName="player2"
+buy
+
+expect "player1" getPlaceOwner placeID=37
+expect "player2" getPlaceOwner placeID=39
+
+expect "{Atlantic Avenue,North Carolina Avenue,Pennsylvania Avenue,Park Place}" getPlayerDeeds playerName="player1"
+expect 395 getPlayerMoney playerName="player1"
+expect "{B & O Railroad,Ventnor Avenue,Marvin Gardens,Pacific Avenue,Short Line Railroad,Boardwalk}" getPlayerDeeds playerName="player2"
+expect 60 getPlayerMoney playerName="player2"
+
+quitGame
+
+###########################################
+# Checking if a place can be bought twice #
+###########################################
+
+createGame numPlayers=3 playerNames={player1,player2,player3} tokenColors={red,green,blue}
+
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=1
+# property
+expecterror "Deed for this place is not for sale" buy
+rollDice firstDieResult=3 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=1
+# railroad
+expecterror "Deed for this place is not for sale" buy
+
+quitGame
+
+#################################################################
+# Checking if a place can be rebought when a player leaves game #
+#################################################################
+
+createGame numPlayers=3 playerNames={player1,player2,player3} tokenColors={red,green,blue}
+
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+rollDice firstDieResult=6 secondDieResult=6
+buy
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+
+expect "{Oriental Avenue,Vermont Avenue,St. Charles Place,States Avenue,Pennsylvania Railroad,New York Avenue,Indiana Avenue,Short Line Railroad}" getPlayerDeeds playerName="player1"
+# player1 will fall on luxury tax and be taken out of the game
+rollDice firstDieResult=2 secondDieResult=1
+expect 2 getNumberOfPlayers
+expecterror "Player no longer in the game" getPlayerPosition playerName="player1"
+
+# now let's see if a property and a railroad can be bought by other players
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=2 seconDieResult=3
+buy
+expect "{States Avenue}" getPlayerDeeds playerName="player2"
+expect "{Pennsylvania Railroad}" getPlayerDeeds playerName="player3"
+quitGame

@@ -1,0 +1,66 @@
+# User story 7 - Utility Places
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+
+# observem que eu nao ativei a regra de turnos extra com dados repetidos
+
+activateUtilityPlaces
+
+# player1 buys electric company (12)
+rollDice firstDieResult=6 secondDieResult=6
+buy
+expect 12 getPlayerPosition playerName="player1"
+expect 1350 getPlayerMoney playerName="player1"
+expect "{Electric Company}" getPlayerDeeds playerName="player1"
+expect "player2" getCurrentPlayer
+
+# now let's make player2 fall on Electric Company; must pay 4x dice result
+rollDice firstDieResult=6 secondDieResult=6
+expecterror "Deed for this place is not for sale" buy
+expect 1452 getPlayerMoney playerName="player2"
+expect 1398 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+
+# player1 buys water works (28)
+rollDice firstDieResult=4 secondDieResult=4
+buy
+expect 28 getPlayerPosition playerName="player1"
+expect 1248 getPlayerMoney playerName="player1"
+expect "{Electric Company,Water Works}" getPlayerDeeds playerName="player1"
+expect "player2" getCurrentPlayer
+
+# player2 falls on water works; must pay 10x dice results, as player1 owns both utilities
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Deed for this place is not for sale" buy
+expect 1372 getPlayerMoney playerName="player2"
+expect 1328 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+expect 1528 getPlayerMoney playerName="player1"
+expect 1572 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+# player2 now must pay 10x dice results by falling on electric company
+rollDice firstDieResult=1 secondDieResult=1
+expect 1552 getPlayerMoney playerName="player2"
+expect 1548 getPlayerMoney playerName="player1"
+
+# player1 goes to jail
+activateJail
+rollDice firstDieResult=5 secondDieResult=5
+expect 10 getPlayerPosition playerName="player1"
+expect true playerIsOnJail playerName="player1"
+rollDice firstDieResult=4 secondDieResult=4
+
+# player1 remains in jail
+rollDice firstDieResult=1 secondDieResult=2
+# now player2 falls on water works; let's check if player1 still receives from it
+rollDice firstDieResult=4 secondDieResult=4
+expect 1472 getPlayerMoney playerName="player2"
+expect 1628 getPlayerMoney playerName="player1"
+quitGame
