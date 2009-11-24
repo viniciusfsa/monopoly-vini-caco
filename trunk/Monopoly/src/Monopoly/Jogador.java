@@ -34,10 +34,12 @@ public class Jogador {
     }
 
     public Jogador(String Nome, String CorPeao) {
+        this(Nome);
+        this.setCorPeao(CorPeao);
+    }
+
+    public Jogador (String Nome){
         this.Nome = Nome;
-        this.CorPeao = CorPeao;
-
-
     }
 
     public int getPosicao() {
