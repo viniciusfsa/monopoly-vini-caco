@@ -20,34 +20,15 @@ public class facade {
     static List<Jogador> listaJogador = new ArrayList();
     static List<String> listaCores = new ArrayList();
     static Jogo jogo = null;
-    int numPlayer =0;
 
     
 
     public void createGame(int num, String playerNames, String tokenColors) throws Exception {
        
-        playerNames = playerNames.substring(1, playerNames.length() - 1);
-        tokenColors = tokenColors.substring(1, tokenColors.length() - 1);
-        String nome[] = playerNames.split(",");
-        String corPeao[] = tokenColors.split(",");
-        listaCores.clear();
-        listaJogador.clear();
-        numPlayer = num;
+        String nomes_jogadores[] = playerNames.substring(1, playerNames.length() - 1).split(",");
+        String cores_jogadores[] = tokenColors.substring(1, tokenColors.length() - 1).split(",");
         
-       
-
-        for (int i = 0; i < nome.length; i++) {
-            listaJogador.add(new Jogador(nome[i], corPeao[i]));
-        }
-        for (int i = 0; i < corPeao.length; i++) {
-            listaCores.add(corPeao[i]);
-        }
-
-       
-        
-
-        System.out.println("q "+numPlayer + "  nomes "+playerNames);
-        jogo = new Jogo(numPlayer,listaJogador,listaCores);
+        jogo = new Jogo(num ,nomes_jogadores,cores_jogadores);
         jogo.StartJogo();
 
     }
