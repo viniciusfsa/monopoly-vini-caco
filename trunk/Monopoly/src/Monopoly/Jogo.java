@@ -1,7 +1,6 @@
 package Monopoly;
 
 
-import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,9 @@ public class Jogo {
 
      static List<Jogador> listaJogador = new ArrayList();
      static List<String> cores = new ArrayList();
+
+     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
+
      static boolean status = false;
 
      static private int vez = 0;
@@ -28,32 +30,11 @@ public class Jogo {
 
 
 
-//    public Jogo(int quantidade, List<Jogador> Jogadores,List<String> cores) throws Exception {
-//
-//
-//        if((Jogadores.size()==1&&quantidade==1)||(Jogadores.size()>8&&quantidade>8))
-//            throw new Exception("Invalid number of players");
-//
-//
-//
-//        if(Jogadores.size()<quantidade){
-//            throw new Exception("Too few player names");}
-//
-//         if(Jogadores.size()>quantidade)
-//            throw new Exception("Too many player names");
-//
-//
-//
-//        this.Jogadores = (ArrayList<Jogador>) Jogadores;
-//
-//    }
-
-
+    //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
 
-//        if ((nomes_jogadores.length == 1 && quantidade == 1) || (nomes_jogadores.length > 8 && quantidade > 8)) {
-        //só isso é suficiente?
+        //só isso é suficiente
         if ((quantidade == 1) || (quantidade > 8)) {
             throw new Exception("Invalid number of players");
         }
@@ -68,15 +49,45 @@ public class Jogo {
             throw new Exception("Too many player names");
         }
 
+        if (cores_jogadores.length<nomes_jogadores.length){
+            throw new Exception("Too few token colors");
+        }
 
-        for (int i=0 ; i<nomes_jogadores.length; i++){
-            this.Jogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i]));
+        if (cores_jogadores.length>nomes_jogadores.length){
+            throw new Exception("Too many token colors");
+        }
+
+
+
+        if (this.hasRepeatedName(nomes_jogadores)){
+           throw new Exception("There mustn't be repeated player names");
+        }
+
+        if (this.hasRepeatedName(cores_jogadores)){
+           throw new Exception("There mustn't be repeated token colors");
         }
 
 
 
 
 
+
+
+    }
+
+
+    private boolean hasRepeatedName (String[] v){
+
+
+        for (int i=0; i<v.length;i++){
+            for (int j = 0; j<v.length; j++){
+                if ((i!=j) && (v[i].equals(v[j]))){
+                    return true;
+                }
+            }
+        }
+        
+        return false;        
     }
 
 

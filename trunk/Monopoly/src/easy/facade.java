@@ -22,7 +22,7 @@ public class facade {
     static Jogo jogo = null;
 
     
-
+    //aqui agora eu passo as strings em vez da listas.
     public void createGame(int num, String playerNames, String tokenColors) throws Exception {
        
         String nomes_jogadores[] = playerNames.substring(1, playerNames.length() - 1).split(",");
