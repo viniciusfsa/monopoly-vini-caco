@@ -15,22 +15,20 @@ import java.util.List;
 public class Jogo {
 
     //pq static?
-//     static List<Jogador> listaJogadores = new ArrayList();
     List<Jogador> listaJogadores = new ArrayList();
-//     static List<String> listaCoresJogadores = new ArrayList();
     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
     static boolean status = false;
-    static private int vez = 0;
-    static int posicoes[] = {40, 40, 40, 40, 40, 40, 40, 40};
-    static Hashtable Donos = new Hashtable();
-//    private ArrayList<Jogador> Jogadores = null;
+    private int vez = 0;
+    private int posicoes[] = {40, 40, 40, 40, 40, 40, 40, 40};
+    private Hashtable Donos = new Hashtable();
+    private Tabuleiro tabuleiro = new Tabuleiro();
     Comandos cmds = new Comandos();
-    private boolean compra_automatica;
+    private boolean compra_automatica = false;
 
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
-        
+
         //só separei o tratamento de erros
         this.tratarErrosIniciais(quantidade, nomes_jogadores, cores_jogadores);
         resetInitDonos();
@@ -46,24 +44,33 @@ public class Jogo {
         return this.listaJogadores;
     }
 
-    static public void resetInitDonos() {
+    public void resetInitDonos() {
         Donos.clear();
-        for(int i = 0; i<40;i++){
+        for (int i = 1; i <= 40; i++) {
             Donos.put(i, "bank");
         }
-        Donos.put(2,"noOwner");     
-        Donos.put(4,"noOwner");
-        Donos.put(7,"noOwner");
-        Donos.put(10,"noOwner");
-        Donos.put(17,"noOwner");
-        Donos.put(20,"noOwner");
-        Donos.put(22,"noOwner");
-        Donos.put(30,"noOwner");
-        Donos.put(33,"noOwner");
-        Donos.put(36,"noOwner");
-        Donos.put(38,"noOwner");
-        Donos.put(40,"noOwner");
+        Donos.put(2, "noOwner");
+        Donos.put(4, "noOwner");
+        Donos.put(7, "noOwner");
+        Donos.put(10, "noOwner");
+        Donos.put(17, "noOwner");
+        Donos.put(20, "noOwner");
+        Donos.put(22, "noOwner");
+        Donos.put(30, "noOwner");
+        Donos.put(33, "noOwner");
+        Donos.put(36, "noOwner");
+        Donos.put(38, "noOwner");
+        Donos.put(40, "noOwner");
 
+    }
+
+    public boolean posicaoCompravel(int posicao) {
+
+        String dono = (String) this.Donos.get(posicao);
+        if (dono.equals("bank")) {
+            return true;
+        }
+        return false;
     }
 
     public String getPlayerToken(String playerName) throws Exception {
@@ -194,15 +201,16 @@ public class Jogo {
         return listaJogadores.size();
     }
 
-    public String getOwnerPlace(int idPlace) throws Exception{
-        if(idPlace>40||idPlace<1)
+    public String getOwnerPlace(int idPlace) throws Exception {
+        if (idPlace > 40 || idPlace < 1) {
             throw new Exception("Place doesn't exist");
-        else{
+        } else {
             String dono = (String) Donos.get(idPlace);
-            if(dono.equals("noOwner"))
+            if (dono.equals("noOwner")) {
                 throw new Exception("This place can't be owned");
-            else
+            } else {
                 return (String) Donos.get(idPlace);
+            }
         }
     }
 
@@ -212,7 +220,6 @@ public class Jogo {
         } else {
             vez++;
         }
-
 
     }
 
@@ -225,20 +232,66 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
-    public boolean rolarDados(int resultadoDado1, int resultadoDado2) throws Exception {
-        if ((isResultadoDadoValido(resultadoDado1))&&(isResultadoDadoValido(resultadoDado2))){
-            return true;
+    public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
+
+        //
+        if ((isResultadoDadoValido(resultadoDado1)) && (isResultadoDadoValido(resultadoDado2))) {
+            this.moverJogadorDaVez(resultadoDado1 + resultadoDado2);
         }
-        else{
-            return false;
-        }
+
+
+
     }
 
-
-    private boolean isResultadoDadoValido(int resultadoDado) throws Exception{
-        if ((resultadoDado>6)||(resultadoDado<1)){
+    private boolean isResultadoDadoValido(int resultadoDado) throws Exception {
+        if ((resultadoDado > 6) || (resultadoDado < 1)) {
             throw new Exception("Invalid die result");
         }
         return true;
+    }
+
+    public void definirCompraAutomatica() {
+        this.compra_automatica = true;
+    }
+
+    private void moverJogadorDaVez(int valorDados) throws Exception {
+
+        //preciso saber se o jogador vai passar pela posição 40, o que significa
+        //ganhar dinheiro
+        int jogador = this.jogadorAtual();
+        if ((this.posicoes[jogador] + valorDados) >= 40) {
+            this.listaJogadores.get(jogador).addDinheiro(200);
+        }
+//
+        //movendo à posição
+        this.posicoes[jogador] = (this.posicoes[jogador] + valorDados) % 40;
+
+        //realizando a compra
+        if (this.isCompraAutomatica()) {
+//            this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador));
+        } else {
+        }
+
+        this.nextJogada();
+
+
+
+    }
+
+    public boolean isCompraAutomatica() {
+        return this.compra_automatica;
+    }
+
+    public void efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
+        if (this.posicaoCompravel(posicaoTabuleiro)) {
+//            
+//            int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
+//            if (preco <= j.getDinheiro()) {
+//                j.retirarDinheiro(preco);
+//                this.Donos.put(posicaoTabuleiro, j.getNome());
+//            }
+
+        }
+
     }
 }

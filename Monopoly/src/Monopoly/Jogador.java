@@ -21,6 +21,15 @@ public class Jogador {
         return id;
     }
 
+
+    public void addDinheiro(int dinheiro){
+        this.dinheiro+=dinheiro;
+    }
+
+    public void retirarDinheiro(int dinheiro){
+        this.addDinheiro(-dinheiro);
+    }
+
     public void setId(int id) {
         this.id = id;
     }
