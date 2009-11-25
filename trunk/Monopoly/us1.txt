@@ -81,211 +81,211 @@ expect "Reading Railroad" getPlaceName placeID=5
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=5
 #expect 200 getPlacePrice placeID=5
 #
-#expect "Oriental Avenue" getPlaceName placeID=6
+expect "Oriental Avenue" getPlaceName placeID=6
 #expect "light blue" getPlaceGroup placeID=6
 #expect "bank" getPlaceOwner placeID=6
 #expect 6 getPropertyRent placeID=6
 #expect 100 getPlacePrice placeID=6
 #
-#expect "Chance 1" getPlaceName placeID=7
+expect "Chance 1" getPlaceName placeID=7
 #expect "chance" getPlaceGroup placeID=7
 #expecterror "This place can't be owned" getPlaceOwner placeID=7
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=7
 #expecterror "This place can't be sold" getPlacePrice placeID=7
 #
-#expect "Vermont Avenue" getPlaceName placeID=8
+expect "Vermont Avenue" getPlaceName placeID=8
 #expect "light blue" getPlaceGroup placeID=8
 #expect "bank" getPlaceOwner placeID=8
 #expect 6 getPropertyRent placeID=8
 #expect 100 getPlacePrice placeID=8
 #
-#expect "Connecticut Avenue" getPlaceName placeID=9
+expect "Connecticut Avenue" getPlaceName placeID=9
 #expect "light blue" getPlaceGroup placeID=9
 #expect "bank" getPlaceOwner placeID=9
 #expect 8 getPropertyRent placeID=9
 #expect 120 getPlacePrice placeID=9
 #
-#expect "Jail - Just Visiting" getPlaceName placeID=10
+expect "Jail - Just Visiting" getPlaceName placeID=10
 #expect "corner" getPlaceGroup placeID=10
 #expecterror "This place can't be owned" getPlaceOwner placeID=10
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=10
 #expecterror "This place can't be sold" getPlacePrice placeID=10
 #
-#expect "St. Charles Place" getPlaceName placeID=11
+expect "St. Charles Place" getPlaceName placeID=11
 #expect "pink" getPlaceGroup placeID=11
 #expect "bank" getPlaceOwner placeID=11
 #expect 10 getPropertyRent placeID=11
 #expect 140 getPlacePrice placeID=11
 #
-#expect "Electric Company" getPlaceName placeID=12
+expect "Electric Company" getPlaceName placeID=12
 #expect "utility" getPlaceGroup placeID=12
 #expect "bank" getPlaceOwner placeID=12
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=12
 #expect 150 getPlacePrice placeID=12
 #
-#expect "States Avenue" getPlaceName placeID=13
+expect "States Avenue" getPlaceName placeID=13
 #expect "pink" getPlaceGroup placeID=13
 #expect "bank" getPlaceOwner placeID=13
 #expect 10 getPropertyRent placeID=13
 #expect 140 getPlacePrice placeID=13
 #
-#expect "Virginia Avenue" getPlaceName placeID=14
+expect "Virginia Avenue" getPlaceName placeID=14
 #expect "pink" getPlaceGroup placeID=14
 #expect "bank" getPlaceOwner placeID=14
 #expect 12 getPropertyRent placeID=14
 #expect 160 getPlacePrice placeID=14
 #
-#expect "Pennsylvania Railroad" getPlaceName placeID=15
+expect "Pennsylvania Railroad" getPlaceName placeID=15
 #expect "railroad" getPlaceGroup placeID=15
 #expect "bank" getPlaceOwner placeID=15
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=15
 #expect 200 getPlacePrice placeID=15
 #
-#expect "St. James Place" getPlaceName placeID=16
+expect "St. James Place" getPlaceName placeID=16
 #expect "orange" getPlaceGroup placeID=16
 #expect "bank" getPlaceOwner placeID=16
 #expect 14 getPropertyRent placeID=16
 #expect 180 getPlacePrice placeID=16
 #
-#expect "Community Chest 2" getPlaceName placeID=17
+expect "Community Chest 2" getPlaceName placeID=17
 #expect "chest" getPlaceGroup placeID=17
 #expecterror "This place can't be owned" getPlaceOwner placeID=17
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=17
 #expecterror "This place can't be sold" getPlacePrice placeID=17
 #
-#expect "Tennessee Avenue" getPlaceName placeID=18
+expect "Tennessee Avenue" getPlaceName placeID=18
 #expect "orange" getPlaceGroup placeID=18
 #expect "bank" getPlaceOwner placeID=18
 #expect 14 getPropertyRent placeID=18
 #expect 180 getPlacePrice placeID=18
 #
-#expect "New York Avenue" getPlaceName placeID=19
+expect "New York Avenue" getPlaceName placeID=19
 #expect "orange" getPlaceGroup placeID=19
 #expect "bank" getPlaceOwner placeID=19
 #expect 16 getPropertyRent placeID=19
 #expect 200 getPlacePrice placeID=19
 #
-#expect "Free Parking" getPlaceName placeID=20
+expect "Free Parking" getPlaceName placeID=20
 #expect "corner" getPlaceGroup placeID=20
 #expecterror "This place can't be owned" getPlaceOwner placeID=20
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=20
 #expecterror "This place can't be sold" getPlacePrice placeID=20
 #
-#expect "Kentucky Avenue" getPlaceName placeID=21
+expect "Kentucky Avenue" getPlaceName placeID=21
 #expect "red" getPlaceGroup placeID=21
 #expect "bank" getPlaceOwner placeID=21
 #expect 18 getPropertyRent placeID=21
 #expect 220 getPlacePrice placeID=21
 #
-#expect "Chance 2" getPlaceName placeID=22
+expect "Chance 2" getPlaceName placeID=22
 #expect "chance" getPlaceGroup placeID=22
 #expecterror "This place can't be owned" getPlaceOwner placeID=22
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=22
 #expecterror "This place can't be sold" getPlacePrice placeID=22
 #
-#expect "Indiana Avenue" getPlaceName placeID=23
+expect "Indiana Avenue" getPlaceName placeID=23
 #expect "red" getPlaceGroup placeID=23
 #expect "bank" getPlaceOwner placeID=23
 #expect 18 getPropertyRent placeID=23
 #expect 220 getPlacePrice placeID=23
 #
-#expect "Illinois Avenue" getPlaceName placeID=24
+expect "Illinois Avenue" getPlaceName placeID=24
 #expect "red" getPlaceGroup placeID=24
 #expect "bank" getPlaceOwner placeID=24
 #expect 20 getPropertyRent placeID=24
 #expect 240 getPlacePrice placeID=24
 #
-#expect "B & O Railroad" getPlaceName placeID=25
+expect "B & O Railroad" getPlaceName placeID=25
 #expect "railroad" getPlaceGroup placeID=25
 #expect "bank" getPlaceOwner placeID=25
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=25
 #expect 200 getPlacePrice placeID=25
 #
-#expect "Atlantic Avenue" getPlaceName placeID=26
+expect "Atlantic Avenue" getPlaceName placeID=26
 #expect "yellow" getPlaceGroup placeID=26
 #expect "bank" getPlaceOwner placeID=26
 #expect 22 getPropertyRent placeID=26
 #expect 260 getPlacePrice placeID=26
 #
-#expect "Ventnor Avenue" getPlaceName placeID=27
+expect "Ventnor Avenue" getPlaceName placeID=27
 #expect "yellow" getPlaceGroup placeID=27
 #expect "bank" getPlaceOwner placeID=27
 #expect 22 getPropertyRent placeID=27
 #expect 260 getPlacePrice placeID=27
 #
-#expect "Water Works" getPlaceName placeID=28
+expect "Water Works" getPlaceName placeID=28
 #expect "utility" getPlaceGroup placeID=28
 #expect "bank" getPlaceOwner placeID=28
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=28
 #expect 150 getPlacePrice placeID=28
 #
-#expect "Marvin Gardens" getPlaceName placeID=29
+expect "Marvin Gardens" getPlaceName placeID=29
 #expect "yellow" getPlaceGroup placeID=29
 #expect "bank" getPlaceOwner placeID=29
 #expect 24 getPropertyRent placeID=29
 #expect 280 getPlacePrice placeID=29
 #
-#expect "Go To Jail" getPlaceName placeID=30
+expect "Go To Jail" getPlaceName placeID=30
 #expect "corner" getPlaceGroup placeID=30
 #expecterror "This place can't be owned" getPlaceOwner placeID=30
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=30
 #expecterror "This place can't be sold" getPlacePrice placeID=30
 #
-#expect "Pacific Avenue" getPlaceName placeID=31
+expect "Pacific Avenue" getPlaceName placeID=31
 #expect "green" getPlaceGroup placeID=31
 #expect "bank" getPlaceOwner placeID=31
 #expect 26 getPropertyRent placeID=31
 #expect 300 getPlacePrice placeID=31
 #
-#expect "North Carolina Avenue" getPlaceName placeID=32
+expect "North Carolina Avenue" getPlaceName placeID=32
 #expect "green" getPlaceGroup placeID=32
 #expect "bank" getPlaceOwner placeID=32
 #expect 26 getPropertyRent placeID=32
 #expect 300 getPlacePrice placeID=32
 #
-#expect "Community Chest 3" getPlaceName placeID=33
+expect "Community Chest 3" getPlaceName placeID=33
 #expect "chest" getPlaceGroup placeID=33
 #expecterror "This place can't be owned" getPlaceOwner placeID=33
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=33
 #expecterror "This place can't be sold" getPlacePrice placeID=33
 #
-#expect "Pennsylvania Avenue" getPlaceName placeID=34
+expect "Pennsylvania Avenue" getPlaceName placeID=34
 #expect "green" getPlaceGroup placeID=34
 #expect "bank" getPlaceOwner placeID=34
 #expect 28 getPropertyRent placeID=34
 #expect 320 getPlacePrice placeID=34
 #
-#expect "Short Line Railroad" getPlaceName placeID=35
+expect "Short Line Railroad" getPlaceName placeID=35
 #expect "railroad" getPlaceGroup placeID=35
 #expect "bank" getPlaceOwner placeID=35
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=35
 #expect 200 getPlacePrice placeID=35
 #
-#expect "Chance 3" getPlaceName placeID=36
+expect "Chance 3" getPlaceName placeID=36
 #expect "chance" getPlaceGroup placeID=36
 #expecterror "This place can't be owned" getPlaceOwner placeID=36
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=36
 #expecterror "This place can't be sold" getPlacePrice placeID=36
 #
-#expect "Park Place" getPlaceName placeID=37
+expect "Park Place" getPlaceName placeID=37
 #expect "indigo" getPlaceGroup placeID=37
 #expect "bank" getPlaceOwner placeID=37
 #expect 35 getPropertyRent placeID=37
 #expect 350 getPlacePrice placeID=37
 #
-#expect "Luxury Tax" getPlaceName placeID=38
+expect "Luxury Tax" getPlaceName placeID=38
 #expect "tax" getPlaceGroup placeID=38
 #expecterror "This place can't be owned" getPlaceOwner placeID=38
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=38
 #expecterror "This place can't be sold" getPlacePrice placeID=38
 #
-#expect "Boardwalk" getPlaceName placeID=39
+expect "Boardwalk" getPlaceName placeID=39
 #expect "indigo" getPlaceGroup placeID=39
 #expect "bank" getPlaceOwner placeID=39
 #expect 50 getPropertyRent placeID=39
 #expect 400 getPlacePrice placeID=39
 #
-#expect "Go" getPlaceName placeID=40
+expect "Go" getPlaceName placeID=40
 #expect "corner" getPlaceGroup placeID=40
 #expecterror "This place can't be owned" getPlaceOwner placeID=40
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=40
