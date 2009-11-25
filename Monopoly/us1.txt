@@ -51,31 +51,31 @@ expecterror "Place doesn't exist" getPlaceOwner placeID=41
 expecterror "Place doesn't exist" getPropertyRent placeID=0
 expecterror "Place doesn't exist" getPropertyRent placeID=41
 
-#expect "Mediterranean Avenue" getPlaceName placeID=1
+expect "Mediterranean Avenue" getPlaceName placeID=1
 #expect "purple" getPlaceGroup placeID=1
 #expect "bank" getPlaceOwner placeID=1
 #expect 2 getPropertyRent placeID=1
 #expect 60 getPlacePrice placeID=1
 #
-#expect "Community Chest 1" getPlaceName placeID=2
+expect "Community Chest 1" getPlaceName placeID=2
 #expect "chest" getPlaceGroup placeID=2
 #expecterror "This place can't be owned" getPlaceOwner placeID=2
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=2
 #expecterror "This place can't be sold" getPlacePrice placeID=2
 #
-#expect "Baltic Avenue" getPlaceName placeID=3
+expect "Baltic Avenue" getPlaceName placeID=3
 #expect "purple" getPlaceGroup placeID=3
 #expect "bank" getPlaceOwner placeID=3
 #expect 4 getPropertyRent placeID=3
 #expect 60 getPlacePrice placeID=3
 #
-#expect "Income Tax" getPlaceName placeID=4
+expect "Income Tax" getPlaceName placeID=4
 #expect "tax" getPlaceGroup placeID=4
 #expecterror "This place can't be owned" getPlaceOwner placeID=4
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=4
 #expecterror "This place can't be sold" getPlacePrice placeID=4
 #
-#expect "Reading Railroad" getPlaceName placeID=5
+expect "Reading Railroad" getPlaceName placeID=5
 #expect "railroad" getPlaceGroup placeID=5
 #expect "bank" getPlaceOwner placeID=5
 #expecterror "This place doesn't have a rent" getPropertyRent placeID=5
