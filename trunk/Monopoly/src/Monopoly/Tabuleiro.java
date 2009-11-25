@@ -6,6 +6,7 @@
 package Monopoly;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  *
@@ -13,7 +14,12 @@ import java.util.ArrayList;
  */
 public class Tabuleiro extends ArrayList<Lugar>{
 
-    //o lugar disso é aqui mesmo?
+    //o lugar disso é aqui mesmo?  by caco
+    //se num for vai ficar //by Marcus
+
+   
+
+
     private String[] nomes_lugares = {  "Mediterranean Avenue",
                                         "Community Chest 1",
                                         "Baltic Avenue",
@@ -55,6 +61,8 @@ public class Tabuleiro extends ArrayList<Lugar>{
                                         "Boardwalk",
                                         "Go"};
 
+    
+
     public Tabuleiro(){
 
         for (int i = 0; i<this.nomes_lugares.length; i++){
@@ -81,7 +89,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
     }
 
     public String getLugarGrupo(int placeID) throws Exception {
-        return this.getLugarById(placeID).getGrupo();
+        return this.getLugarById(placeID).getGrupo(placeID);
     }
 
     public int getLugarPrecoAluguel(int placeID) throws Exception{
