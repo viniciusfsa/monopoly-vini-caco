@@ -39,6 +39,10 @@ public class Jogo {
             throw new Exception("Invalid number of players");
         }
 
+       
+        if (this.hasInvalidName(nomes_jogadores)){
+               throw new Exception("Invalid player name");
+        }
 
 
         if (nomes_jogadores.length < quantidade) {
@@ -90,8 +94,16 @@ public class Jogo {
         return false;        
     }
 
+    private boolean hasInvalidName (String[] n) throws Exception{
+        boolean repeat = false;
+         for (int i = 0; i < n.length; i++) {
+            if(n[i].equals("bank"))
+               repeat = true;
+        }
+        return repeat;
+    }
 
-   
+
     public void StartJogo() {
        
     }
