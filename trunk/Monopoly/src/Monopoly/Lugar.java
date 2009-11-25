@@ -14,9 +14,9 @@ public class Lugar {
     private int Posicao=0;
     private String Nome="";
     private double Preco=0;
+    private String dono = "bank";
 
     public Lugar(int Posicao, String Nome, double Preco) {
-
         this.Nome= Nome;
         this.Posicao = Posicao;
         this.Preco=Preco;
@@ -45,6 +45,22 @@ public class Lugar {
 
     public void setPreco(double Preco) {
         this.Preco = Preco;
+    }
+
+    public String getGrupo() {
+        return "";
+    }
+
+    public int getPrecoCompra() {
+        return 0;
+    }
+
+    public int getPrecoAluguel() {
+        return 0;
+    }
+
+    public String getDono() {
+        return dono;
     }
 
 

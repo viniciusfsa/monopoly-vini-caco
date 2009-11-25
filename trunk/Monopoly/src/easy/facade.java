@@ -7,6 +7,7 @@ package easy;
 import Monopoly.Comandos;
 import Monopoly.Jogador;
 import Monopoly.Jogo;
+import Monopoly.Tabuleiro;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class facade {
 
-//    static List<Jogador> listaJogador = new ArrayList();
-//    static List<String> listaCores = new ArrayList();
-    Jogo jogo = null;
+
+    Jogo           jogo = null;
+    Tabuleiro tabuleiro = null;
 
     
     //aqui agora eu passo as strings em vez da listas.
@@ -30,58 +31,26 @@ public class facade {
         
         this.jogo = new Jogo(num ,nomes_jogadores,cores_jogadores);
         this.jogo.StartJogo();
+        this.tabuleiro = new Tabuleiro();
 
     }
 
     public int getNumberOfPlayers() {
 
         return jogo.getNumberOfPlayers();
-//        return 2;
     }
 
-//    public String getPlayerToken(String playerName) {
-//        for (int i = 0; i < listaJogador.size(); i++) {
-//            Jogador j = listaJogador.get(i);
-//            if (j.getNome().equals(playerName)) {
-//                return j.getCorPeao();
-//            }
-//        }
-//        return null;
-//    }
-    public String getPlayerToken(String playerName) throws Exception{
 
-        List<Jogador> jogs = this.jogo.getListaJogadores();
-        for (int i = 0; i < jogs.size(); i++) {
-            Jogador j = jogs.get(i);
-            if (j.getNome().equals(playerName)) {
-                return j.getCorPeao();
-            }
-        }
-        
-        throw new Exception ("Player doesn't exist");
+    public String getPlayerToken(String playerName) throws Exception{
+        return this.jogo.getPlayerToken(playerName);
     }
 
     public int getPlayerMoney(String playerName) throws Exception{
-
-        List<Jogador> listaJogador = this.jogo.getListaJogadores();
-        for (int i = 0; i < listaJogador.size(); i++) {
-            Jogador a = listaJogador.get(i);
-            if (a.getNome().equals(playerName)) {
-                return a.getDinheiro();
-            }
-        }
-        throw new Exception ("Player doesn't exist");
+        return this.jogo.getPlayerMoney(playerName);
     }
 
     public int getPlayerPosition(String playerName) throws Exception{
-        List<Jogador> listaJogador = this.jogo.getListaJogadores();
-        for (int i = 0; i < listaJogador.size(); i++) {
-            Jogador a = listaJogador.get(i);
-            if (a.getNome().equals(playerName)) {
-                return a.getPosicao();
-            }
-        }
-        throw new Exception ("Player doesn't exist");
+        return this.jogo.getPlayerPosition(playerName);
     }
 
     public String getCurrentPlayer() {
@@ -134,5 +103,28 @@ public class facade {
             throw new Exception("There's no game to quit");
         }
         
+    }
+
+    //A gente pode incorporar algumas exceções pra dentro dos objetos em vez do
+    //façade
+    public String getPlaceName(int placeID) throws Exception{
+        return this.tabuleiro.getPlaceName(placeID);
+    }
+    
+    public String getPlaceGroup(int placeID) throws Exception{
+        return this.tabuleiro.getLugarGrupo(placeID);
+    }
+
+    public String getPlaceOwner(int placeID) throws Exception{
+        return this.tabuleiro.getLugarDono(placeID);
+    }
+
+    public int getPlacePrice(int placeID) throws Exception{
+        return this.tabuleiro.getLugarPreçoCompra(placeID);
+    }
+
+
+    public int getPropertyRent(int placeID) throws Exception{
+        return this.tabuleiro.getLugarPrecoAluguel(placeID);
     }
 }

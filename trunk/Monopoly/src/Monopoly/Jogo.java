@@ -51,6 +51,31 @@ public class Jogo {
     }
 
 
+    public String getPlayerToken(String playerName) throws Exception{
+        return this.getJogadorByName(playerName).getCorPeao();
+    }
+
+    public int getPlayerMoney(String playerName) throws Exception{
+        return this.getJogadorByName(playerName).getDinheiro();
+    }
+
+    public int getPlayerPosition(String playerName) throws Exception{
+        return this.getJogadorByName(playerName).getPosicao();
+    }
+    
+
+    private Jogador getJogadorByName(String playerName) throws Exception{
+        for (int i = 0; i < this.listaJogadores.size(); i++) {
+            Jogador j = this.listaJogadores.get(i);
+            if (j.getNome().equals(playerName)) {
+                return j;
+            }
+        }
+
+        throw new Exception("Player doesn't exist");
+    }
+
+
 
     private void tratarErrosIniciais (int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception{
         //só isso é suficiente
