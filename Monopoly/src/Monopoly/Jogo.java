@@ -72,17 +72,40 @@ public class Jogo {
         }
 
 
+        boolean cor_valida = true;
+        for (int i =0; i<cores_jogadores.length && cor_valida;i++){
+            if (!this.isCorPermitida(cores_jogadores[i]))
+                cor_valida = false;;
+        }
+
+        if (!cor_valida){
+            throw new Exception("Invalid token color");
+        }
+
+    }
+
+    
 
 
+    /**
+     * Verifica se uma cor é permitida
+     * @param cor o nome da cor
+     * @return a posiçã
+     */
+    private boolean isCorPermitida(String cor ){
 
+        int pos = -1;
+        for (int i = 0;i<Jogo.coresPermitidas.length && pos == -1;i++){
+            if (cor.equals(Jogo.coresPermitidas[i])){
+                pos = i;
+            }
+        }
 
-
+        return (pos != -1);
     }
 
 
     private boolean hasRepeatedName (String[] v){
-
-
         for (int i=0; i<v.length;i++){
             for (int j = 0; j<v.length; j++){
                 if ((i!=j) && (v[i].equals(v[j]))){

@@ -111,6 +111,12 @@ public class facade {
     }
 
     public void quitGame() throws Exception{
-        jogo.QuitJogo();
+        if (jogo!=null){
+            jogo.QuitJogo();
+        }
+        else{
+            throw new Exception("There's no game to quit");
+        }
+        
     }
 }
