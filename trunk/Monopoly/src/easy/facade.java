@@ -116,7 +116,8 @@ public class facade {
     }
 
     public String getPlaceOwner(int placeID) throws Exception{
-        return this.tabuleiro.getLugarDono(placeID);
+        return jogo.getOwnerPlace(placeID);
+        //return this.tabuleiro.getLugarDono(placeID);
     }
 
     public int getPlacePrice(int placeID) throws Exception{

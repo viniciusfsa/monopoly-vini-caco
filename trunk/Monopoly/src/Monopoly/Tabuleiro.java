@@ -6,7 +6,6 @@
 package Monopoly;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 /**
  *
@@ -18,7 +17,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
     //se num for vai ficar //by Marcus
 
    
-
+    
 
     private String[] nomes_lugares = {  "Mediterranean Avenue",
                                         "Community Chest 1",
@@ -61,6 +60,10 @@ public class Tabuleiro extends ArrayList<Lugar>{
                                         "Boardwalk",
                                         "Go"};
 
+
+    static private int[] preços_lugares_aluguel = {2,0,4,0,0,6,0,6,8,0,10,0,10,12,0,14,0,14,16,0,
+                                            18,0,18,20,0,22,22,0,24,0,26,26,0,28,0,0,35,0,50,0};
+
     
 
     public Tabuleiro(){
@@ -71,6 +74,10 @@ public class Tabuleiro extends ArrayList<Lugar>{
 
     }
 
+    public void SetAluguel(int idLocal, int novoPreco){
+        preços_lugares_aluguel[idLocal-1]=novoPreco;
+    }
+    
     public String getPlaceName(int placeID) throws Exception{
         return this.getLugarById(placeID).getNome();
 
@@ -92,19 +99,23 @@ public class Tabuleiro extends ArrayList<Lugar>{
         return this.getLugarById(placeID).getGrupo(placeID);
     }
 
-    public int getLugarPrecoAluguel(int placeID) throws Exception{
-        return this.getLugarById(placeID).getPrecoAluguel();
-    }
+    
 
     public int getLugarPreçoCompra(int placeID) throws Exception{
         return this.getLugarById(placeID).getPrecoCompra();
     }
 
+    public int getLugarPrecoAluguel(int  placeId) throws Exception{
+        if(placeId<1 ||placeId>40)
+            throw new Exception("Place doesn't exist");
+        else{
+            int preco = preços_lugares_aluguel[placeId-1];
+            if(preco==0)
+                throw new Exception("This place doesn't have a rent");
+            else
+                return preços_lugares_aluguel[placeId -1];
 
-
-    public String getLugarDono(int placeID) throws Exception {
-        return this.getLugarById(placeID).getDono();
+        }
     }
-    
 
 }
