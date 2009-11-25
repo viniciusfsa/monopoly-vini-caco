@@ -72,7 +72,7 @@ public class Lugar {
             return "yellow";
         else if(placeID==31||placeID==32||placeID==34)
             return "green";
-        else if(placeID==39)
+        else if(placeID==37||placeID==39)
             return "indigo";
         else
             return "chest";
