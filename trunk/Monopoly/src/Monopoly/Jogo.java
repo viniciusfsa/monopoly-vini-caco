@@ -14,8 +14,10 @@ import java.util.List;
  */
 public class Jogo {
 
-     static List<Jogador> listaJogador = new ArrayList();
-     static List<String> cores = new ArrayList();
+    //pq static?
+//     static List<Jogador> listaJogadores = new ArrayList();
+     List<Jogador> listaJogadores = new ArrayList();
+//     static List<String> listaCoresJogadores = new ArrayList();
 
      static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
 
@@ -25,7 +27,7 @@ public class Jogo {
 
 
 
-    private ArrayList<Jogador> Jogadores = null;
+//    private ArrayList<Jogador> Jogadores = null;
     Comandos cmds = new Comandos();
 
 
@@ -33,13 +35,30 @@ public class Jogo {
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
+        //só separei o tratamento de erros
+        this.tratarErrosIniciais(quantidade, nomes_jogadores, cores_jogadores);
 
+        
+        for (int i = 0; i <nomes_jogadores.length;i++){
+            this.listaJogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i]));
+        }
+        
+
+    }
+
+    public List<Jogador> getListaJogadores(){
+        return this.listaJogadores;
+    }
+
+
+
+    private void tratarErrosIniciais (int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception{
         //só isso é suficiente
         if ((quantidade == 1) || (quantidade > 8)) {
             throw new Exception("Invalid number of players");
         }
 
-       
+
         if (this.hasInvalidName(nomes_jogadores)){
                throw new Exception("Invalid player name");
         }
@@ -75,7 +94,7 @@ public class Jogo {
         boolean cor_valida = true;
         for (int i =0; i<cores_jogadores.length && cor_valida;i++){
             if (!this.isCorPermitida(cores_jogadores[i]))
-                cor_valida = false;;
+                cor_valida = false;
         }
 
         if (!cor_valida){
@@ -137,12 +156,12 @@ public class Jogo {
     }
 
     public int getNumberOfPlayers(){
-     return Jogadores.size();
+     return listaJogadores.size();
     }
 
 
     public void nextJogada(){
-        if(vez==listaJogador.size()-1)
+        if(vez==listaJogadores.size()-1)
             vez = 0;
         else
             vez++;

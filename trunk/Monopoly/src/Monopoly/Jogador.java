@@ -26,7 +26,7 @@ public class Jogador {
         j.addPropriedade("casa boa");
         j.addPropriedade("casa boa2");
 
-        ArrayList a = j.getPropriedades();       
+        ArrayList a = j.getPropriedades();
         Iterator i = a.iterator();
         while (i.hasNext())
             System.out.println(i.next());
