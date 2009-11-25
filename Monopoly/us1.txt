@@ -35,22 +35,22 @@ expect {} getPlayerDeeds playerName="player2"
 expect "player1" getCurrentPlayer
 expect {roll,status,quit} getCommands
 
-#expecterror "Player doesn't exist" getPlayerToken playerName="abcde"
-#expecterror "Player doesn't exist" getPlayerMoney playerName="abcde"
-#expecterror "Player doesn't exist" getPlayerPosition playerName="abcde"
-#expecterror "Player doesn't exist" getPlayerDeeds playerName="abcde"
-#
-#expecterror "Place doesn't exist" getPlaceName placeID=0
-#expecterror "Place doesn't exist" getPlaceName placeID=41
-#expecterror "Place doesn't exist" getPlaceGroup placeID=0
-#expecterror "Place doesn't exist" getPlaceGroup placeID=41
-#expecterror "Place doesn't exist" getPlacePrice placeID=0
-#expecterror "Place doesn't exist" getPlacePrice placeID=41
-#expecterror "Place doesn't exist" getPlaceOwner placeID=0
-#expecterror "Place doesn't exist" getPlaceOwner placeID=41
-#expecterror "Place doesn't exist" getPropertyRent placeID=0
-#expecterror "Place doesn't exist" getPropertyRent placeID=41
-#
+expecterror "Player doesn't exist" getPlayerToken playerName="abcde"
+expecterror "Player doesn't exist" getPlayerMoney playerName="abcde"
+expecterror "Player doesn't exist" getPlayerPosition playerName="abcde"
+expecterror "Player doesn't exist" getPlayerDeeds playerName="abcde"
+
+expecterror "Place doesn't exist" getPlaceName placeID=0
+expecterror "Place doesn't exist" getPlaceName placeID=41
+expecterror "Place doesn't exist" getPlaceGroup placeID=0
+expecterror "Place doesn't exist" getPlaceGroup placeID=41
+expecterror "Place doesn't exist" getPlacePrice placeID=0
+expecterror "Place doesn't exist" getPlacePrice placeID=41
+expecterror "Place doesn't exist" getPlaceOwner placeID=0
+expecterror "Place doesn't exist" getPlaceOwner placeID=41
+expecterror "Place doesn't exist" getPropertyRent placeID=0
+expecterror "Place doesn't exist" getPropertyRent placeID=41
+
 #expect "Mediterranean Avenue" getPlaceName placeID=1
 #expect "purple" getPlaceGroup placeID=1
 #expect "bank" getPlaceOwner placeID=1
