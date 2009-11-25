@@ -25,6 +25,7 @@ public class Jogo {
     static Hashtable Donos = new Hashtable();
 //    private ArrayList<Jogador> Jogadores = null;
     Comandos cmds = new Comandos();
+    private boolean compra_automatica;
 
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
@@ -218,5 +219,26 @@ public class Jogo {
     public int jogadorAtual() {
 
         return vez;
+    }
+
+    public void setCompraAutomatica() {
+        this.compra_automatica = true;
+    }
+
+    public boolean rolarDados(int resultadoDado1, int resultadoDado2) throws Exception {
+        if ((isResultadoDadoValido(resultadoDado1))&&(isResultadoDadoValido(resultadoDado2))){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    private boolean isResultadoDadoValido(int resultadoDado) throws Exception{
+        if ((resultadoDado>6)||(resultadoDado<1)){
+            throw new Exception("Invalid die result");
+        }
+        return true;
     }
 }
