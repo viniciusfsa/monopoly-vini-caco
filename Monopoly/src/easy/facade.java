@@ -121,7 +121,7 @@ public class facade {
     }
 
     public int getPlacePrice(int placeID) throws Exception{
-        return this.tabuleiro.getLugarPreçoCompra(placeID);
+        return this.tabuleiro.getLugarPrecoCompra(placeID);
     }
 
 
