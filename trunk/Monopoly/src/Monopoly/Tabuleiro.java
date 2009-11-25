@@ -28,7 +28,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
                                         "Chance 1",
                                         "Vermont Avenue",
                                         "Connecticut Avenue",
-                                        "Jail",
+                                        "Jail - Just Visiting",
                                         "St. Charles Place",
                                         "Electric Company",
                                         "States Avenue",
@@ -63,7 +63,11 @@ public class Tabuleiro extends ArrayList<Lugar>{
 
     static private int[] preços_lugares_aluguel = {2,0,4,0,0,6,0,6,8,0,10,0,10,12,0,14,0,14,16,0,
                                             18,0,18,20,0,22,22,0,24,0,26,26,0,28,0,0,35,0,50,0};
-
+    static private int[] preços_lugares_compra = {60,0,60,0,200,100,0,100,120,0,
+                                            140,150,140,160,200,180,0,180,200,0,
+                                            220,0,220,240,200,260,260,150,280,0,
+                                            300,300,0,320,200,0,350,0,400,0};
+  
     
 
     public Tabuleiro(){
@@ -74,9 +78,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
 
     }
 
-    public void SetAluguel(int idLocal, int novoPreco){
-        preços_lugares_aluguel[idLocal-1]=novoPreco;
-    }
+    
     
     public String getPlaceName(int placeID) throws Exception{
         return this.getLugarById(placeID).getNome();
@@ -101,9 +103,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
 
     
 
-    public int getLugarPreçoCompra(int placeID) throws Exception{
-        return this.getLugarById(placeID).getPrecoCompra();
-    }
+   
 
     public int getLugarPrecoAluguel(int  placeId) throws Exception{
         if(placeId<1 ||placeId>40)
@@ -113,9 +113,22 @@ public class Tabuleiro extends ArrayList<Lugar>{
             if(preco==0)
                 throw new Exception("This place doesn't have a rent");
             else
-                return preços_lugares_aluguel[placeId -1];
+                return preco;
 
         }
     }
 
+
+     public int getLugarPrecoCompra(int  placeId) throws Exception{
+        if(placeId<1 ||placeId>40)
+            throw new Exception("Place doesn't exist");
+        else{
+            int preco = preços_lugares_compra[placeId-1];
+            if(preco==0)
+                throw new Exception("This place can't be sold");
+            else
+                return preco;
+
+        }
+    }
 }

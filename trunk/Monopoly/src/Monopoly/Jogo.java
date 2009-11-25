@@ -29,6 +29,7 @@ public class Jogo {
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
+        
         //só separei o tratamento de erros
         this.tratarErrosIniciais(quantidade, nomes_jogadores, cores_jogadores);
         resetInitDonos();
@@ -36,7 +37,7 @@ public class Jogo {
         for (int i = 0; i < nomes_jogadores.length; i++) {
             this.listaJogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i], i + 1));
         }
-
+        status = true;
 
     }
 
