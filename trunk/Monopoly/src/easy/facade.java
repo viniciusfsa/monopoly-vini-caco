@@ -44,8 +44,13 @@ public class facade {
         return jogo.getNumberOfPlayers();
     }
 
-    public void rollDice(int firstDiceResult, int secondDiceResult) throws Exception{
-        this.jogo.rolarDados(firstDiceResult,secondDiceResult);
+    public void rollDice(int firstDieResult, int secondDieResult) throws Exception{
+//        this.jogo.processarJogada(firstDieResult,secondDieResult);
+        this.jogo.processarJogada(firstDieResult,secondDieResult);
+    }
+
+    public void setAutomaticBuying(boolean auto){
+        this.jogo.definirCompraAutomatica();
     }
 
 
