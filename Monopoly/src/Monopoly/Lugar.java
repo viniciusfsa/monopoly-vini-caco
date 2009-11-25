@@ -11,14 +11,13 @@ package Monopoly;
  */
 public class Lugar {
 
-    private int Posicao=0;
+  
     private String Nome="";
     private double Preco=0;
     private String dono = "bank";
 
     public Lugar(int Posicao, String Nome, double Preco) {
-        this.Nome= Nome;
-        this.Posicao = Posicao;
+        this.Nome= Nome;        
         this.Preco=Preco;
     }
 
@@ -31,13 +30,9 @@ public class Lugar {
         this.Nome = Nome;
     }
 
-    public int getPosicao() {
-        return Posicao;
-    }
+   
 
-    public void setPosicao(int Posicao) {
-        this.Posicao = Posicao;
-    }
+    
 
     public double getPreco() {
         return Preco;
@@ -82,9 +77,7 @@ public class Lugar {
         return 0;
     }
 
-    public int getPrecoAluguel() {
-        return 0;
-    }
+    
 
     public String getDono() {
         return dono;

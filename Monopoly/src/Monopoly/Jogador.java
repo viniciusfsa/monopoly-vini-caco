@@ -15,14 +15,23 @@ import java.util.List;
  */
 public class Jogador {
 
+    private int id = 0;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     private String Nome = "";
     private String CorPeao = "";
     private int dinheiro=1500;
-    private int posicao=40;
+    
     private ArrayList<String> propriedades = new ArrayList<String>();
 
     public static void main(String[] args) {
-        Jogador j = new Jogador("maria", "preto");
+        Jogador j = new Jogador("maria", "preto", 1);
         j.addPropriedade("casa boa");
         j.addPropriedade("casa boa2");
 
@@ -33,7 +42,7 @@ public class Jogador {
 
     }
 
-    public Jogador(String Nome, String CorPeao) {
+    public Jogador(String Nome, String CorPeao, int id) {
         this(Nome);
         this.setCorPeao(CorPeao);
     }
@@ -42,14 +51,7 @@ public class Jogador {
         this.Nome = Nome;
     }
 
-    public int getPosicao() {
-        return posicao;
-    }
-
-    public void setPosicao(int posicao) {
-        this.posicao = posicao;
-    }
-
+    
 
 
     public String getCorPeao() {
