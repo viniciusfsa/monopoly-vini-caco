@@ -66,9 +66,11 @@ public class Jogo {
         Donos.put(4, "Income Tax");
         Donos.put(7, "noOwner");
         Donos.put(10, "noOwner");
+        Donos.put(12, "Electric Company");
         Donos.put(17, "noOwner");
         Donos.put(20, "noOwner");
         Donos.put(22, "noOwner");
+        Donos.put(28, "Water Works");
         Donos.put(30, "noOwner");
         Donos.put(33, "noOwner");
         Donos.put(36, "noOwner");
@@ -261,8 +263,12 @@ public class Jogo {
 
     }
 
-    public void pagarAluguel(int valor, int IdProprietario){
-        listaJogadores.get(IdProprietario).addDinheiro(valor);        
+    public void pagarAluguel(int credor, int devedor,int valor){
+        Jogador JogadorDevedor = listaJogadores.get(devedor);
+        Jogador JogadorCredor = listaJogadores.get(credor);
+        JogadorDevedor.retirarDinheiro(valor);
+        JogadorCredor.addDinheiro(valor);
+
     }
 
 
@@ -284,7 +290,7 @@ public class Jogo {
         //preciso saber se o jogador vai passar pela posição 40, o que significa
         //ganhar dinheiro
         int jogador = this.jogadorAtual();
-        if ((this.posicoes[jogador] + valorDados) >= 40) {
+        if ((this.posicoes[jogador] + valorDados) >= 40 && this.posicoes[jogador]!=0) {
             this.listaJogadores.get(jogador).addDinheiro(200);
             System.out.println("\tGanha $200 por passar pela casa 40.");
         }
@@ -317,6 +323,18 @@ public class Jogo {
             
         } else if (!this.posicaoCompravel(this.posicoes[jogador])) {
             System.out.println("\t" + lugar.getNome() + " não está à venda!");
+
+            String dono = (String) Donos.get(this.posicoes[jogador]);
+            
+            for(int i = 0;i<8;i++){
+                Jogador possivelDono = listaJogadores.get(i);
+                if(possivelDono.getNome().equals(dono)){
+                    System.out.println("O dono eh " + possivelDono.getNome());
+                    this.pagarAluguel(possivelDono.getId(), jogador, this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]));
+                    
+                }
+            }
+
         }
        
 
@@ -365,6 +383,7 @@ public class Jogo {
                 this.Donos.put(posicaoTabuleiro, j.getNome());
 
                 String nomeLugar = this.tabuleiro.getPlaceName(posicaoTabuleiro);
+                j.addPropriedade(nomeLugar);
                 if(nomeLugar.equals("Reading Railroad")||nomeLugar.equals("Pennsylvania Railroad")||
                         nomeLugar.equals("B & O Railroad")||nomeLugar.equals("Short Line Railroad")){
                     DonosFerrovias[jogadorAtual()]++;

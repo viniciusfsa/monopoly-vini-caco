@@ -149,7 +149,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
         return this.getLugarById(placeID).getGrupo(placeID);
     }
 
-    
+   
 
    
 
