@@ -24,8 +24,14 @@ public class Jogo {
     private Tabuleiro tabuleiro = new Tabuleiro();
     Comandos cmds = new Comandos();
     private boolean compra_automatica = false;
+    String[] DonosFerrovias = {"","","","","","","",""};
+    
+    private int dinheiroBanco = 0;
 
     //mudei a assinatura, em vez de listas, vetores de strings.
+
+
+
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
 
@@ -40,6 +46,14 @@ public class Jogo {
 
     }
 
+    public void showPosicoes(){
+        System.out.println("");
+        for (int i = 0; i < listaJogadores.size(); i++) {
+            System.out.print(posicoes[i]+"\t");
+        }
+        
+    }
+
     public List<Jogador> getListaJogadores() {
         return this.listaJogadores;
     }
@@ -50,7 +64,7 @@ public class Jogo {
             Donos.put(i, "bank");
         }
         Donos.put(2, "noOwner");
-        Donos.put(4, "noOwner");
+        Donos.put(4, "income tax");
         Donos.put(7, "noOwner");
         Donos.put(10, "noOwner");
         Donos.put(17, "noOwner");
@@ -59,7 +73,7 @@ public class Jogo {
         Donos.put(30, "noOwner");
         Donos.put(33, "noOwner");
         Donos.put(36, "noOwner");
-        Donos.put(38, "noOwner");
+        Donos.put(38, "luxury tax");
         Donos.put(40, "noOwner");
 
     }
@@ -214,7 +228,7 @@ public class Jogo {
         }
     }
 
-    public void nextJogada() {
+    public void PrepareNextJogada() {
         if (vez == listaJogadores.size() - 1) {
             vez = 0;
         } else {
@@ -243,6 +257,12 @@ public class Jogo {
 
     }
 
+    public void pagarAluguel(int valor, int IdProprietario){
+        listaJogadores.get(IdProprietario).addDinheiro(valor);        
+    }
+
+
+
     private boolean isResultadoDadoValido(int resultadoDado) throws Exception {
         if ((resultadoDado > 6) || (resultadoDado < 1)) {
             throw new Exception("Invalid die result");
@@ -255,6 +275,7 @@ public class Jogo {
     }
 
     private void moverJogadorDaVez(int valorDados) throws Exception {
+       
 
         //preciso saber se o jogador vai passar pela posição 40, o que significa
         //ganhar dinheiro
@@ -263,16 +284,38 @@ public class Jogo {
             this.listaJogadores.get(jogador).addDinheiro(200);
         }
 //
+        
         //movendo à posição
-        this.posicoes[jogador] = (this.posicoes[jogador] + valorDados) % 40;
+        this.posicoes[jogador] = (this.posicoes[jogador] + valorDados);
+        if(posicoes[jogador]>40)
+            posicoes[jogador] = posicoes[jogador]-40;
+
 
         //realizando a compra
+
+
         if (this.isCompraAutomatica()) {
-//            this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador));
-        } else {
+            this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador));
         }
 
-        this.nextJogada();
+        if(Donos.get(this.posicoes[jogador]).equals("income tax")){
+            listaJogadores.get(vez).retirarDinheiro(200);
+            dinheiroBanco = dinheiroBanco + 200;
+        }
+        else if(Donos.get(this.posicoes[jogador]).equals("luxury tax")){
+            listaJogadores.get(vez).retirarDinheiro(75);
+            dinheiroBanco = dinheiroBanco + 75;
+        }
+
+        
+
+    
+
+        System.out.println("Jogador "+(vez+1) +" agora tem"  + listaJogadores.get(vez).getDinheiro());
+
+        this.PrepareNextJogada();
+
+        //this.showPosicoes();
 
 
 
@@ -284,12 +327,16 @@ public class Jogo {
 
     public void efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
         if (this.posicaoCompravel(posicaoTabuleiro)) {
-//            
-//            int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
-//            if (preco <= j.getDinheiro()) {
-//                j.retirarDinheiro(preco);
-//                this.Donos.put(posicaoTabuleiro, j.getNome());
-//            }
+            
+            int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
+         if (preco <= j.getDinheiro()) {
+               j.retirarDinheiro(preco);
+                this.Donos.put(posicaoTabuleiro, j.getNome());
+
+
+                
+
+            }
 
         }
 
