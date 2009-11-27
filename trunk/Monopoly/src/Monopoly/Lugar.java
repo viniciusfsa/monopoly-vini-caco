@@ -13,10 +13,10 @@ public class Lugar {
 
   
     private String Nome="";
-    private double Preco=0;
+    private int Preco=0;
     private String dono = "bank";
 
-    public Lugar(int Posicao, String Nome, double Preco) {
+    public Lugar(int Posicao, String Nome, int Preco) {
         this.Nome= Nome;        
         this.Preco=Preco;
     }
@@ -38,7 +38,7 @@ public class Lugar {
         return Preco;
     }
 
-    public void setPreco(double Preco) {
+    public void setPreco(int Preco) {
         this.Preco = Preco;
     }
 
@@ -74,7 +74,7 @@ public class Lugar {
     }
 
     public int getPrecoCompra() {
-        return 0;
+        return this.Preco;
     }
 
     
