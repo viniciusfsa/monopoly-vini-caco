@@ -40,7 +40,7 @@ public class Jogo {
         resetInitDonos();
 
         for (int i = 0; i < nomes_jogadores.length; i++) {
-            this.listaJogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i], i + 1));
+            this.listaJogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i], i));
         }
         status = true;
 
@@ -64,7 +64,7 @@ public class Jogo {
             Donos.put(i, "bank");
         }
         Donos.put(2, "noOwner");
-        Donos.put(4, "income tax");
+        Donos.put(4, "Income Tax");
         Donos.put(7, "noOwner");
         Donos.put(10, "noOwner");
         Donos.put(17, "noOwner");
@@ -73,7 +73,7 @@ public class Jogo {
         Donos.put(30, "noOwner");
         Donos.put(33, "noOwner");
         Donos.put(36, "noOwner");
-        Donos.put(38, "luxury tax");
+        Donos.put(38, "Luxury Tax");
         Donos.put(40, "noOwner");
 
     }
@@ -220,7 +220,7 @@ public class Jogo {
             throw new Exception("Place doesn't exist");
         } else {
             String dono = (String) Donos.get(idPlace);
-            if (dono.equals("noOwner")) {
+            if (dono.equals("noOwner")||dono.equals("Luxury Tax")||dono.equals("Income Tax")) {
                 throw new Exception("This place can't be owned");
             } else {
                 return (String) Donos.get(idPlace);
@@ -333,6 +333,11 @@ public class Jogo {
                j.retirarDinheiro(preco);
                 this.Donos.put(posicaoTabuleiro, j.getNome());
 
+                String nomeLugar = this.tabuleiro.getPlaceName(posicaoTabuleiro);
+                if(nomeLugar.equals("Reading Railroad")||nomeLugar.equals("Pennsylvania Railroad")||
+                        nomeLugar.equals("B & O Railroad")||nomeLugar.equals("Short Line Railroad")){
+                   // this.DonosFerrovias[j.]=nomeLugar;
+                }
 
                 
 
