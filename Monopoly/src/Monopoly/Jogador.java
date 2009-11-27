@@ -54,6 +54,7 @@ public class Jogador {
     public Jogador(String Nome, String CorPeao, int id) {
         this(Nome);
         this.setCorPeao(CorPeao);
+        this.id = id;
     }
 
     public Jogador (String Nome){
