@@ -35,7 +35,7 @@ public class Jogador {
     }
     private String Nome = "";
     private String CorPeao = "";
-    private int dinheiro=1300;
+    private int dinheiro=1500;
     
     private ArrayList<String> propriedades = new ArrayList<String>();
 
