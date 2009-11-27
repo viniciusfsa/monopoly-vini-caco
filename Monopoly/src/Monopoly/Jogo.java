@@ -14,10 +14,9 @@ import java.util.List;
  */
 public class Jogo {
 
-    //pq static?
-    List<Jogador> listaJogadores = new ArrayList();
+    private List<Jogador> listaJogadores = new ArrayList();
     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
-    static boolean status = false;
+    private boolean status = false;
     private int vez = 0;
     private int posicoes[] = {40, 40, 40, 40, 40, 40, 40, 40};
     private Hashtable Donos = new Hashtable();
@@ -250,6 +249,9 @@ public class Jogo {
 
         //
         if ((isResultadoDadoValido(resultadoDado1)) && (isResultadoDadoValido(resultadoDado2))) {
+            System.out.println("Jogador " + this.jogadorAtual());
+            System.out.println("\tEstá em "+ this.posicoes[this.jogadorAtual()] );
+            System.out.println("\tvai andar " + (resultadoDado1+resultadoDado2) + " casas.");
             this.moverJogadorDaVez(resultadoDado1 + resultadoDado2);
         }
 
@@ -280,22 +282,40 @@ public class Jogo {
         //preciso saber se o jogador vai passar pela posição 40, o que significa
         //ganhar dinheiro
         int jogador = this.jogadorAtual();
-        if ((this.posicoes[jogador] + valorDados) >= 40) {
+        if ((this.posicoes[jogador] + valorDados) > 40) {
             this.listaJogadores.get(jogador).addDinheiro(200);
+            System.out.println("\tGanha $200 por passar pela casa 40.");
         }
-//
+        else{
+            this.posicoes[jogador] +=  valorDados;
+        }
+
         
         //movendo à posição
         this.posicoes[jogador] = (this.posicoes[jogador] + valorDados);
         if(posicoes[jogador]>40)
             posicoes[jogador] = posicoes[jogador]-40;
+        System.out.println("\tVai até a posição " + this.posicoes[jogador]);
 
 
         //realizando a compra
-
-
-        if (this.isCompraAutomatica()) {
-            this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador));
+        Lugar lugar =  this.tabuleiro.get(this.posicoes[jogador]);
+        if (this.isCompraAutomatica()&&this.posicaoCompravel(this.posicoes[jogador])) {
+            System.out.println("\tO lugar " + lugar.getNome() + " está à venda!" );
+            System.out.println("\tPreço:" + lugar.getPrecoCompra());
+            System.out.println("\tAtual dinheiro:" + this.listaJogadores.get(jogador).getDinheiro());
+            System.out.println("\tTenta realizar a compra" );
+            if(this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador))){
+                System.out.println("\tJogador compra " + lugar.getNome());
+                System.out.println("\tAtual dinheiro:" + this.listaJogadores.get(jogador).getDinheiro());
+            }
+            else{
+                System.out.println("\tCompra não realizada!");
+            }
+            
+            
+        } else if (!this.posicaoCompravel(this.posicoes[jogador])) {
+            System.out.println("\t" + lugar.getNome() + " não está à venda!");
         }
 
         if(Donos.get(this.posicoes[jogador]).equals("income tax")){
@@ -325,12 +345,13 @@ public class Jogo {
         return this.compra_automatica;
     }
 
-    public void efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
+    public boolean efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
         if (this.posicaoCompravel(posicaoTabuleiro)) {
-            
+//            
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
-         if (preco <= j.getDinheiro()) {
-               j.retirarDinheiro(preco);
+            if (preco <= j.getDinheiro()) {
+                System.out.println("\tPossui dinheiro para a compra!");
+                j.retirarDinheiro(preco);
                 this.Donos.put(posicaoTabuleiro, j.getNome());
 
                 String nomeLugar = this.tabuleiro.getPlaceName(posicaoTabuleiro);
@@ -338,12 +359,15 @@ public class Jogo {
                         nomeLugar.equals("B & O Railroad")||nomeLugar.equals("Short Line Railroad")){
                    // this.DonosFerrovias[j.]=nomeLugar;
                 }
-
-                
-
+                return true;
+            }
+            else{
+                System.out.println("\tNão possui dinheiro para realizar a compra!");
+                return false;
             }
 
         }
+        return false;
 
     }
 }

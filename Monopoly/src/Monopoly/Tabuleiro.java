@@ -120,7 +120,7 @@ public class Tabuleiro extends ArrayList<Lugar>{
     public Tabuleiro(){
 
         for (int i = 0; i<this.nomes_lugares.length; i++){
-            this.add(new Lugar(i,this.nomes_lugares[i], 0));
+            this.add(new Lugar(i,this.nomes_lugares[i], this.preços_lugares_compra[i]));
         }
 
     }
