@@ -84,6 +84,8 @@ public class facade {
                 Iterator it = prop.iterator();
                 while(it.hasNext()){
                     propriedades = propriedades + it.next();
+                    if(it.hasNext())
+                        propriedades = propriedades+",";
                 }
                 return "{"+propriedades+"}";
             }
