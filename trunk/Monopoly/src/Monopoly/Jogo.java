@@ -32,6 +32,8 @@ public class Jogo {
 
 
         //só separei o tratamento de erros
+        listaJogadoresFalidos.clear();
+        listaJogadores.clear();
         this.tratarErrosIniciais(quantidade, nomes_jogadores, cores_jogadores);
         resetInitDonos();
 
@@ -63,11 +65,11 @@ public class Jogo {
         Donos.put(4, "Income Tax");
         Donos.put(7, "noOwner");
         Donos.put(10, "noOwner");
-        Donos.put(12, "Electric Company");
+        //Donos.put(12, "Electric Company");
         Donos.put(17, "noOwner");
         Donos.put(20, "noOwner");
         Donos.put(22, "noOwner");
-        Donos.put(28, "Water Works");
+        //Donos.put(28, "Water Works");
         Donos.put(30, "noOwner");
         Donos.put(33, "noOwner");
         Donos.put(36, "noOwner");
@@ -95,12 +97,12 @@ public class Jogo {
 
     public int getPlayerPosition(String playerName) throws Exception {
 
-        if(listaJogadoresFalidos.contains(playerName)){            
+        if (listaJogadoresFalidos.contains(playerName)) {
             throw new Exception("Player no longer in the game");
         }
 
         int Id = this.getJogadorByName(playerName).getId();
-        return posicoes[Id + 1];
+        return posicoes[Id];
     }
 
     private Jogador getJogadorByName(String playerName) throws Exception {
@@ -215,16 +217,17 @@ public class Jogo {
         }
     }
 
-    public boolean isGameFinished(){
-        if(listaJogadores.size()-listaJogadoresFalidos.size() ==1)
+    public boolean isGameFinished() {
+        if (listaJogadores.size() - listaJogadoresFalidos.size() == 1) {
             return true;
-        else
+        } else {
             return false;
+        }
 
     }
 
     public int getNumberOfPlayers() {
-        return listaJogadores.size()-listaJogadoresFalidos.size();
+        return listaJogadores.size() - listaJogadoresFalidos.size();
     }
 
     public String getOwnerPlace(int idPlace) throws Exception {
@@ -249,7 +252,7 @@ public class Jogo {
             vez++;
         }
 
-        System.out.println("vez agora eh "+vez);
+        System.out.println("vez agora eh " + vez);
     }
 
     public int jogadorAtual() {
@@ -275,30 +278,52 @@ public class Jogo {
 
     }
 
-    public void pagarFerrovia(int Devedor,String NomeDaFerrovia){
-
-        
-        
-    }
-
-
-    public void pagarAluguel(int credor, int devedor, int valor) {
+    public void pagarFerrovia(int credor, int devedor, int valor, String NomePopriedade) {
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
-        
+          if ((NomePopriedade.equals("Reading Railroad")) ||
+                (NomePopriedade.equals("Pennsylvania Railroad")) ||
+                (NomePopriedade.equals("B & O Railroad")) ||
+                (NomePopriedade.equals("Short Line Railroad"))) {
+            int quantidadeFerrovias = DonosFerrovias[credor];
+            int divida = quantidadeFerrovias * valor;
+                System.out.println("Credor tem "+ quantidadeFerrovias);
+                System.out.println("Divida eh "+ divida);
 
+            if (listaJogadores.get(devedor).getDinheiro() > divida) {
+                JogadorDevedor.retirarDinheiro(divida);
+                JogadorCredor.addDinheiro(divida);
+                System.out.println("aqui");
 
-        if (listaJogadores.get(devedor).getDinheiro() > valor) {
-             JogadorDevedor.retirarDinheiro(valor);
-             JogadorCredor.addDinheiro(valor);
-             
-       } else {
-             int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
-             JogadorDevedor.retirarDinheiro(DinheiroRestante);
-             JogadorCredor.addDinheiro(DinheiroRestante);
-             this.removePlayer(devedor);
+            } else {
+                int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
+                JogadorDevedor.retirarDinheiro(DinheiroRestante);
+
+                JogadorCredor.addDinheiro(DinheiroRestante);
+                this.removePlayer(devedor);
 
             }
+
+        }
+    }
+
+    public void pagarAluguel(int credor, int devedor, int valor, String NomePopriedade) {
+        Jogador JogadorDevedor = listaJogadores.get(devedor);
+        Jogador JogadorCredor = listaJogadores.get(credor);
+
+      
+            if (listaJogadores.get(devedor).getDinheiro() > valor) {
+                JogadorDevedor.retirarDinheiro(valor);
+                JogadorCredor.addDinheiro(valor);
+
+            } else {
+                int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
+                JogadorDevedor.retirarDinheiro(DinheiroRestante);
+                JogadorCredor.addDinheiro(DinheiroRestante);
+                this.removePlayer(devedor);
+
+            }
+        
 
     }
 
@@ -313,10 +338,11 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
-
-
     private void moverJogadorDaVez(int valorDados) throws Exception {
 
+        System.out.println("Situacao de ferrovias");
+        for(int t = 0;t<DonosFerrovias.length; t++)
+            System.out.print(DonosFerrovias[t]+" ");
 
 
         //preciso saber se o jogador vai passar pela posição 40, o que significa
@@ -358,34 +384,33 @@ public class Jogo {
 
             String dono = (String) Donos.get(this.posicoes[jogador]);
 
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < listaJogadores.size(); i++) {
                 Jogador possivelDono = listaJogadores.get(i);
-                if (possivelDono.getNome().equals(dono)) {
+                if (possivelDono.getNome().equals(dono)&&posicoes[jogador]!=5 && posicoes[jogador]!=15&& posicoes[jogador]!=25&& posicoes[jogador]!=35) {
                     System.out.println("O dono eh " + possivelDono.getNome());
                     int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
                     if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
-                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel);
+                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
                     } else {
                         int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                        this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante);
+                        this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante, lugar.getNome());
                         this.removePlayer(jogador);
-                       
+
                     }
 
-                    
                 }
+                if(possivelDono.getNome().equals(dono)){
+                    System.out.println("O dono eh " + possivelDono.getNome());
+                    this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
+                }
+
+
             }
 
         }
 
-        if((tabuleiro.get(jogador).getNome().equals("Reading Railroad"))||
-                (tabuleiro.get(jogador).getNome().equals("Pennsylvania Railroad"))||
-                (tabuleiro.get(jogador).getNome().equals("B & O Railroad"))||
-                (tabuleiro.get(jogador).getNome().equals("Short Line Railroad"))){
-            this.pagarFerrovia(jogador,tabuleiro.get(jogador).getNome() );
-        }
 
-       
+
 
         if (Donos.get(this.posicoes[jogador]).equals("Income Tax")) {
             System.out.println("\tpagando imposto");
@@ -397,7 +422,7 @@ public class Jogo {
                 listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
                 dinheiroBanco = dinheiroBanco + DinheiroRestante;
                 this.removePlayer(jogador);
-               
+
             }
 
         } else if (Donos.get(this.posicoes[jogador]).equals("Luxury Tax")) {
@@ -409,7 +434,7 @@ public class Jogo {
                 listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
                 dinheiroBanco = dinheiroBanco + DinheiroRestante;
                 this.removePlayer(jogador);
-               
+
 
             }
         }
@@ -425,11 +450,11 @@ public class Jogo {
 
         }
 
-       
-        do{
-        this.PrepareNextJogada();
-        }while(this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
-        
+
+        do {
+            this.PrepareNextJogada();
+        } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
+
         this.showPosicoes();
 
 
@@ -439,15 +464,16 @@ public class Jogo {
     public void removePlayer(int id) {
         listaJogadoresFalidos.add(listaJogadores.get(vez).getNome());
         //liberando os pertences
-          String NomeFalido = listaJogadores.get(vez).getNome();
-          for(int i=1;i<=Donos.size();i++)
-          {if(Donos.get(i).equals(NomeFalido))
-               Donos.put(i, "bank");
+        String NomeFalido = listaJogadores.get(vez).getNome();
+        for (int i = 1; i <= Donos.size(); i++) {
+            if (Donos.get(i).equals(NomeFalido)) {
+                Donos.put(i, "bank");
+            }
 
-          }
+        }
         //this.listaJogadores.remove(id);
         //vez--;
-        
+
     }
 
     public boolean isCompraAutomatica() {
@@ -455,7 +481,7 @@ public class Jogo {
     }
 
     public boolean efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
-        if (this.posicaoCompravel(posicaoTabuleiro)) {
+        if (this.posicaoCompravel(posicaoTabuleiro)&&posicaoTabuleiro!=12&&posicaoTabuleiro!=28) {
 //            
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
             if (preco <= j.getDinheiro()) {
