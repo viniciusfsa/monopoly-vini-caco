@@ -480,6 +480,36 @@ public class Jogo {
         return this.compra_automatica;
     }
 
+    
+    public boolean buy() throws Exception{
+
+        if (this.posicaoCompravel(posicoes[jogadorAtual()])&&posicoes[jogadorAtual()]!=12&&posicoes[jogadorAtual()]!=28) {
+          int posicaoTabuleiro = posicoes[jogadorAtual()];
+            int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
+            Jogador j = listaJogadores.get(vez);
+            if (preco <= j.getDinheiro()) {
+                System.out.println("\tPossui dinheiro para a compra!");
+                j.retirarDinheiro(preco);
+                this.Donos.put(posicaoTabuleiro, j.getNome());
+
+                String nomeLugar = this.tabuleiro.getPlaceName(posicaoTabuleiro);
+                j.addPropriedade(nomeLugar);
+                if (nomeLugar.equals("Reading Railroad") || nomeLugar.equals("Pennsylvania Railroad") ||
+                        nomeLugar.equals("B & O Railroad") || nomeLugar.equals("Short Line Railroad")) {
+                    DonosFerrovias[jogadorAtual()]++;
+                }
+                return true;
+            } else {
+                System.out.println("\tNão possui dinheiro para realizar a compra!");
+                return false;
+            }
+
+        }
+        return false;
+
+        
+    }
+
     public boolean efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
         if (this.posicaoCompravel(posicaoTabuleiro)&&posicaoTabuleiro!=12&&posicaoTabuleiro!=28) {
 //            
