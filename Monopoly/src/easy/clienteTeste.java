@@ -16,8 +16,10 @@ public class clienteTeste {
 
         List<String> files = new ArrayList<String>();
         //Put the us1.txt file into the "test scripts" list
-//        files.add("us1.txt");
-        files.add("us2.txt");
+        //files.add("us1.txt");
+        //files.add("us2.txt");
+        //files.add("us3.txt");
+        files.add("us4.txt");
         //Instantiate the Monopoly Game façade
         facade monopolyGameFacade = new facade();
         //Instantiate EasyAccept façade
