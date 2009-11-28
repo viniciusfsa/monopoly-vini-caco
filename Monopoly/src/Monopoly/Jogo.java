@@ -15,6 +15,7 @@ import java.util.List;
 public class Jogo {
 
     private List<Jogador> listaJogadores = new ArrayList();
+    private List<String> listaJogadoresFalidos = new ArrayList();
     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
     private boolean status = false;
     private int vez = 0;
@@ -94,7 +95,9 @@ public class Jogo {
 
     public int getPlayerPosition(String playerName) throws Exception {
 
-
+        if(listaJogadoresFalidos.contains(playerName)){            
+            throw new Exception("Player no longer in the game");
+        }
 
         int Id = this.getJogadorByName(playerName).getId();
         return posicoes[Id + 1];
@@ -212,8 +215,16 @@ public class Jogo {
         }
     }
 
+    public boolean isGameFinished(){
+        if(listaJogadores.size()-listaJogadoresFalidos.size() ==1)
+            return true;
+        else
+            return false;
+
+    }
+
     public int getNumberOfPlayers() {
-        return listaJogadores.size();
+        return listaJogadores.size()-listaJogadoresFalidos.size();
     }
 
     public String getOwnerPlace(int idPlace) throws Exception {
@@ -233,10 +244,12 @@ public class Jogo {
     public void PrepareNextJogada() {
         if (vez == listaJogadores.size() - 1) {
             vez = 0;
+
         } else {
             vez++;
         }
 
+        System.out.println("vez agora eh "+vez);
     }
 
     public int jogadorAtual() {
@@ -262,11 +275,30 @@ public class Jogo {
 
     }
 
+    public void pagarFerrovia(int Devedor,String NomeDaFerrovia){
+
+        
+        
+    }
+
+
     public void pagarAluguel(int credor, int devedor, int valor) {
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
-        JogadorDevedor.retirarDinheiro(valor);
-        JogadorCredor.addDinheiro(valor);
+        
+
+
+        if (listaJogadores.get(devedor).getDinheiro() > valor) {
+             JogadorDevedor.retirarDinheiro(valor);
+             JogadorCredor.addDinheiro(valor);
+             
+       } else {
+             int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
+             JogadorDevedor.retirarDinheiro(DinheiroRestante);
+             JogadorCredor.addDinheiro(DinheiroRestante);
+             this.removePlayer(devedor);
+
+            }
 
     }
 
@@ -281,7 +313,10 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
+
+
     private void moverJogadorDaVez(int valorDados) throws Exception {
+
 
 
         //preciso saber se o jogador vai passar pela posição 40, o que significa
@@ -333,18 +368,24 @@ public class Jogo {
                     } else {
                         int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
                         this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante);
-                    }
-
-                    if (listaJogadores.get(jogador).getDinheiro() <= 0) {
                         this.removePlayer(jogador);
-
-
+                       
                     }
+
+                    
                 }
             }
 
         }
 
+        if((tabuleiro.get(jogador).getNome().equals("Reading Railroad"))||
+                (tabuleiro.get(jogador).getNome().equals("Pennsylvania Railroad"))||
+                (tabuleiro.get(jogador).getNome().equals("B & O Railroad"))||
+                (tabuleiro.get(jogador).getNome().equals("Short Line Railroad"))){
+            this.pagarFerrovia(jogador,tabuleiro.get(jogador).getNome() );
+        }
+
+       
 
         if (Donos.get(this.posicoes[jogador]).equals("Income Tax")) {
             System.out.println("\tpagando imposto");
@@ -355,6 +396,8 @@ public class Jogo {
                 int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
                 listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
                 dinheiroBanco = dinheiroBanco + DinheiroRestante;
+                this.removePlayer(jogador);
+               
             }
 
         } else if (Donos.get(this.posicoes[jogador]).equals("Luxury Tax")) {
@@ -365,6 +408,8 @@ public class Jogo {
                 int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
                 listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
                 dinheiroBanco = dinheiroBanco + DinheiroRestante;
+                this.removePlayer(jogador);
+               
 
             }
         }
@@ -380,10 +425,11 @@ public class Jogo {
 
         }
 
-        //  System.out.println("Jogador "+(vez+1) +" agora tem"  + listaJogadores.get(vez).getDinheiro());
-
+       
+        do{
         this.PrepareNextJogada();
-
+        }while(this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
+        
         this.showPosicoes();
 
 
@@ -391,7 +437,17 @@ public class Jogo {
     }
 
     public void removePlayer(int id) {
-        this.listaJogadores.remove(id);
+        listaJogadoresFalidos.add(listaJogadores.get(vez).getNome());
+        //liberando os pertences
+          String NomeFalido = listaJogadores.get(vez).getNome();
+          for(int i=1;i<=Donos.size();i++)
+          {if(Donos.get(i).equals(NomeFalido))
+               Donos.put(i, "bank");
+
+          }
+        //this.listaJogadores.remove(id);
+        //vez--;
+        
     }
 
     public boolean isCompraAutomatica() {

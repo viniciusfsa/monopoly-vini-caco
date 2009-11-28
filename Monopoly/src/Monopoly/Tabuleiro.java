@@ -156,6 +156,8 @@ public class Tabuleiro extends ArrayList<Lugar>{
     public int getLugarPrecoAluguel(int  placeId) throws Exception{
         if(placeId<1 ||placeId>40)
             throw new Exception("Place doesn't exist");
+        else if(placeId==5||placeId==15||placeId==25||placeId==35)
+            return 25;
         else{
             int preco = preços_lugares_aluguel[placeId-1];
             if(preco==0)

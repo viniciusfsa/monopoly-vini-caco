@@ -143,4 +143,8 @@ public class facade {
     public int getPropertyRent(int placeID) throws Exception{
         return this.tabuleiro.getLugarPrecoAluguel(placeID);
     }
+
+    public boolean gameIsOver (){
+        return this.jogo.isGameFinished();
+    }
 }
