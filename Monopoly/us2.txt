@@ -870,22 +870,3 @@ createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
 setAutomaticBuying auto=true
 rollDice firstDieResult=2 secondDieResult=3
 rollDice firstDieResult=2 secondDieResult=3
-expect 1325 getPlayerMoney playerName="player1"
-expect 1475 getPlayerMoney playerName="player2"
-rollDice firstDieResult=5 secondDieResult=5
-rollDice firstDieResult=5 secondDieResult=5
-expect 1175 getPlayerMoney playerName="player1"
-expect 1425 getPlayerMoney playerName="player2"
-rollDice firstDieResult=5 secondDieResult=5
-rollDice firstDieResult=5 secondDieResult=5
-expect 1050 getPlayerMoney playerName="player1"
-expect 1350 getPlayerMoney playerName="player2"
-rollDice firstDieResult=5 secondDieResult=5
-rollDice firstDieResult=5 secondDieResult=5
-expect 950 getPlayerMoney playerName="player1"
-expect 1250 getPlayerMoney playerName="player2"
-rollDice firstDieResult=5 secondDieResult=5
-rollDice firstDieResult=5 secondDieResult=5
-expect 1250 getPlayerMoney playerName="player1"
-expect 1350 getPlayerMoney playerName="player2"
-quitGame
