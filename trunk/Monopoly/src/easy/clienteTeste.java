@@ -23,7 +23,7 @@ public class clienteTeste {
         //Instantiate EasyAccept façade
         EasyAcceptFacade eaFacade = new EasyAcceptFacade(monopolyGameFacade, files);
         //Execute the tests
-        eaFacade.executeTests();
+        eaFacade.executeTests();    
         //Print the tests execution results
         System.out.println(eaFacade.getCompleteResults());
     }
