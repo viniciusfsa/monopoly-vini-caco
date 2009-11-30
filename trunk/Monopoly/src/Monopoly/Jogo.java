@@ -45,9 +45,9 @@ public class Jogo {
     }
 
     public void showPosicoes() {
-        System.out.println("");
+        this.print("");
         for (int i = 0; i < listaJogadores.size(); i++) {
-            System.out.print(posicoes[i] + "\t");
+//            System.out.print(posicoes[i] + "\t");
         }
 
     }
@@ -245,6 +245,7 @@ public class Jogo {
     }
 
     public void PrepareNextJogada() {
+        System.out.println("Passei aqui!");
         if (vez == listaJogadores.size() - 1) {
             vez = 0;
 
@@ -252,7 +253,7 @@ public class Jogo {
             vez++;
         }
 
-        System.out.println("vez agora eh " + vez);
+        this.print("vez agora eh " + vez);
     }
 
     public int jogadorAtual() {
@@ -264,13 +265,17 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
+    public void unsetCompraAutomatica() {
+        this.compra_automatica = false;
+    }
+
     public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
 
         //
         if ((isResultadoDadoValido(resultadoDado1)) && (isResultadoDadoValido(resultadoDado2))) {
-            System.out.println("Jogador " + this.jogadorAtual());
-            System.out.println("\tEstá em " + this.posicoes[this.jogadorAtual()]);
-            System.out.println("\tvai andar " + (resultadoDado1 + resultadoDado2) + " casas.");
+            this.print("Jogador " + this.jogadorAtual());
+            this.print("\tEstá em " + this.posicoes[this.jogadorAtual()]);
+            this.print("\tvai andar " + (resultadoDado1 + resultadoDado2) + " casas.");
             this.moverJogadorDaVez(resultadoDado1 + resultadoDado2);
         }
 
@@ -287,13 +292,13 @@ public class Jogo {
                 (NomePopriedade.equals("Short Line Railroad"))) {
             int quantidadeFerrovias = DonosFerrovias[credor];
             int divida = quantidadeFerrovias * valor;
-                System.out.println("Credor tem "+ quantidadeFerrovias);
-                System.out.println("Divida eh "+ divida);
+                this.print("Credor tem "+ quantidadeFerrovias);
+                this.print("Divida eh "+ divida);
 
             if (listaJogadores.get(devedor).getDinheiro() > divida) {
                 JogadorDevedor.retirarDinheiro(divida);
                 JogadorCredor.addDinheiro(divida);
-                System.out.println("aqui");
+                this.print("aqui");
 
             } else {
                 int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
@@ -340,9 +345,9 @@ public class Jogo {
 
     private void moverJogadorDaVez(int valorDados) throws Exception {
 
-        System.out.println("Situacao de ferrovias");
-        for(int t = 0;t<DonosFerrovias.length; t++)
-            System.out.print(DonosFerrovias[t]+" ");
+        this.print("Situacao de ferrovias");
+//        for(int t = 0;t<DonosFerrovias.length; t++)
+//            System.out.print(DonosFerrovias[t]+" ");
 
 
         //preciso saber se o jogador vai passar pela posição 40, o que significa
@@ -350,7 +355,7 @@ public class Jogo {
         int jogador = this.jogadorAtual();
         if ((this.posicoes[jogador] + valorDados) >= 40 && this.posicoes[jogador] != 40) {
             this.listaJogadores.get(jogador).addDinheiro(200);
-            System.out.println("\tGanha $200 por passar pela casa 40.");
+            this.print("\tGanha $200 por passar pela casa 40.");
         }
 
 
@@ -360,34 +365,34 @@ public class Jogo {
         if (posicoes[jogador] > 40) {
             posicoes[jogador] = posicoes[jogador] - 40;
         }
-        System.out.println("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
-        System.out.println("\tVai até a posição " + this.posicoes[jogador]);
+        this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
+        this.print("\tVai até a posição " + this.posicoes[jogador]);
 
 
         //realizando a compra
         Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
         if (this.isCompraAutomatica() && this.posicaoCompravel(this.posicoes[jogador])) {
-            System.out.println("\tO lugar " + lugar.getNome() + " está à venda!");
-            System.out.println("\tPreço:" + lugar.getPrecoCompra());
-            System.out.println("\tAtual dinheiro:" + this.listaJogadores.get(jogador).getDinheiro());
-            System.out.println("\tTenta realizar a compra");
+            this.print("\tO lugar " + lugar.getNome() + " está à venda!");
+            this.print("\tPreço:" + lugar.getPrecoCompra());
+            this.print("\tAtual dinheiro:" + this.listaJogadores.get(jogador).getDinheiro());
+            this.print("\tTenta realizar a compra");
             if (this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador))) {
-                System.out.println("\tJogador compra " + lugar.getNome());
+                this.print("\tJogador compra " + lugar.getNome());
 
             } else {
-                System.out.println("\tCompra não realizada!");
+                this.print("\tCompra não realizada!");
             }
 
 
         } else if (!this.posicaoCompravel(this.posicoes[jogador])) {
-            System.out.println("\t" + lugar.getNome() + " não está à venda!");
+            this.print("\t" + lugar.getNome() + " não está à venda!");
 
             String dono = (String) Donos.get(this.posicoes[jogador]);
 
             for (int i = 0; i < listaJogadores.size(); i++) {
                 Jogador possivelDono = listaJogadores.get(i);
                 if (possivelDono.getNome().equals(dono)&&posicoes[jogador]!=5 && posicoes[jogador]!=15&& posicoes[jogador]!=25&& posicoes[jogador]!=35) {
-                    System.out.println("O dono eh " + possivelDono.getNome());
+                    this.print("O dono eh " + possivelDono.getNome());
                     int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
                     if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
                         this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
@@ -400,7 +405,7 @@ public class Jogo {
 
                 }
                 if(possivelDono.getNome().equals(dono)){
-                    System.out.println("O dono eh " + possivelDono.getNome());
+                    this.print("O dono eh " + possivelDono.getNome());
                     this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
                 }
 
@@ -413,7 +418,7 @@ public class Jogo {
 
 
         if (Donos.get(this.posicoes[jogador]).equals("Income Tax")) {
-            System.out.println("\tpagando imposto");
+            this.print("\tpagando imposto");
             if (listaJogadores.get(jogador).getDinheiro() > 200) {
                 listaJogadores.get(jogador).retirarDinheiro(200);
                 dinheiroBanco = dinheiroBanco + 200;
@@ -439,14 +444,11 @@ public class Jogo {
             }
         }
 
-        System.out.println("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
+        this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
 
-        /*for(int z =1;z<=40;z++){
-        System.out.println(z+ " "+Donos.get(z));
-        }*/
         for (int i = 0; i < this.listaJogadores.size(); i++) {
             Jogador j = this.listaJogadores.get(i);
-            System.out.println("din " + 1 + " = " + j.getDinheiro());
+            this.print("din " + 1 + " = " + j.getDinheiro());
 
         }
 
@@ -488,7 +490,7 @@ public class Jogo {
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
             Jogador j = listaJogadores.get(vez);
             if (preco <= j.getDinheiro()) {
-                System.out.println("\tPossui dinheiro para a compra!");
+                this.print("\tPossui dinheiro para a compra!");
                 j.retirarDinheiro(preco);
                 this.Donos.put(posicaoTabuleiro, j.getNome());
 
@@ -500,12 +502,16 @@ public class Jogo {
                 }
                 return true;
             } else {
-                System.out.println("\tNão possui dinheiro para realizar a compra!");
+                this.print("\tNão possui dinheiro para realizar a compra!");
                 return false;
             }
 
         }
-        return false;
+        else{
+            throw new Exception("Place doesn't have a deed to be bought");
+
+        }
+        
 
         
     }
@@ -515,7 +521,7 @@ public class Jogo {
 //            
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
             if (preco <= j.getDinheiro()) {
-                System.out.println("\tPossui dinheiro para a compra!");
+                this.print("\tPossui dinheiro para a compra!");
                 j.retirarDinheiro(preco);
                 this.Donos.put(posicaoTabuleiro, j.getNome());
 
@@ -527,12 +533,22 @@ public class Jogo {
                 }
                 return true;
             } else {
-                System.out.println("\tNão possui dinheiro para realizar a compra!");
+                this.print("\tNão possui dinheiro para realizar a compra!");
                 return false;
             }
 
         }
         return false;
 
+    }
+
+
+
+    /**
+     * Apenas um encapsulador para o System.out.println(String)
+     * @param msg
+     */
+    public void print(String msg){
+//        System.out.println(msg);
     }
 }
