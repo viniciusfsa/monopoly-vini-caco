@@ -147,4 +147,10 @@ public class facade {
     public boolean gameIsOver (){
         return this.jogo.isGameFinished();
     }
+
+
+    public void buy() throws Exception{
+        this.jogo.buy();
+    }
+            
 }
