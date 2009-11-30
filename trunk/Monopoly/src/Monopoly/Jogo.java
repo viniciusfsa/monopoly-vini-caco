@@ -45,9 +45,10 @@ public class Jogo {
     }
 
     public void showPosicoes() {
-        this.print("");
+//        this.print("\n");
+        System.out.println("");
         for (int i = 0; i < listaJogadores.size(); i++) {
-//            System.out.print(posicoes[i] + "\t");
+            System.out.print(posicoes[i] + "\t");
         }
 
     }
@@ -245,7 +246,6 @@ public class Jogo {
     }
 
     public void PrepareNextJogada() {
-        System.out.println("Passei aqui!");
         if (vez == listaJogadores.size() - 1) {
             vez = 0;
 
@@ -269,6 +269,7 @@ public class Jogo {
         this.compra_automatica = false;
     }
 
+    //processar Jogada já faz tudo... pergunta se a compra é automática e já compra.
     public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
 
         //
@@ -276,7 +277,8 @@ public class Jogo {
             this.print("Jogador " + this.jogadorAtual());
             this.print("\tEstá em " + this.posicoes[this.jogadorAtual()]);
             this.print("\tvai andar " + (resultadoDado1 + resultadoDado2) + " casas.");
-            this.moverJogadorDaVez(resultadoDado1 + resultadoDado2);
+
+            this.moverJogadorDaVez(resultadoDado1, resultadoDado2);
         }
 
 
@@ -343,9 +345,11 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
-    private void moverJogadorDaVez(int valorDados) throws Exception {
+//    private void moverJogadorDaVez(int valorDados) throws Exception {
+    private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
-        this.print("Situacao de ferrovias");
+        int valorDados = dado1+dado2;
+//        this.print("Situacao de ferrovias");
 //        for(int t = 0;t<DonosFerrovias.length; t++)
 //            System.out.print(DonosFerrovias[t]+" ");
 
