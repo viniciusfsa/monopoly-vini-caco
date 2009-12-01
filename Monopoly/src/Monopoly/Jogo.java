@@ -27,6 +27,13 @@ public class Jogo {
     int[] DonosFerrovias = {0, 0, 0, 0, 0, 0, 0, 0};
     private int dinheiroBanco = 0;
 
+    public int vezesJogadas = 0;
+
+    /**
+     * Identifica 
+     */
+    private boolean terminouVez = false;
+
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
@@ -46,11 +53,12 @@ public class Jogo {
 
     public void showPosicoes() {
 //        this.print("\n");
-//        System.out.println("");
-//        for (int i = 0; i < listaJogadores.size(); i++) {
-//            System.out.print(posicoes[i] + "\t");
-//        }
+        System.out.println("");
+        for (int i = 0; i < listaJogadores.size(); i++) {
+            System.out.print(posicoes[i] + "\t");
+        }
     }
+    
 
     public List<Jogador> getListaJogadores() {
         return this.listaJogadores;
@@ -115,6 +123,10 @@ public class Jogo {
         }
 
         throw new Exception("Player doesn't exist");
+    }
+
+    private void iniciarNovaVez() {        
+        this.terminouVez = false;
     }
 
     private void tratarErrosIniciais(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
@@ -252,7 +264,7 @@ public class Jogo {
             vez++;
         }
 
-        this.print("vez agora eh " + vez);
+//        this.print("vez agora eh " + vez);
     }
 
     public int jogadorAtual() {
@@ -270,7 +282,8 @@ public class Jogo {
 
     //processar Jogada já faz tudo... pergunta se a compra é automática e já compra.
     public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
-
+        this.vezesJogadas++;
+        this.print("Rodada " + this.vezesJogadas);
         //
         if ((isResultadoDadoValido(resultadoDado1)) && (isResultadoDadoValido(resultadoDado2))) {
             this.print("Jogador " + this.jogadorAtual());
@@ -280,11 +293,15 @@ public class Jogo {
             this.moverJogadorDaVez(resultadoDado1, resultadoDado2);
         }
 
-
+//        this.showPosicoes();
+        
 
     }
 
     public void pagarFerrovia(int credor, int devedor, int valor, String NomePopriedade) {
+
+        this.terminarAVez();
+        
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
         if ((NomePopriedade.equals("Reading Railroad")) ||
@@ -296,7 +313,7 @@ public class Jogo {
             this.print("Credor tem " + quantidadeFerrovias);
             this.print("Divida eh " + divida);
 
-            if (listaJogadores.get(devedor).getDinheiro() > divida) {
+            if (listaJogadores.get(devedor).getDinheiro() >= divida) {
                 JogadorDevedor.retirarDinheiro(divida);
                 JogadorCredor.addDinheiro(divida);
                 this.print("aqui");
@@ -314,11 +331,14 @@ public class Jogo {
     }
 
     public void pagarAluguel(int credor, int devedor, int valor, String NomePopriedade) {
+
+        this.terminarAVez();
+        
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
 
+        
         //Dúvida... > ou >= ?
-//            if (listaJogadores.get(devedor).getDinheiro() > valor) {
         if (listaJogadores.get(devedor).getDinheiro() >= valor) {
             JogadorDevedor.retirarDinheiro(valor);
             JogadorCredor.addDinheiro(valor);
@@ -331,7 +351,30 @@ public class Jogo {
 
         }
 
+        //terminei
+        this.terminarAVez();
+        
+    }
 
+
+    private void terminarAVez(){
+
+
+        if (!this.jogadorTerminouAVez()) {
+            do {
+                this.PrepareNextJogada();
+            } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
+
+        }
+        
+        this.terminouVez = true;
+        
+        
+        
+    }
+
+    private boolean jogadorTerminouAVez(){
+        return this.terminouVez;
     }
 
     private boolean isResultadoDadoValido(int resultadoDado) throws Exception {
@@ -364,6 +407,10 @@ public class Jogo {
     }
 
     private boolean realizarCompra(int jogador, Lugar lugar) throws Exception {
+
+        //depois daqui não pode fazer mais nada
+        this.terminarAVez();
+
         if (this.posicaoCompravel(this.posicoes[jogador])) {
             this.print("\tO lugar " + lugar.getNome() + " está à venda!");
             this.print("\tPreço:" + lugar.getPrecoCompra());
@@ -395,12 +442,11 @@ public class Jogo {
 
 
 
-
-
     private boolean pagarImposto(String nomeImposto, int valorImposto, int jogador) {
         if (Donos.get(this.posicoes[jogador]).equals(nomeImposto)) {
-            this.print("\tpagando imposto");
-            if (listaJogadores.get(jogador).getDinheiro() > valorImposto) {
+            this.print("\tPagando imposto " + nomeImposto);
+            this.print("\tValor do imposto " + valorImposto);
+            if (listaJogadores.get(jogador).getDinheiro() >= valorImposto) {
                 listaJogadores.get(jogador).retirarDinheiro(valorImposto);
                 dinheiroBanco = dinheiroBanco + valorImposto;
             } else {
@@ -423,7 +469,13 @@ public class Jogo {
         boolean pagouIncomeTax = this.pagarImposto("Income Tax", 200, jogador);
         boolean pagouLuxuryTax = this.pagarImposto("Luxury Tax", 75, jogador);
 
-        return (pagouIncomeTax || pagouLuxuryTax);
+        if (pagouIncomeTax || pagouLuxuryTax){
+            this.terminarAVez();
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -451,6 +503,15 @@ public class Jogo {
 
 //    private void moverJogadorDaVez(int valorDados) throws Exception {
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
+
+//        if (!this.jogadorTerminouAVez()){
+            this.iniciarNovaVez();
+//        }
+//        else{
+//            this.terminarAVez();
+//        }
+//        this.terminarAVez();
+        
 
         int valorDados = dado1 + dado2;
 
@@ -483,21 +544,24 @@ public class Jogo {
 
 
                 String nomeDono = (String) Donos.get(this.posicoes[jogador]);
+                //não cobrar aluguel de si mesmo
+                if (!nomeDono.equals(this.listaJogadores.get(this.jogadorAtual()).getNome())) {
 
-                if (this.isDonoUmJogador(nomeDono)) {
-                    Jogador possivelDono = this.getJogadorByName(nomeDono);
+                    if (this.isDonoUmJogador(nomeDono)) {
+                        Jogador possivelDono = this.getJogadorByName(nomeDono);
 
-                    if (this.isPosicaoJogadorFerrovia(this.posicoes[jogador])) {
-                        this.print("O dono eh " + possivelDono.getNome());
-                        this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
-                    } else {
+                        if (this.isPosicaoJogadorFerrovia(this.posicoes[jogador])) {
+                            this.print("O dono eh " + possivelDono.getNome());
+                            this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
+                        } else {
 
-                        this.print("O dono eh " + possivelDono.getNome());
-                        int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
-                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
+                            this.print("O dono eh " + possivelDono.getNome());
+                            int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
+                            this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
+
+                        }
 
                     }
-                
                 }
 
             }
@@ -509,18 +573,15 @@ public class Jogo {
 
         this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
 
-        do {
-            this.PrepareNextJogada();
-        } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
-
+        
 
 
     }
 
     public void removePlayer(int id) {
-        listaJogadoresFalidos.add(listaJogadores.get(vez).getNome());
+        listaJogadoresFalidos.add(listaJogadores.get(id).getNome());
         //liberando os pertences
-        String NomeFalido = listaJogadores.get(vez).getNome();
+        String NomeFalido = listaJogadores.get(id).getNome();
         for (int i = 1; i <= Donos.size(); i++) {
             if (Donos.get(i).equals(NomeFalido)) {
                 Donos.put(i, "bank");
@@ -536,12 +597,16 @@ public class Jogo {
         return this.compra_automatica;
     }
 
+//    public boolean buy() throws Exception {
     public boolean buy() throws Exception {
 
-        if (this.posicaoCompravel(posicoes[jogadorAtual()]) && posicoes[jogadorAtual()] != 12 && posicoes[jogadorAtual()] != 28) {
-            int posicaoTabuleiro = posicoes[jogadorAtual()];
+        int jogador = this.jogadorAtual();
+        this.terminarAVez();
+
+        if (this.posicaoCompravel(posicoes[jogador]) && posicoes[jogador] != 12 && posicoes[jogador] != 28) {
+            int posicaoTabuleiro = posicoes[jogador];
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
-            Jogador j = listaJogadores.get(vez);
+            Jogador j = listaJogadores.get(jogador);
             if (preco <= j.getDinheiro()) {
                 this.print("\tPossui dinheiro para a compra!");
                 j.retirarDinheiro(preco);
@@ -551,16 +616,25 @@ public class Jogo {
                 j.addPropriedade(nomeLugar);
                 if (nomeLugar.equals("Reading Railroad") || nomeLugar.equals("Pennsylvania Railroad") ||
                         nomeLugar.equals("B & O Railroad") || nomeLugar.equals("Short Line Railroad")) {
-                    DonosFerrovias[jogadorAtual()]++;
+                    DonosFerrovias[jogador]++;
                 }
+                this.print("\tVocê adquiriu "+ nomeLugar);
                 return true;
             } else {
                 this.print("\tNão possui dinheiro para realizar a compra!");
-                return false;
+                throw new Exception("Not enough money");
+//                return false;
             }
 
         } else {
-            throw new Exception("Place doesn't have a deed to be bought");
+
+            if ((this.posicoes[jogador]==12)||(this.posicoes[jogador]==28)){
+                throw new Exception("Deed for this place is not for sale");
+            }
+            else{
+                throw new Exception("Place doesn't have a deed to be bought");
+            }
+            
 
         }
 
@@ -602,7 +676,7 @@ public class Jogo {
      * @param msg
      */
     public void print(String msg) {
-        this.print(msg, false);
+        this.print(msg, true);
     }
 
     public void print(String msg, boolean reallyPrint) {
