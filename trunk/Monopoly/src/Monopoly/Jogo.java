@@ -418,11 +418,6 @@ public class Jogo {
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
         int valorDados = dado1+dado2;
-//        this.print("Situacao de ferrovias");
-//        for(int t = 0;t<DonosFerrovias.length; t++)
-//            System.out.print(DonosFerrovias[t]+" ");
-
-
         
         int jogador = this.jogadorAtual();
 
@@ -437,7 +432,6 @@ public class Jogo {
         this.print("\tVai até a posição " + this.posicoes[jogador]);
 
 
-        
         Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
         
         //se não realizar a compra automática :)
@@ -451,18 +445,11 @@ public class Jogo {
                 for (int i = 0; i < listaJogadores.size(); i++) {
                     Jogador possivelDono = listaJogadores.get(i);
 
-                    
                     if (possivelDono.getNome().equals(dono) && !this.isPosicaoJogadorFerrovia(this.posicoes[jogador])) {
                         this.print("O dono eh " + possivelDono.getNome());
                         int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
-                        if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
-                            this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
-                        } else {
-                            int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                            this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante, lugar.getNome());
-                            this.removePlayer(jogador);
+                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
 
-                        }
 
                     }
                     //jogador está numa ferrovia
