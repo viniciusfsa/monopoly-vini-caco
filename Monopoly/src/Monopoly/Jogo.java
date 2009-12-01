@@ -29,10 +29,10 @@ public class Jogo {
 
     public int vezesJogadas = 0;
 
-    /**
+    /**pro
      * Identifica 
      */
-    private boolean terminouVez = false;
+    private boolean terminouVez = true;
 
     //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
@@ -283,9 +283,22 @@ public class Jogo {
     //processar Jogada já faz tudo... pergunta se a compra é automática e já compra.
     public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
         this.vezesJogadas++;
+
+        
+        
+
+        
         this.print("Rodada " + this.vezesJogadas);
         //
         if ((isResultadoDadoValido(resultadoDado1)) && (isResultadoDadoValido(resultadoDado2))) {
+
+            if (!this.jogadorTerminouAVez()) {
+                //faça algo
+                this.terminarAVez();
+            }
+
+            this.iniciarNovaVez();
+
             this.print("Jogador " + this.jogadorAtual());
             this.print("\tEstá em " + this.posicoes[this.jogadorAtual()]);
             this.print("\tvai andar " + (resultadoDado1 + resultadoDado2) + " casas.");
@@ -505,7 +518,7 @@ public class Jogo {
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
 //        if (!this.jogadorTerminouAVez()){
-            this.iniciarNovaVez();
+            
 //        }
 //        else{
 //            this.terminarAVez();
@@ -618,12 +631,12 @@ public class Jogo {
                         nomeLugar.equals("B & O Railroad") || nomeLugar.equals("Short Line Railroad")) {
                     DonosFerrovias[jogador]++;
                 }
-                this.print("\tVocê adquiriu "+ nomeLugar);
+                this.print("\tVocê adquiriu "+ nomeLugar + " por " + preco);
+                this.print("\tAtual dinheiro: " + j.getDinheiro());
                 return true;
             } else {
                 this.print("\tNão possui dinheiro para realizar a compra!");
                 throw new Exception("Not enough money");
-//                return false;
             }
 
         } else {
@@ -634,8 +647,6 @@ public class Jogo {
             else{
                 throw new Exception("Place doesn't have a deed to be bought");
             }
-            
-
         }
 
 
@@ -676,7 +687,8 @@ public class Jogo {
      * @param msg
      */
     public void print(String msg) {
-        this.print(msg, true);
+//        this.print(msg, false);
+//        this.print(msg, true);
     }
 
     public void print(String msg, boolean reallyPrint) {
