@@ -136,11 +136,10 @@ public class Tabuleiro extends ArrayList<Lugar>{
 
         
         if ((placeID<1) ||(placeID>this.size())){
-            System.out.println("\t posicao: "+placeID);
             throw new Exception ("Place doesn't exist");
         }
         else{
-            //atenção para o migué!
+            //atenção para o índice!
             return this.get(placeID-1);
         }
     }
