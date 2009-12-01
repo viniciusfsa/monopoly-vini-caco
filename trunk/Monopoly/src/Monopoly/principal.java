@@ -28,15 +28,21 @@ public class principal {
         String[] jogadores = {"player1","player2"};
         String[] cores = {"black","white"};
         Jogo j = new Jogo(2, jogadores, cores);
-        j.unsetCompraAutomatica();
 
-        // 1st round
-        j.processarJogada( 1, 1 );
+
+        j.processarJogada(1, 1);
         j.buy();
-        j.processarJogada( 1, 2 );
+        j.processarJogada(1, 2);
+        j.buy();
+        j.processarJogada(1, 1);
+        j.buy();
+        j.processarJogada(1, 1);
+        j.buy();
+        j.processarJogada(1, 1);
+        j.buy();
+        j.processarJogada(1, 1);
         
         
-
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.println("Entre com o número de jogadores [2-8]:");
 //        int n = Integer.parseInt(scanner.nextLine());
