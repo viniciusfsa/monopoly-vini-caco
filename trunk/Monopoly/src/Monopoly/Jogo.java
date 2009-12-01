@@ -383,20 +383,35 @@ public class Jogo {
         return false;
     }
 
-    private Jogador encontrarDonoByNome(String nomeDono) throws Exception {
 
-        Jogador dono = null;
+    private boolean isPosicaoJogadorFerrovia(int posicao){
+        return (posicao == 5 || posicao == 15 || posicao == 25 || posicao== 35);
+    }
 
-        for (int i = 0; (i < listaJogadores.size()) || (dono != null); i++) {
-            Jogador possivelDono = listaJogadores.get(i);
-            if (possivelDono.getNome().equals(nomeDono)) {
-                dono = possivelDono;
+
+    private boolean pagarImposto(String nomeImposto, int valorImposto, int jogador ){
+        if (Donos.get(this.posicoes[jogador]).equals(nomeImposto)) {
+            this.print("\tpagando imposto");
+            if (listaJogadores.get(jogador).getDinheiro() > valorImposto) {
+                listaJogadores.get(jogador).retirarDinheiro(valorImposto);
+                dinheiroBanco = dinheiroBanco + valorImposto;
+            } else {
+                int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
+                listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
+                dinheiroBanco = dinheiroBanco + DinheiroRestante;
+                this.removePlayer(jogador);
+
             }
-
-
+            return true;
         }
+        return false;
+    }
 
-        return dono;
+    private boolean pagarEventuaisTaxas(int jogador){
+        boolean pagouIncomeTax = this.pagarImposto("Income Tax", 200, jogador);
+        boolean pagouLuxuryTax = this.pagarImposto("Luxury Tax", 75, jogador);
+
+        return (pagouIncomeTax || pagouLuxuryTax );
     }
 
 //    private void moverJogadorDaVez(int valorDados) throws Exception {
@@ -435,7 +450,9 @@ public class Jogo {
 
                 for (int i = 0; i < listaJogadores.size(); i++) {
                     Jogador possivelDono = listaJogadores.get(i);
-                    if (possivelDono.getNome().equals(dono) && posicoes[jogador] != 5 && posicoes[jogador] != 15 && posicoes[jogador] != 25 && posicoes[jogador] != 35) {
+
+                    
+                    if (possivelDono.getNome().equals(dono) && !this.isPosicaoJogadorFerrovia(this.posicoes[jogador])) {
                         this.print("O dono eh " + possivelDono.getNome());
                         int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
                         if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
@@ -448,11 +465,11 @@ public class Jogo {
                         }
 
                     }
+                    //jogador está numa ferrovia
                     if (possivelDono.getNome().equals(dono)) {
                         this.print("O dono eh " + possivelDono.getNome());
                         this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
                     }
-
 
                 }
 
@@ -460,50 +477,14 @@ public class Jogo {
 
         }
 
-
-
-
-        if (Donos.get(this.posicoes[jogador]).equals("Income Tax")) {
-            this.print("\tpagando imposto");
-            if (listaJogadores.get(jogador).getDinheiro() > 200) {
-                listaJogadores.get(jogador).retirarDinheiro(200);
-                dinheiroBanco = dinheiroBanco + 200;
-            } else {
-                int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
-                dinheiroBanco = dinheiroBanco + DinheiroRestante;
-                this.removePlayer(jogador);
-
-            }
-
-        } else if (Donos.get(this.posicoes[jogador]).equals("Luxury Tax")) {
-            if (listaJogadores.get(jogador).getDinheiro() > 75) {
-                listaJogadores.get(jogador).retirarDinheiro(75);
-                dinheiroBanco = dinheiroBanco + 75;
-            } else {
-                int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                listaJogadores.get(jogador).retirarDinheiro(DinheiroRestante);
-                dinheiroBanco = dinheiroBanco + DinheiroRestante;
-                this.removePlayer(jogador);
-
-
-            }
-        }
+        //pagando impostos
+        this.pagarEventuaisTaxas(jogador);
 
         this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
-
-        for (int i = 0; i < this.listaJogadores.size(); i++) {
-            Jogador j = this.listaJogadores.get(i);
-            this.print("din " + 1 + " = " + j.getDinheiro());
-
-        }
-
 
         do {
             this.PrepareNextJogada();
         } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
-
-        this.showPosicoes();
 
 
 
@@ -596,5 +577,12 @@ public class Jogo {
      */
     public void print(String msg){
 //        System.out.println(msg);
+        this.print(msg, false);
+    }
+    public void print(String msg, boolean reallyPrint){
+        if (reallyPrint) {
+            System.out.println(msg);
+        }
+
     }
 }
