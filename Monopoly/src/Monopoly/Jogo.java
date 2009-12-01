@@ -46,10 +46,10 @@ public class Jogo {
 
     public void showPosicoes() {
 //        this.print("\n");
-        System.out.println("");
-        for (int i = 0; i < listaJogadores.size(); i++) {
-            System.out.print(posicoes[i] + "\t");
-        }
+//        System.out.println("");
+//        for (int i = 0; i < listaJogadores.size(); i++) {
+//            System.out.print(posicoes[i] + "\t");
+//        }
 
     }
 
@@ -345,36 +345,27 @@ public class Jogo {
         this.compra_automatica = true;
     }
 
-//    private void moverJogadorDaVez(int valorDados) throws Exception {
-    private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
-        int valorDados = dado1+dado2;
-//        this.print("Situacao de ferrovias");
-//        for(int t = 0;t<DonosFerrovias.length; t++)
-//            System.out.print(DonosFerrovias[t]+" ");
-
-
-        //preciso saber se o jogador vai passar pela posição 40, o que significa
-        //ganhar dinheiro
-        int jogador = this.jogadorAtual();
+    private boolean completouVolta(int jogador, int valorDados){
+        
         if ((this.posicoes[jogador] + valorDados) >= 40 && this.posicoes[jogador] != 40) {
             this.listaJogadores.get(jogador).addDinheiro(200);
             this.print("\tGanha $200 por passar pela casa 40.");
+            return true;
         }
+        return false;
 
+    }
 
-
-        //movendo à posição
+    private void moverJogadorAPosicao(int jogador, int valorDados){
         this.posicoes[jogador] = (this.posicoes[jogador] + valorDados);
         if (posicoes[jogador] > 40) {
             posicoes[jogador] = posicoes[jogador] - 40;
         }
-        this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
-        this.print("\tVai até a posição " + this.posicoes[jogador]);
+    }
 
 
-        //realizando a compra
-        Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
+    private boolean realizarCompraAutomatica(int jogador, Lugar lugar) throws Exception{
         if (this.isCompraAutomatica() && this.posicaoCompravel(this.posicoes[jogador])) {
             this.print("\tO lugar " + lugar.getNome() + " está à venda!");
             this.print("\tPreço:" + lugar.getPrecoCompra());
@@ -387,32 +378,67 @@ public class Jogo {
                 this.print("\tCompra não realizada!");
             }
 
+        }
 
-        } else if (!this.posicaoCompravel(this.posicoes[jogador])) {
-            this.print("\t" + lugar.getNome() + " não está à venda!");
+        return false;
+    }
 
-            String dono = (String) Donos.get(this.posicoes[jogador]);
+//    private void moverJogadorDaVez(int valorDados) throws Exception {
+    private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
-            for (int i = 0; i < listaJogadores.size(); i++) {
-                Jogador possivelDono = listaJogadores.get(i);
-                if (possivelDono.getNome().equals(dono)&&posicoes[jogador]!=5 && posicoes[jogador]!=15&& posicoes[jogador]!=25&& posicoes[jogador]!=35) {
-                    this.print("O dono eh " + possivelDono.getNome());
-                    int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
-                    if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
-                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
-                    } else {
-                        int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                        this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante, lugar.getNome());
-                        this.removePlayer(jogador);
+        int valorDados = dado1+dado2;
+//        this.print("Situacao de ferrovias");
+//        for(int t = 0;t<DonosFerrovias.length; t++)
+//            System.out.print(DonosFerrovias[t]+" ");
+
+
+        
+        int jogador = this.jogadorAtual();
+
+
+        //preciso saber se o jogador vai passar pela posição 40, o que significa
+        //ganhar dinheiro
+        this.completouVolta(jogador, valorDados);
+
+        //movendo à posição
+        this.moverJogadorAPosicao(jogador, valorDados);
+        this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
+        this.print("\tVai até a posição " + this.posicoes[jogador]);
+
+
+        
+        Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
+        
+        //se não realizar a compra automática :)
+        if (!this.realizarCompraAutomatica(jogador, lugar)){
+
+            if (!this.posicaoCompravel(this.posicoes[jogador])) {
+                this.print("\t" + lugar.getNome() + " não está à venda!");
+
+                String dono = (String) Donos.get(this.posicoes[jogador]);
+
+                for (int i = 0; i < listaJogadores.size(); i++) {
+                    Jogador possivelDono = listaJogadores.get(i);
+                    if (possivelDono.getNome().equals(dono) && posicoes[jogador] != 5 && posicoes[jogador] != 15 && posicoes[jogador] != 25 && posicoes[jogador] != 35) {
+                        this.print("O dono eh " + possivelDono.getNome());
+                        int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
+                        if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
+                            this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
+                        } else {
+                            int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
+                            this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante, lugar.getNome());
+                            this.removePlayer(jogador);
+
+                        }
 
                     }
+                    if (possivelDono.getNome().equals(dono)) {
+                        this.print("O dono eh " + possivelDono.getNome());
+                        this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
+                    }
+
 
                 }
-                if(possivelDono.getNome().equals(dono)){
-                    this.print("O dono eh " + possivelDono.getNome());
-                    this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
-                }
-
 
             }
 
