@@ -9,7 +9,7 @@ import java.util.List;
  * and open the template in the editor.
  */
 /**
- * This class contains 
+ *
  * @author Marcus
  */
 public class Jogo {
@@ -27,14 +27,7 @@ public class Jogo {
     int[] DonosFerrovias = {0, 0, 0, 0, 0, 0, 0, 0};
     private int dinheiroBanco = 0;
 
-    /**
-     *
-     * 
-     * @param quantidade total of players
-     * @param nomes_jogadores list of players' names
-     * @param cores_jogadores list of players' colors' names
-     * @throws Exception
-     */
+    //mudei a assinatura, em vez de listas, vetores de strings.
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
 
@@ -51,10 +44,8 @@ public class Jogo {
 
     }
 
-    /**
-     * Debug for print the players positions
-     */
     public void showPosicoes() {
+//        this.print("\n");
         System.out.println("");
         for (int i = 0; i < listaJogadores.size(); i++) {
             System.out.print(posicoes[i] + "\t");
@@ -62,17 +53,10 @@ public class Jogo {
 
     }
 
-    /**
-     * Returns a list of the players (Jogador)
-     * @return a list of players (Jogador)
-     */
     public List<Jogador> getListaJogadores() {
         return this.listaJogadores;
     }
 
-    /**
-     * Resets the owners of the locations to its defaults
-     */
     public void resetInitDonos() {
         Donos.clear();
         for (int i = 1; i <= 40; i++) {
@@ -95,11 +79,6 @@ public class Jogo {
 
     }
 
-    /**
-     * Checks if a place (Lugar) is buyable
-     * @param posicao the position of the place
-     * @return true if place is buyable, false otherwise
-     */
     public boolean posicaoCompravel(int posicao) {
 
         String dono = (String) this.Donos.get(posicao);
@@ -109,32 +88,14 @@ public class Jogo {
         return false;
     }
 
-    /**
-     * Returns the color name of a player
-     * @param playerName the player's name
-     * @return
-     * @throws Exception
-     */
     public String getPlayerToken(String playerName) throws Exception {
         return this.getJogadorByName(playerName).getCorPeao();
     }
 
-    /**
-     * Returns the player ammount of money
-     * @param playerName the name of the player
-     * @return the money of the player
-     * @throws Exception
-     */
     public int getPlayerMoney(String playerName) throws Exception {
         return this.getJogadorByName(playerName).getDinheiro();
     }
 
-    /**
-     * Returns the position of the player in the tabuleiro
-     * @param playerName the name of the player
-     * @return the player's position
-     * @throws Exception
-     */
     public int getPlayerPosition(String playerName) throws Exception {
 
         if (listaJogadoresFalidos.contains(playerName)) {
@@ -145,12 +106,6 @@ public class Jogo {
         return posicoes[Id];
     }
 
-    /**
-     * Returns a player object by its name
-     * @param playerName the player name
-     * @return the player (Jogador)
-     * @throws Exception
-     */
     private Jogador getJogadorByName(String playerName) throws Exception {
         for (int i = 0; i < this.listaJogadores.size(); i++) {
             Jogador j = this.listaJogadores.get(i);
@@ -163,13 +118,6 @@ public class Jogo {
         throw new Exception("Player doesn't exist");
     }
 
-    /**
-     * Checks for basic errors
-     * @param quantidade total of players
-     * @param nomes_jogadores list of players' names
-     * @param cores_jogadores list of colors' names
-     * @throws Exception
-     */
     private void tratarErrosIniciais(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
         //só isso é suficiente
         if ((quantidade == 1) || (quantidade > 8)) {
@@ -223,9 +171,9 @@ public class Jogo {
     }
 
     /**
-     * Verifies if a color is allowed
-     * @param cor color name
-     * @return true if it is allowed, false otherwise
+     * Verifica se uma cor é permitida
+     * @param cor o nome da cor
+     * @return a posiçã
      */
     private boolean isCorPermitida(String cor) {
 
@@ -239,11 +187,6 @@ public class Jogo {
         return (pos != -1);
     }
 
-    /**
-     * Checks if a list of names has any repeated name
-     * @param v the list of names for analysis
-     * @return
-     */
     private boolean hasRepeatedName(String[] v) {
         for (int i = 0; i < v.length; i++) {
             for (int j = 0; j < v.length; j++) {
@@ -256,12 +199,6 @@ public class Jogo {
         return false;
     }
 
-    /**
-     * Checks if a list of player names has any prohibited name ("bank" for instance)
-     * @param list of player names for analysis
-     * @return true if all the player names are allowed, false otherwise
-     * @throws Exception
-     */
     private boolean hasInvalidName(String[] n) throws Exception {
         boolean repeat = false;
         for (int i = 0; i < n.length; i++) {
@@ -272,47 +209,31 @@ public class Jogo {
         return repeat;
     }
 
-    /**
-     * Starts the game
-     */
     public void StartJogo() {
     }
 
-    /**
-     * Tries to quit the game
-     * @throws Exception
-     */
     public void QuitJogo() throws Exception {
         if (status == false) {
             throw new Exception("There's no game to quit");
         }
     }
 
-    /**
-     * Asks if the game has finished (one player remaining)
-     * @return true if game is finished, false otherwise.
-     */
     public boolean isGameFinished() {
-        return (listaJogadores.size() - listaJogadoresFalidos.size() == 1);
+        if (listaJogadores.size() - listaJogadoresFalidos.size() == 1) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
-    /**
-     * Gets the number of players in the match (skips broken players)
-     * @return
-     */
     public int getNumberOfPlayers() {
         return listaJogadores.size() - listaJogadoresFalidos.size();
     }
 
-    /**
-     * 
-     * @param idPlace
-     * @return
-     * @throws Exception
-     */
     public String getOwnerPlace(int idPlace) throws Exception {
         if (idPlace > 40 || idPlace < 1) {
+
             throw new Exception("Place doesn't exist");
         } else {
             String dono = (String) Donos.get(idPlace);
@@ -324,10 +245,6 @@ public class Jogo {
         }
     }
 
-    /**
-     * Prepares for the next jogada, as the broken players are also in the
-     * players list
-     */
     public void PrepareNextJogada() {
         if (vez == listaJogadores.size() - 1) {
             vez = 0;
@@ -339,37 +256,20 @@ public class Jogo {
         this.print("vez agora eh " + vez);
     }
 
-    /**
-     * Gets for the current player index
-     * @return the current player index
-     */
     public int jogadorAtual() {
 
         return vez;
     }
 
-    /**
-     * Sets the automatic buying to on
-     */
     public void setCompraAutomatica() {
         this.compra_automatica = true;
     }
 
-    /**
-     * Sets the automatic buying to off
-     */
     public void unsetCompraAutomatica() {
         this.compra_automatica = false;
     }
 
-    /**
-     * processar Jogada já faz tudo... pergunta se a compra é automática e já compra.
-     *
-     * Processess a move of a player
-     * @param resultadoDado1 the first dice result
-     * @param resultadoDado2 the second dice result
-     * @throws Exception
-     */
+    //processar Jogada já faz tudo... pergunta se a compra é automática e já compra.
     public void processarJogada(int resultadoDado1, int resultadoDado2) throws Exception {
 
         //
@@ -385,24 +285,17 @@ public class Jogo {
 
     }
 
-    /**
-     * Makes a player pay a fee for the use of a railway
-     * @param credor the payer index
-     * @param devedor the owner index
-     * @param valor the cost of the fee
-     * @param NomePopriedade property name
-     */
     public void pagarFerrovia(int credor, int devedor, int valor, String NomePopriedade) {
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
-        if ((NomePopriedade.equals("Reading Railroad")) ||
+          if ((NomePopriedade.equals("Reading Railroad")) ||
                 (NomePopriedade.equals("Pennsylvania Railroad")) ||
                 (NomePopriedade.equals("B & O Railroad")) ||
                 (NomePopriedade.equals("Short Line Railroad"))) {
             int quantidadeFerrovias = DonosFerrovias[credor];
             int divida = quantidadeFerrovias * valor;
-            this.print("Credor tem " + quantidadeFerrovias);
-            this.print("Divida eh " + divida);
+                this.print("Credor tem "+ quantidadeFerrovias);
+                this.print("Divida eh "+ divida);
 
             if (listaJogadores.get(devedor).getDinheiro() > divida) {
                 JogadorDevedor.retirarDinheiro(divida);
@@ -421,39 +314,26 @@ public class Jogo {
         }
     }
 
-    /**
-     * Makes a player pay a rent
-     * @param credor the payer index
-     * @param devedor the owner index
-     * @param valor the cost of the fee
-     * @param NomePopriedade property name
-     */
     public void pagarAluguel(int credor, int devedor, int valor, String NomePopriedade) {
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
 
+      
+            if (listaJogadores.get(devedor).getDinheiro() > valor) {
+                JogadorDevedor.retirarDinheiro(valor);
+                JogadorCredor.addDinheiro(valor);
 
-        if (listaJogadores.get(devedor).getDinheiro() > valor) {
-            JogadorDevedor.retirarDinheiro(valor);
-            JogadorCredor.addDinheiro(valor);
+            } else {
+                int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
+                JogadorDevedor.retirarDinheiro(DinheiroRestante);
+                JogadorCredor.addDinheiro(DinheiroRestante);
+                this.removePlayer(devedor);
 
-        } else {
-            int DinheiroRestante = listaJogadores.get(devedor).getDinheiro();
-            JogadorDevedor.retirarDinheiro(DinheiroRestante);
-            JogadorCredor.addDinheiro(DinheiroRestante);
-            this.removePlayer(devedor);
-
-        }
-
+            }
+        
 
     }
 
-    /**
-     * Checks if a dice result is valid
-     * @param resultadoDado the dice result
-     * @return
-     * @throws Exception
-     */
     private boolean isResultadoDadoValido(int resultadoDado) throws Exception {
         if ((resultadoDado > 6) || (resultadoDado < 1)) {
             throw new Exception("Invalid die result");
@@ -461,60 +341,39 @@ public class Jogo {
         return true;
     }
 
-    /**
-     * Sets the automatic buying to on
-     */
     public void definirCompraAutomatica() {
         this.compra_automatica = true;
     }
 
-    private boolean processarGanhosVolta(int jogador, int valorDados) {
+//    private void moverJogadorDaVez(int valorDados) throws Exception {
+    private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
+
+        int valorDados = dado1+dado2;
+//        this.print("Situacao de ferrovias");
+//        for(int t = 0;t<DonosFerrovias.length; t++)
+//            System.out.print(DonosFerrovias[t]+" ");
+
+
+        //preciso saber se o jogador vai passar pela posição 40, o que significa
+        //ganhar dinheiro
+        int jogador = this.jogadorAtual();
         if ((this.posicoes[jogador] + valorDados) >= 40 && this.posicoes[jogador] != 40) {
             this.listaJogadores.get(jogador).addDinheiro(200);
             this.print("\tGanha $200 por passar pela casa 40.");
-            return true;
         }
 
-        return false;
-    }
 
-    private int processarAvancoJogador(int jogador, int valorDados) {
+
+        //movendo à posição
         this.posicoes[jogador] = (this.posicoes[jogador] + valorDados);
         if (posicoes[jogador] > 40) {
             posicoes[jogador] = posicoes[jogador] - 40;
         }
-
-        return this.posicoes[jogador];
-    }
-
-    private boolean isJogadorOnFerrovia(int jogador) {
-        return posicoes[jogador] == 5 || posicoes[jogador] == 15 || posicoes[jogador] == 25 || posicoes[jogador] == 35;
-    }
-
-    /**
-     * Moves a player
-     * @param dado1 the result of the first dice
-     * @param dado2 the result of the second dice
-     * @throws Exception
-     */
-    private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
-
-        int valorDados = dado1 + dado2;
-        boolean terminou_vez = false;
-        int jogador = this.jogadorAtual();
-
-        //preciso saber se o jogador vai passar pela posição 40, o que significa
-        this.processarGanhosVolta(jogador, valorDados);
-
-        //movendo à posição
-        this.processarAvancoJogador(jogador, valorDados);
-
-
         this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
         this.print("\tVai até a posição " + this.posicoes[jogador]);
 
 
-        //realizando a compra automática
+        //realizando a compra
         Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
         if (this.isCompraAutomatica() && this.posicaoCompravel(this.posicoes[jogador])) {
             this.print("\tO lugar " + lugar.getNome() + " está à venda!");
@@ -529,34 +388,37 @@ public class Jogo {
             }
 
 
-        } // posição não comprável ==
-        else if (!this.posicaoCompravel(this.posicoes[jogador])) {
+        } else if (!this.posicaoCompravel(this.posicoes[jogador])) {
             this.print("\t" + lugar.getNome() + " não está à venda!");
 
             String dono = (String) Donos.get(this.posicoes[jogador]);
 
-            Jogador jogadorDono = this.getDonoByNome(dono);
-            this.print("O dono eh " + jogadorDono.getNome());
+            for (int i = 0; i < listaJogadores.size(); i++) {
+                Jogador possivelDono = listaJogadores.get(i);
+                if (possivelDono.getNome().equals(dono)&&posicoes[jogador]!=5 && posicoes[jogador]!=15&& posicoes[jogador]!=25&& posicoes[jogador]!=35) {
+                    this.print("O dono eh " + possivelDono.getNome());
+                    int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
+                    if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
+                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
+                    } else {
+                        int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
+                        this.pagarAluguel(possivelDono.getId(), jogador, DinheiroRestante, lugar.getNome());
+                        this.removePlayer(jogador);
 
-            if (this.isJogadorOnFerrovia(jogador)) {
-                this.pagarFerrovia(jogadorDono.getId(), jogador, 25, lugar.getNome());
-            } else {
-                int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
-
-                if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
-                    this.pagarAluguel(jogadorDono.getId(), jogador, valorAluguel, lugar.getNome());
-                } else {
-                    int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
-                    this.pagarAluguel(jogadorDono.getId(), jogador, DinheiroRestante, lugar.getNome());
-                    this.removePlayer(jogador);
+                    }
 
                 }
+                if(possivelDono.getNome().equals(dono)){
+                    this.print("O dono eh " + possivelDono.getNome());
+                    this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
+                }
+
 
             }
 
         }
 
-        
+
 
 
         if (Donos.get(this.posicoes[jogador]).equals("Income Tax")) {
@@ -595,36 +457,16 @@ public class Jogo {
         }
 
 
-        if (terminou_vez) {
-            do {
-                this.PrepareNextJogada();
-            } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
-
-        }
+        do {
+            this.PrepareNextJogada();
+        } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
 
         this.showPosicoes();
 
+
+
     }
 
-    public Jogador getDonoByNome(String nomeDono) {
-
-        Jogador dono = null;
-
-        for (int i = 0; i < listaJogadores.size() || dono != null; i++) {
-
-            if (listaJogadores.get(i).getNome().equals(nomeDono)) {
-                dono = listaJogadores.get(i);
-            }
-
-        }
-
-        return dono;
-    }
-
-    /**
-     * Removes a player
-     * @param id the player index
-     */
     public void removePlayer(int id) {
         listaJogadoresFalidos.add(listaJogadores.get(vez).getNome());
         //liberando os pertences
@@ -640,18 +482,15 @@ public class Jogo {
 
     }
 
-    /**
-     * 
-     * @return
-     */
     public boolean isCompraAutomatica() {
         return this.compra_automatica;
     }
 
-    public boolean buy() throws Exception {
+    
+    public boolean buy() throws Exception{
 
-        if (this.posicaoCompravel(posicoes[jogadorAtual()]) && posicoes[jogadorAtual()] != 12 && posicoes[jogadorAtual()] != 28) {
-            int posicaoTabuleiro = posicoes[jogadorAtual()];
+        if (this.posicaoCompravel(posicoes[jogadorAtual()])&&posicoes[jogadorAtual()]!=12&&posicoes[jogadorAtual()]!=28) {
+          int posicaoTabuleiro = posicoes[jogadorAtual()];
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
             Jogador j = listaJogadores.get(vez);
             if (preco <= j.getDinheiro()) {
@@ -671,17 +510,18 @@ public class Jogo {
                 return false;
             }
 
-        } else {
+        }
+        else{
             throw new Exception("Place doesn't have a deed to be bought");
 
         }
+        
 
-
-
+        
     }
 
     public boolean efetuarCompra(int posicaoTabuleiro, Jogador j) throws Exception {
-        if (this.posicaoCompravel(posicaoTabuleiro) && posicaoTabuleiro != 12 && posicaoTabuleiro != 28) {
+        if (this.posicaoCompravel(posicaoTabuleiro)&&posicaoTabuleiro!=12&&posicaoTabuleiro!=28) {
 //            
             int preco = this.tabuleiro.getLugarPrecoCompra(posicaoTabuleiro);
             if (preco <= j.getDinheiro()) {
@@ -706,11 +546,13 @@ public class Jogo {
 
     }
 
+
+
     /**
      * Apenas um encapsulador para o System.out.println(String)
      * @param msg
      */
-    public void print(String msg) {
+    public void print(String msg){
 //        System.out.println(msg);
     }
 }
