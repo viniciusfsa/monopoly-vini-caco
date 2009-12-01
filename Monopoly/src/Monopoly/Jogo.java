@@ -383,6 +383,24 @@ public class Jogo {
         return false;
     }
 
+    private Jogador encontrarDonoByNome(String nomeDono) throws Exception {
+
+        Jogador dono = null;
+
+        for (int i = 0; (i < listaJogadores.size()) || (dono != null); i++) {
+            Jogador possivelDono = listaJogadores.get(i);
+            if (possivelDono.getNome().equals(nomeDono)) {
+                dono = possivelDono;
+            }
+
+
+        }
+
+        return dono;
+    }
+
+
+
 //    private void moverJogadorDaVez(int valorDados) throws Exception {
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
@@ -415,11 +433,11 @@ public class Jogo {
             if (!this.posicaoCompravel(this.posicoes[jogador])) {
                 this.print("\t" + lugar.getNome() + " não está à venda!");
 
-                String dono = (String) Donos.get(this.posicoes[jogador]);
+                String nomeDono = (String) Donos.get(this.posicoes[jogador]);
 
                 for (int i = 0; i < listaJogadores.size(); i++) {
                     Jogador possivelDono = listaJogadores.get(i);
-                    if (possivelDono.getNome().equals(dono) && posicoes[jogador] != 5 && posicoes[jogador] != 15 && posicoes[jogador] != 25 && posicoes[jogador] != 35) {
+                    if (possivelDono.getNome().equals(nomeDono) && posicoes[jogador] != 5 && posicoes[jogador] != 15 && posicoes[jogador] != 25 && posicoes[jogador] != 35) {
                         this.print("O dono eh " + possivelDono.getNome());
                         int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
                         if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
@@ -432,13 +450,38 @@ public class Jogo {
                         }
 
                     }
-                    if (possivelDono.getNome().equals(dono)) {
+                    if (possivelDono.getNome().equals(nomeDono)) {
                         this.print("O dono eh " + possivelDono.getNome());
                         this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
                     }
 
 
                 }
+
+                /****
+                Jogador dono = this.encontrarDonoByNome(nomeDono);
+//                for (int i = 0; i < listaJogadores.size(); i++) {
+                    if (dono.getNome().equals(nomeDono) && posicoes[jogador] != 5 && posicoes[jogador] != 15 && posicoes[jogador] != 25 && posicoes[jogador] != 35) {
+                        this.print("O dono eh " + dono.getNome());
+                        int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
+                        if (listaJogadores.get(jogador).getDinheiro() > valorAluguel) {
+                            this.pagarAluguel(dono.getId(), jogador, valorAluguel, lugar.getNome());
+                        } else {
+                            int DinheiroRestante = listaJogadores.get(jogador).getDinheiro();
+                            this.pagarAluguel(dono.getId(), jogador, DinheiroRestante, lugar.getNome());
+                            this.removePlayer(jogador);
+
+                        }
+
+                    }
+                    if (dono.getNome().equals(nomeDono)) {
+                        this.print("O dono eh " + dono.getNome());
+                        this.pagarFerrovia(dono.getId(), jogador, 25, lugar.getNome());
+                    }
+
+
+//                }
+                ****/
 
             }
 
