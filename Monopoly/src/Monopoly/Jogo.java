@@ -363,17 +363,19 @@ public class Jogo {
         }
     }
 
-    private boolean realizarCompraAutomatica(int jogador, Lugar lugar) throws Exception {
-        if (this.isCompraAutomatica() && this.posicaoCompravel(this.posicoes[jogador])) {
+    private boolean realizarCompra(int jogador, Lugar lugar) throws Exception {
+        if (this.posicaoCompravel(this.posicoes[jogador])) {
             this.print("\tO lugar " + lugar.getNome() + " está à venda!");
             this.print("\tPreço:" + lugar.getPrecoCompra());
             this.print("\tAtual dinheiro:" + this.listaJogadores.get(jogador).getDinheiro());
             this.print("\tTenta realizar a compra");
             if (this.efetuarCompra(this.posicoes[jogador], this.listaJogadores.get(jogador))) {
                 this.print("\tJogador compra " + lugar.getNome());
+                return true;
 
             } else {
                 this.print("\tCompra não realizada!");
+                return false;
             }
 
         }
@@ -381,9 +383,19 @@ public class Jogo {
         return false;
     }
 
+
+
+
     private boolean isPosicaoJogadorFerrovia(int posicao) {
         return (posicao == 5 || posicao == 15 || posicao == 25 || posicao == 35);
     }
+
+
+
+
+
+
+
 
     private boolean pagarImposto(String nomeImposto, int valorImposto, int jogador) {
         if (Donos.get(this.posicoes[jogador]).equals(nomeImposto)) {
@@ -403,12 +415,20 @@ public class Jogo {
         return false;
     }
 
+
+
+
+
     private boolean pagarEventuaisTaxas(int jogador) {
         boolean pagouIncomeTax = this.pagarImposto("Income Tax", 200, jogador);
         boolean pagouLuxuryTax = this.pagarImposto("Luxury Tax", 75, jogador);
 
         return (pagouIncomeTax || pagouLuxuryTax);
     }
+
+
+
+
 
     private boolean isDonoUmJogador(String nomeDono) {
         for (int i = 0; i < listaJogadores.size(); i++) {
@@ -424,15 +444,15 @@ public class Jogo {
     }
 
 
+
+
+
+
+
 //    private void moverJogadorDaVez(int valorDados) throws Exception {
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
         int valorDados = dado1 + dado2;
-//        this.print("Situacao de ferrovias");
-//        for(int t = 0;t<DonosFerrovias.length; t++)
-//            System.out.print(DonosFerrovias[t]+" ");
-
-
 
         int jogador = this.jogadorAtual();
 
@@ -451,22 +471,25 @@ public class Jogo {
         Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
 
         //se não realizar a compra automática :)
-        if (!this.realizarCompraAutomatica(jogador, lugar)) {
+//        if (!this.realizarCompra(jogador, lugar)) {
+        if (this.isCompraAutomatica()){
+            this.realizarCompra(jogador, lugar);
+        }
+//        else {
 
             if (!this.posicaoCompravel(this.posicoes[jogador])) {
                 this.print("\t" + lugar.getNome() + " não está à venda!");
 
 
 
-                String dono = (String) Donos.get(this.posicoes[jogador]);
+                String nomeDono = (String) Donos.get(this.posicoes[jogador]);
 
-                if (this.isDonoUmJogador(dono)) {
-                    Jogador possivelDono = this.getJogadorByName(dono);
+                if (this.isDonoUmJogador(nomeDono)) {
+                    Jogador possivelDono = this.getJogadorByName(nomeDono);
 
                     if (this.isPosicaoJogadorFerrovia(this.posicoes[jogador])) {
                         this.print("O dono eh " + possivelDono.getNome());
                         this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
-                        ;
                     } else {
 
                         this.print("O dono eh " + possivelDono.getNome());
@@ -474,13 +497,12 @@ public class Jogo {
                         this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
 
                     }
-
-//                    
+                
                 }
 
             }
 
-        }
+//        }
 
         //pagando impostos
         this.pagarEventuaisTaxas(jogador);
@@ -572,12 +594,14 @@ public class Jogo {
 
     }
 
+
+    
+
     /**
      * Apenas um encapsulador para o System.out.println(String)
      * @param msg
      */
     public void print(String msg) {
-//        System.out.println(msg);
         this.print(msg, false);
     }
 
