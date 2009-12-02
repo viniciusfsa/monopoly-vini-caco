@@ -129,19 +129,35 @@ public class Jogador {
         this.CorPeao = CorPeao;
     }
 
+    /**
+     * Obtem o nome do jogador
+     * @return o nome
+     */
     public String getNome() {
         return Nome;
     }
 
+    /**
+     * Define um nome para o jogador
+     * @param Nome o nome
+     */
     public void setNome(String Nome) {
         this.Nome = Nome;
     }
 
+    /**
+     * Adiciona uma propriedade à lista de posses do jogador
+     * @param nome o nome da propriedade
+     */
     public void addPropriedade(String nome){
         propriedades.add(nome);
         
     }
 
+    /**
+     * Obtem a lista de posses do Jogador
+     * @return a lista de propriedades
+     */
     public ArrayList getPropriedades(){
         return propriedades;
     }

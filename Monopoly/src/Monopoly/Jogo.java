@@ -4,33 +4,77 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * A classe que gerencia todas as operacoes do jogo, alem de saber de quase tudo.
  * @author Marcus
  */
 public class Jogo {
 
+    /**
+     * Lista dos jogadores participantes do jogo (nao-falidos)
+     */
     private List<Jogador> listaJogadores = new ArrayList();
+
+    /**
+     * Lista dos jogadores falidos
+     */
     private List<String> listaJogadoresFalidos = new ArrayList();
+
+    /**
+     * Cores permitidas para os peoes dos jogadores
+     */
     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
+
+    /**
+     * O status do jogo (terminado?)
+     */
     private boolean status = false;
+
+    /**
+     * A vez
+     */
     private int vez = 0;
+
+    /**
+     * A posicao que cada um dos jogadores ocupa
+     */
     private int posicoes[] = {40, 40, 40, 40, 40, 40, 40, 40};
+
+    /**
+     * Os donos das propriedades
+     */
     private Hashtable Donos = new Hashtable();
+
+    /**
+     * O tabuleiro do jogo
+     */
     private Tabuleiro tabuleiro = new Tabuleiro();
+
+    /**
+     * Lista de comandos
+     */
     Comandos cmds = new Comandos();
+
+    /**
+     * definicao da compra automatica
+     */
     private boolean compra_automatica = false;
+
+    /**
+     * Os donos das ferrovias
+     */
     int[] DonosFerrovias = {0, 0, 0, 0, 0, 0, 0, 0};
+
+    /**
+     * O dinheiro do banco
+     */
     private int dinheiroBanco = 0;
+
 
     public int vezesJogadas = 0;
 
     /**
-     * Identifica 
+     * Identifica se a vez de um jogador ja terminou ou nao
      */
     private boolean terminouVez = true;
 
@@ -668,14 +712,6 @@ public class Jogo {
             if (isEstatal) {
                 throw new Exception("Deed for this place is not for sale");
             }
-//            else if (this.is)
-//            else if (){
-//                throw new Exception("Deed for this place is not for sale");
-//            }
-//            else{
-//                throw new Exception("Place doesn't have a deed to be bought");
-//            }
-            
             
         }
 
