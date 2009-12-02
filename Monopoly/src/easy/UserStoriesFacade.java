@@ -51,7 +51,7 @@ public class UserStoriesFacade {
 
     /**
      * Consulta o total de jogadores
-     * @return
+     * @return o total de jogadores
      */
     public int getNumberOfPlayers() {
         return jogo.getNumberOfPlayers();
