@@ -13,17 +13,23 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * Facade das user stories
  * @author Marcus
  */
-public class facade {
+public class UserStoriesFacade {
 
 
     Jogo           jogo = null;
     Tabuleiro tabuleiro = null;
 
     
-    //aqui agora eu passo as strings em vez da listas.
+    /**
+     * Criacao de um jogo
+     * @param num total de jogadores
+     * @param playerNames nomes dos jogadores
+     * @param tokenColors nomes das cores dos peoes dos jogadores
+     * @throws Exception
+     */
     public void createGame(int num, String playerNames, String tokenColors) throws Exception {
        
         String nomes_jogadores[] = playerNames.substring(1, playerNames.length() - 1).split(",");
@@ -35,40 +41,81 @@ public class facade {
 
     }
 
+    /**
+     * Seta a compra automatica
+     */
     public void setAutomaticBuying(){
         this.jogo.setCompraAutomatica();
     }
 
-    public int getNumberOfPlayers() {
 
+    /**
+     * Consulta o total de jogadores
+     * @return
+     */
+    public int getNumberOfPlayers() {
         return jogo.getNumberOfPlayers();
     }
 
+
+    /**
+     * Executa um movimento considerando os valores dos dados
+     * @param firstDieResult resultado do primeiro dado
+     * @param secondDieResult resultado do segundo dado
+     * @throws Exception
+     */
     public void rollDice(int firstDieResult, int secondDieResult) throws Exception{
-//        this.jogo.processarJogada(firstDieResult,secondDieResult);
         this.jogo.processarJogada(firstDieResult,secondDieResult);
     }
 
+    /**
+     * Set a compra automatica
+     * @param auto 
+     */
     public void setAutomaticBuying(boolean auto){
         this.jogo.definirCompraAutomatica();
     }
 
 
+
+    /**
+     * Obtem a cor do peao do jogador
+     * @param playerName nome do jogador
+     * @return retorna a cor do peao
+     * @throws Exception
+     */
     public String getPlayerToken(String playerName) throws Exception{
         jogo.terminarAVez();
         return this.jogo.getPlayerToken(playerName);
     }
 
+
+    /**
+     * Obtem o dinheiro do jogador
+     * @param playerName nome do jogador
+     * @return o dinheiro
+     * @throws Exception
+     */
     public int getPlayerMoney(String playerName) throws Exception{
-//        jogo.terminarAVez();
         return this.jogo.getPlayerMoney(playerName);
     }
 
+
+    /**
+     * Obtem a posicao do jogador
+     * @param playerName nome do jogador
+     * @return a posicao
+     * @throws Exception
+     */
     public int getPlayerPosition(String playerName) throws Exception{
-//        jogo.terminarAVez();
         return this.jogo.getPlayerPosition(playerName);
     }
 
+
+    /**
+     * Obtem o nome do jogador atual
+     * @return o nome do jogador
+     */
     public String getCurrentPlayer() {
         jogo.terminarAVez();
         List<Jogador> listaJogador = this.jogo.getListaJogadores();
@@ -77,6 +124,13 @@ public class facade {
         return a.getNome();
     }
 
+
+    /**
+     * Obtem as posses de um jogador
+     * @param playerName nome do jogador
+     * @return lista de posses do jogador
+     * @throws Exception
+     */
     public String getPlayerDeeds(String playerName) throws Exception{
         String propriedades  ="";
         List<Jogador> listaJogador = this.jogo.getListaJogadores();
@@ -98,6 +152,12 @@ public class facade {
         throw new Exception ("Player doesn't exist");
     }
 
+
+    /**
+     * Obtem os comandos possiveis
+     * @return lista de comandos
+     */
+
     public String getCommands(){
         Comandos comandos = new Comandos();
         List a = comandos.getCmds();
@@ -114,6 +174,11 @@ public class facade {
         
     }
 
+
+    /**
+     * Finaliza um jogo
+     * @throws Exception
+     */
     public void quitGame() throws Exception{
         if (this.jogo!=null){
             this.jogo.QuitJogo();
@@ -124,37 +189,74 @@ public class facade {
         
     }
 
-    //A gente pode incorporar algumas exceções pra dentro dos objetos em vez do
-    //façade
+    /**
+     * Obtem o nome do lugar
+     * @param placeID id do lugar
+     * @return o nome do lugar
+     * @throws Exception
+     */
     public String getPlaceName(int placeID) throws Exception{
         return this.tabuleiro.getPlaceName(placeID);
     }
-    
+
+
+    /**
+     * Obtem o grupo ao qual um lugar pertence
+     * @param placeID o id do lugar
+     * @return o nome do grupo
+     * @throws Exception
+     */
     public String getPlaceGroup(int placeID) throws Exception{
-        
         return this.tabuleiro.getLugarGrupo(placeID);
     }
 
+
+    /**
+     * Obtem o dono de um lugar
+     * @param placeID id do lugar
+     * @return o nome do dono
+     * @throws Exception
+     */
     public String getPlaceOwner(int placeID) throws Exception{
         jogo.terminarAVez();
         return jogo.getOwnerPlace(placeID);
-        //return this.tabuleiro.getLugarDono(placeID);
     }
 
+
+    /**
+     * Obtem o preco de um lugar
+     * @param placeID id do lugar
+     * @return o preco
+     * @throws Exception
+     */
     public int getPlacePrice(int placeID) throws Exception{
         return this.tabuleiro.getLugarPrecoCompra(placeID);
     }
 
 
+    /**
+     * Obtem o valor de aluguel de uma propriedade
+     * @param placeID id do lugar
+     * @return o preco
+     * @throws Exception
+     */
     public int getPropertyRent(int placeID) throws Exception{
         return this.tabuleiro.getLugarPrecoAluguel(placeID);
     }
 
+    /**
+     * Verifica se o jogo acabou (apenas um jogador restante)
+     * @return true se o jogo acabou, false caso contrario
+     */
     public boolean gameIsOver (){
         return this.jogo.isGameFinished();
     }
 
 
+    /**
+     * Realiza uma compra
+     * @throws Exception
+     */
     public void buy() throws Exception{
         this.jogo.buy();
     }

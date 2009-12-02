@@ -1,5 +1,5 @@
 /**
- *
+ * Somente executa as user stories da Milestone 1
  * @author Marcus
  */
 
@@ -10,8 +10,13 @@ import easyaccept.EasyAcceptFacade;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExecutaUserStories {
+public class Milestone1 {
 
+    /**
+     * Executa os testes da milestone 1
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         List<String> files = new ArrayList<String>();
@@ -21,7 +26,7 @@ public class ExecutaUserStories {
         files.add("us3.txt");
         files.add("us4.txt");
         //Instantiate the Monopoly Game façade
-        facade monopolyGameFacade = new facade();
+        UserStoriesFacade monopolyGameFacade = new UserStoriesFacade();
         //Instantiate EasyAccept façade
         EasyAcceptFacade eaFacade = new EasyAcceptFacade(monopolyGameFacade, files);
         //Execute the tests
