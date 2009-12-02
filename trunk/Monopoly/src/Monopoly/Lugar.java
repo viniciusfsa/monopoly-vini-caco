@@ -1,31 +1,52 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package Monopoly;
 
 /**
- *
+ * Contem as informacoes de um lugar do tabuleiro
  * @author Marcus
  */
 public class Lugar {
 
-  
+
+    /**
+     * Nome do lugar
+     */
     private String Nome="";
+
+    /**
+     * Preco de compra do lugar
+     */
     private int Preco=0;
+
+    /**
+     * Nome do dono do lugar
+     */
     private String dono = "bank";
 
+
+    /**
+     * Instancia um novo lugar
+     * @param Posicao a posicao
+     * @param Nome o nome
+     * @param Preco o preco de compra
+     */
     public Lugar(int Posicao, String Nome, int Preco) {
         this.Nome= Nome;        
         this.Preco=Preco;
     }
 
 
+    /**
+     * Obtem o nome do lugar
+     * @return o nome
+     */
     public String getNome() {
         return Nome;
     }
 
+    /**
+     * Define um nome para o lugar
+     * @param Nome o nome do lugar
+     */
     public void setNome(String Nome) {
         this.Nome = Nome;
     }
@@ -33,15 +54,29 @@ public class Lugar {
    
 
     
-
-    public double getPreco() {
+    /**
+     * Obtem o preco de compra do lugar
+     * @return o preco
+     */
+    public int getPreco() {
         return Preco;
     }
 
+
+
+    /**
+     * Define um preco para o lugar
+     * @param Preco o preco
+     */
     public void setPreco(int Preco) {
         this.Preco = Preco;
     }
 
+    /**
+     * Consulta o grupo de algum lugar
+     * @param placeID o id do lugar
+     * @return o nome do grupo
+     */
     public String getGrupo(int placeID) {
         if(placeID==1||placeID==3){
             return "purple";}
@@ -73,12 +108,20 @@ public class Lugar {
             return "chest";
     }
 
+
+    /**
+     * Obtem o preco de compra do lugar
+     * @return
+     */
     public int getPrecoCompra() {
-        return this.Preco;
+        return this.getPreco();
     }
 
     
-
+    /**
+     * Obtem o nome do dono do lugar
+     * @return nome do dono
+     */
     public String getDono() {
         return dono;
     }
