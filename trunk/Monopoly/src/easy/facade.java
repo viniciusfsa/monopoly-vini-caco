@@ -60,12 +60,12 @@ public class facade {
     }
 
     public int getPlayerMoney(String playerName) throws Exception{
-        jogo.terminarAVez();
+//        jogo.terminarAVez();
         return this.jogo.getPlayerMoney(playerName);
     }
 
     public int getPlayerPosition(String playerName) throws Exception{
-        jogo.terminarAVez();
+//        jogo.terminarAVez();
         return this.jogo.getPlayerPosition(playerName);
     }
 

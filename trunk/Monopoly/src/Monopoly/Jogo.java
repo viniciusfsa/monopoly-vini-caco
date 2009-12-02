@@ -659,15 +659,22 @@ public class Jogo {
         }
         else {
 
+            if (this.jaTemDono(posicoes[jogador])){
+                throw new Exception("Deed for this place is not for sale");
+            }
+            if (!posicaoCompravel){
+                throw new Exception("Place doesn't have a deed to be bought");
+            }
             if (isEstatal) {
                 throw new Exception("Deed for this place is not for sale");
             }
-            else if (this.isPosicaoFerrovia(posicoes[jogador])){
-                throw new Exception("Deed for this place is not for sale");
-            }
-            else{
-                throw new Exception("Place doesn't have a deed to be bought");
-            }
+//            else if (this.is)
+//            else if (){
+//                throw new Exception("Deed for this place is not for sale");
+//            }
+//            else{
+//                throw new Exception("Place doesn't have a deed to be bought");
+//            }
             
             
         }
@@ -728,5 +735,11 @@ public class Jogo {
             System.out.println(msg);
         }
 
+    }
+
+    private boolean jaTemDono(int posicao) {
+        String nomeDono = Donos.get(posicao).toString();
+        return (this.isUmJogador(nomeDono));
+        
     }
 }
