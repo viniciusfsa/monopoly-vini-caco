@@ -1,8 +1,3 @@
-/**
- * Somente executa as user stories da Milestone 1
- * @author Marcus
- */
-
 package easy;
 
 
@@ -10,6 +5,10 @@ import easyaccept.EasyAcceptFacade;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Testes da Milestone 1
+ * @author Marcus
+ */
 public class Milestone1 {
 
     /**
