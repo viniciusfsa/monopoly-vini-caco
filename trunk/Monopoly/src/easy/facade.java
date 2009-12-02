@@ -55,18 +55,22 @@ public class facade {
 
 
     public String getPlayerToken(String playerName) throws Exception{
+        jogo.terminarAVez();
         return this.jogo.getPlayerToken(playerName);
     }
 
     public int getPlayerMoney(String playerName) throws Exception{
+        jogo.terminarAVez();
         return this.jogo.getPlayerMoney(playerName);
     }
 
     public int getPlayerPosition(String playerName) throws Exception{
+        jogo.terminarAVez();
         return this.jogo.getPlayerPosition(playerName);
     }
 
     public String getCurrentPlayer() {
+        jogo.terminarAVez();
         List<Jogador> listaJogador = this.jogo.getListaJogadores();
 
         Jogador a=listaJogador.get(jogo.jogadorAtual());
@@ -127,10 +131,12 @@ public class facade {
     }
     
     public String getPlaceGroup(int placeID) throws Exception{
+        
         return this.tabuleiro.getLugarGrupo(placeID);
     }
 
     public String getPlaceOwner(int placeID) throws Exception{
+        jogo.terminarAVez();
         return jogo.getOwnerPlace(placeID);
         //return this.tabuleiro.getLugarDono(placeID);
     }
