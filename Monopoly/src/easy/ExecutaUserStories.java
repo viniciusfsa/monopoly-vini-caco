@@ -10,7 +10,7 @@ import easyaccept.EasyAcceptFacade;
 import java.util.ArrayList;
 import java.util.List;
 
-public class clienteTeste {
+public class ExecutaUserStories {
 
     public static void main(String[] args) throws Exception {
 
