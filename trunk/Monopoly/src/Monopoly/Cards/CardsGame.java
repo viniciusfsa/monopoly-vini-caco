@@ -52,8 +52,8 @@ public class CardsGame {
     public void initCardsSorteReves(){
 
         CardsSorteReves[0] = new Card(1, "Advance To Go - Collect $200", "Receba $200");
-        CardsSorteReves[1] = new Card(2, "Avance para", "Illinois Avenue");
-        CardsSorteReves[2] = new Card(3, "Avance para St. Charles Place", "Se passer pelo ponto de partida, receba $200");
+        CardsSorteReves[1] = new Card(2, "Advance To - Illinois Avenue", "Illinois Avenue");
+        CardsSorteReves[2] = new Card(3, "Advance To St. Charles Place - If you pass Go, Collect $200", "Se passer pelo ponto de partida, receba $200");
         CardsSorteReves[3] = new Card(4, "Avance o peão para o serviço público mais próximo", "Se não tiver dono você pode comprá-lo do banco. Se tiver, lance os dados e pague ao dono 10 vezes o resultado do lançamento.");
         CardsSorteReves[4] = new Card(5, "Avance o peão para a ferrovia mais próxima", "Pague ao dono duas vezes o valor que ele deveria receber normalmente. Se a ferrovia não tiver dono, você pode comprá-la do banco.");
         CardsSorteReves[5] = new Card(6, "O banco lhe pagou dividendos de", "$50");
