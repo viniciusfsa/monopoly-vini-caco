@@ -13,7 +13,6 @@ import java.util.List;
 public class Jogo {
 
     private boolean cards = false;
-
     private boolean cardShuffle = false;
     /**
      * Lista dos jogadores participantes do jogo (nao-falidos)
@@ -114,11 +113,11 @@ public class Jogo {
         cardShuffle = false;
     }
 
-    public void activeCards(){
+    public void activeCards() {
         cards = true;
     }
 
-    public void desativeCards(){
+    public void desativeCards() {
         cards = false;
     }
 
@@ -623,8 +622,8 @@ public class Jogo {
         }
     }
 
-    private void DeslocarJogador(int jogador, int novaPosicao){
-         this.posicoes[jogador] = novaPosicao;
+    private void DeslocarJogador(int jogador, int novaPosicao) {
+        this.posicoes[jogador] = novaPosicao;
     }
 
     /**
@@ -726,53 +725,57 @@ public class Jogo {
     }
 
     public void realizaProcessamentoCartaoChance() {
-       if(indiceChance==1){
+        if (indiceChance == 1) {
             DeslocarJogador(jogadorAtual(), 40);
             this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
-           
-        }
 
-       else if(indiceChance==2){
-           DeslocarJogador(jogadorAtual(), 24);
-       }
-
-       else if(indiceChance==3){
-           DeslocarJogador(jogadorAtual(), 11);
+        } else if (indiceChance == 2) {
+            DeslocarJogador(jogadorAtual(), 24);
+        } else if (indiceChance == 3) {
+            DeslocarJogador(jogadorAtual(), 11);
             this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
 
-       }
-
-       else if(indiceChance==4){
-           if(this.posicoes[this.jogadorAtual()]<12||this.posicoes[this.jogadorAtual()]>28){
+        } else if (indiceChance == 4) {
+            if (this.posicoes[this.jogadorAtual()] < 12 || this.posicoes[this.jogadorAtual()] > 28) {
                 DeslocarJogador(jogadorAtual(), 12);
-           }
-           else{
-               DeslocarJogador(jogadorAtual(), 28);
-           }
-       }
-
-       else if(indiceChance==5){
-           if(this.posicoes[jogadorAtual()]<5||this.posicoes[jogadorAtual()]>35)
-               DeslocarJogador(jogadorAtual(), 5);
-           else if(this.posicoes[jogadorAtual()]<15)
-               DeslocarJogador(jogadorAtual(), 15);
-           else if(this.posicoes[jogadorAtual()]<25)
-               DeslocarJogador(jogadorAtual(), 25);
-           else if(this.posicoes[jogadorAtual()]<35)
-               DeslocarJogador(jogadorAtual(), 35);
-       }
-
-       else if(indiceChance==6){
-           dinheiroBanco = dinheiroBanco - 50;
+            } else {
+                DeslocarJogador(jogadorAtual(), 28);
+            }
+        } else if (indiceChance == 5) {
+            if (this.posicoes[jogadorAtual()] < 5 || this.posicoes[jogadorAtual()] > 35) {
+                DeslocarJogador(jogadorAtual(), 5);
+            } else if (this.posicoes[jogadorAtual()] < 15) {
+                DeslocarJogador(jogadorAtual(), 15);
+            } else if (this.posicoes[jogadorAtual()] < 25) {
+                DeslocarJogador(jogadorAtual(), 25);
+            } else if (this.posicoes[jogadorAtual()] < 35) {
+                DeslocarJogador(jogadorAtual(), 35);
+            }
+        } else if (indiceChance == 6) {
+            dinheiroBanco = dinheiroBanco - 50;
             this.listaJogadores.get(jogadorAtual()).addDinheiro(50);
-       }
+        } else if (indiceChance == 7) {
+            DeslocarJogador(jogadorAtual(), this.posicoes[jogadorAtual()] - 3);
+        } else if (indiceChance == 8) {
+            DeslocarJogador(jogadorAtual(), 10);
+        } else if (indiceChance == 9) {
+        } else if (indiceChance == 10) {
+            this.listaJogadores.get(jogadorAtual()).retirarDinheiro(15);
+            dinheiroBanco += 15;
+        } else if (indiceChance == 11) {
+        } else if (indiceChance == 12) {
+            if (this.posicoes[this.jogadorAtual()] > 5) {
+                this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
+            }
+            DeslocarJogador(jogadorAtual(), 5);
+            if (this.posicoes[this.jogadorAtual()] > 5) {
+                this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
+            }
+        }
 
-       else if(indiceChance ==7){
-           DeslocarJogador(jogadorAtual(), this.posicoes[jogadorAtual()-3]);
-       }
 
         indiceChance++;
-        
+
     }
 
     /**
@@ -784,69 +787,69 @@ public class Jogo {
      */
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
-         
-            int valorDados = dado1 + dado2;
 
-            int jogador = this.jogadorAtual();
+        int valorDados = dado1 + dado2;
 
-
-            //preciso saber se o jogador vai passar pela posição 40, o que significa
-            //ganhar dinheiro
-            this.completouVolta(jogador, valorDados);
-
-            //movendo à posição
-            this.moverJogadorAPosicao(jogador, valorDados);
-            this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
-            this.print("\tVai até a posição " + this.posicoes[jogador]);
+        int jogador = this.jogadorAtual();
 
 
+        //preciso saber se o jogador vai passar pela posição 40, o que significa
+        //ganhar dinheiro
+        this.completouVolta(jogador, valorDados);
 
-            Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
-
-            
-            if (this.isCompraAutomatica()) {
-                this.realizarCompra(jogador, lugar);
-            }
-
-            if (!this.posicaoCompravel(this.posicoes[jogador])) {
-                this.print("\t" + lugar.getNome() + " não está à venda!");
+        //movendo à posição
+        this.moverJogadorAPosicao(jogador, valorDados);
+        this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
+        this.print("\tVai até a posição " + this.posicoes[jogador]);
 
 
 
-                String nomeDono = (String) Donos.get(this.posicoes[jogador]);
-                //não cobrar aluguel de si mesmo
-                if (!nomeDono.equals(this.listaJogadores.get(this.jogadorAtual()).getNome())) {
+        Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
 
-                    if (this.isUmJogador(nomeDono)) {
-                        Jogador possivelDono = this.getJogadorByName(nomeDono);
 
-                        if (this.isPosicaoFerrovia(this.posicoes[jogador])) {
-                            this.print("\tO dono eh " + possivelDono.getNome());
-                            this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
-                        } else {
+        if (this.isCompraAutomatica()) {
+            this.realizarCompra(jogador, lugar);
+        }
 
-                            this.print("\tO dono eh " + possivelDono.getNome());
-                            int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
-                            this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
+        if (!this.posicaoCompravel(this.posicoes[jogador])) {
+            this.print("\t" + lugar.getNome() + " não está à venda!");
 
-                        }
+
+
+            String nomeDono = (String) Donos.get(this.posicoes[jogador]);
+            //não cobrar aluguel de si mesmo
+            if (!nomeDono.equals(this.listaJogadores.get(this.jogadorAtual()).getNome())) {
+
+                if (this.isUmJogador(nomeDono)) {
+                    Jogador possivelDono = this.getJogadorByName(nomeDono);
+
+                    if (this.isPosicaoFerrovia(this.posicoes[jogador])) {
+                        this.print("\tO dono eh " + possivelDono.getNome());
+                        this.pagarFerrovia(possivelDono.getId(), jogador, 25, lugar.getNome());
+                    } else {
+
+                        this.print("\tO dono eh " + possivelDono.getNome());
+                        int valorAluguel = this.tabuleiro.getLugarPrecoAluguel(this.posicoes[jogador]);
+                        this.pagarAluguel(possivelDono.getId(), jogador, valorAluguel, lugar.getNome());
 
                     }
+
                 }
-
             }
 
-
-            this.pagarEventuaisTaxas(jogador);
-
-            if((this.posicoes[this.jogadorAtual()]==7 ||this.posicoes[jogadorAtual()]==22||this.posicoes[jogadorAtual()]==36 )&& cards==true){
-                realizaProcessamentoCartaoChance();               
-            }
+        }
 
 
-            this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
+        this.pagarEventuaisTaxas(jogador);
 
-        
+        if ((this.posicoes[this.jogadorAtual()] == 7 || this.posicoes[jogadorAtual()] == 22 || this.posicoes[jogadorAtual()] == 36) && cards == true) {
+            realizaProcessamentoCartaoChance();
+        }
+
+
+        this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
+
+
 
     }
 
