@@ -1,0 +1,42 @@
+# User story 5 - Chance and Community Chest Places
+
+############################
+# testing all chance cards #
+############################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+# cardShuffle=false - cards are drawn sequentially, from 1 to 16
+# cardShuffle=true - cards are randomized in the pile
+activateChancePlaces cardShuffle=false
+
+expecterror "Card doesn't exist" forceNextChanceCard cardId=0
+expecterror "Card doesn't exist" forceNextChanceCard cardId=17
+expecterror "Card doesn't exist" forceNextChestCard cardId=0
+expecterror "Card doesn't exist" forceNextChestCard cardId=17
+
+expect 1 getCurrentChanceCardNumber
+expect "Advance To Go - Collect $200" getCurrentChanceCardDescription
+
+# player1 falls on Chance 1 and gets card 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 40 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+expect 2 getCurrentChanceCardNumber
+expect "Advance To - Illinois Avenue" getCurrentChanceCardDescription
+
+# player2 falls on Chance 1 and gets card 2 - I'm not buying automatically, so I don't want Illinois Av. deed
+rollDice firstDieResult=4 secondDieResult=3
+expect 24 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+expect 3 getCurrentChanceCardNumber
+expect "Advance To St. Charles Place - If you pass Go, Collect $200" getCurrentChanceCardDescription
+
+rollDice firstDieResult=6 secondDieResult=6
+
+# player2 falls on Chance 3 and gets card 3 - collects $200 when passing Go
+rollDice firstDieResult=6 secondDieResult=6
+expect 11 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
