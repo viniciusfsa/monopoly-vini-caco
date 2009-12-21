@@ -54,10 +54,10 @@ public class CardsGame {
         CardsSorteReves[0] = new Card(1, "Advance To Go - Collect $200", "Receba $200");
         CardsSorteReves[1] = new Card(2, "Advance To - Illinois Avenue", "Illinois Avenue");
         CardsSorteReves[2] = new Card(3, "Advance To St. Charles Place - If you pass Go, Collect $200", "Se passer pelo ponto de partida, receba $200");
-        CardsSorteReves[3] = new Card(4, "Avance o peão para o serviço público mais próximo", "Se não tiver dono você pode comprá-lo do banco. Se tiver, lance os dados e pague ao dono 10 vezes o resultado do lançamento.");
-        CardsSorteReves[4] = new Card(5, "Avance o peão para a ferrovia mais próxima", "Pague ao dono duas vezes o valor que ele deveria receber normalmente. Se a ferrovia não tiver dono, você pode comprá-la do banco.");
-        CardsSorteReves[5] = new Card(6, "O banco lhe pagou dividendos de", "$50");
-        CardsSorteReves[6] = new Card(7, "Volte 3 espaços", "");
+        CardsSorteReves[3] = new Card(4, "Advance Token To Nearest Utility - If unowned you may buy it from the bank. If owned, throw dice and pay owner a total ten times the amount thrown.", "Se não tiver dono você pode comprá-lo do banco. Se tiver, lance os dados e pague ao dono 10 vezes o resultado do lançamento.");
+        CardsSorteReves[4] = new Card(5, "Advance Token To The Nearest Railroad - Pay Owner Twice The Rental To Which He Is Otherwise entitled. If Railroad Is Unowned, You May Buy It From The Bank.", "Pague ao dono duas vezes o valor que ele deveria receber normalmente. Se a ferrovia não tiver dono, você pode comprá-la do banco.");
+        CardsSorteReves[5] = new Card(6, "Bank Pays You Dividend Of - $50", "$50");
+        CardsSorteReves[6] = new Card(7, "Go Back 3 Spaces", "");
         CardsSorteReves[7] = new Card(8, "Vá diretamente para a Prisão", "Não passe pelo ponto de partida, não receba $200.");
         CardsSorteReves[8] = new Card(9, "Faça a manutenção de todas as suas propriedades", "Para cada casa pague $25, para cada hotel $10.");
         CardsSorteReves[9] = new Card(10, "Pague imposto de pobreza de", "$15");
