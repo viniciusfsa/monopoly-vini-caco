@@ -58,11 +58,11 @@ public class CardsGame {
         CardsSorteReves[4] = new Card(5, "Advance Token To The Nearest Railroad - Pay Owner Twice The Rental To Which He Is Otherwise entitled. If Railroad Is Unowned, You May Buy It From The Bank.", "Pague ao dono duas vezes o valor que ele deveria receber normalmente. Se a ferrovia não tiver dono, você pode comprá-la do banco.");
         CardsSorteReves[5] = new Card(6, "Bank Pays You Dividend Of - $50", "$50");
         CardsSorteReves[6] = new Card(7, "Go Back 3 Spaces", "");
-        CardsSorteReves[7] = new Card(8, "Vá diretamente para a Prisão", "Não passe pelo ponto de partida, não receba $200.");
-        CardsSorteReves[8] = new Card(9, "Faça a manutenção de todas as suas propriedades", "Para cada casa pague $25, para cada hotel $10.");
-        CardsSorteReves[9] = new Card(10, "Pague imposto de pobreza de", "$15");
-        CardsSorteReves[10] = new Card(11, "Esta carta pode ser mantida até seu uso ou venda", "Get Out Of Jail Free");
-        CardsSorteReves[11] = new Card(12, "Dê uma volta na Reading", "Se você passer pelo Ponto de Partida receba $200");
+        CardsSorteReves[7] = new Card(8, "Go Directly To Jail - Do Not Pass Go, Do Not Collect $200", "Não passe pelo ponto de partida, não receba $200.");
+        CardsSorteReves[8] = new Card(9, "Make General Repairs On All Your Property - For Each House Pay $25, For Each Hotel $100", "Para cada casa pague $25, para cada hotel $10.");
+        CardsSorteReves[9] = new Card(10, "Pay Poor Tax Of - $15", "$15");
+        CardsSorteReves[10] = new Card(11, "This Card May Be Kept Until Needed Or Sold - Get Out Of Jail Free", "Get Out Of Jail Free");
+        CardsSorteReves[11] = new Card(12, "Take A Ride On The Reading - If You Pass Go Collect $200", "Se você passer pelo Ponto de Partida receba $200");
         CardsSorteReves[12] = new Card(13, "Dê uma caminhada no Board Walk", "Avance o peão para Board Walk");
         CardsSorteReves[13] = new Card(14, "Você foi eleito presidente do tabuleiro", "Pague $50 para cada jogador");
         CardsSorteReves[14] = new Card(15, "Seus empréstimos e investimento fizeram aniversário", "Receba $150");
