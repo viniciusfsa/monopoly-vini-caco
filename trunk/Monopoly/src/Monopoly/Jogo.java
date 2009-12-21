@@ -1,5 +1,7 @@
 package Monopoly;
 
+import Monopoly.Cards.Card;
+import Monopoly.Cards.CardsGame;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -10,72 +12,63 @@ import java.util.List;
  */
 public class Jogo {
 
+    private boolean cards = false;
+
+    private boolean cardShuffle = false;
     /**
      * Lista dos jogadores participantes do jogo (nao-falidos)
      */
     private List<Jogador> listaJogadores = new ArrayList();
-
     /**
      * Lista dos jogadores falidos
      */
     private List<String> listaJogadoresFalidos = new ArrayList();
-
     /**
      * Cores permitidas para os peoes dos jogadores
      */
     static String[] coresPermitidas = {"black", "white", "red", "green", "blue", "orange", "yellow", "pink", "brown"};
-
     /**
      * O status do jogo (terminado?)
      */
     private boolean status = false;
-
     /**
      * A vez
      */
     private int vez = 0;
-
     /**
      * A posicao que cada um dos jogadores ocupa
      */
     private int posicoes[] = {40, 40, 40, 40, 40, 40, 40, 40};
-
     /**
      * Os donos das propriedades
      */
     private Hashtable Donos = new Hashtable();
-
     /**
      * O tabuleiro do jogo
      */
     private Tabuleiro tabuleiro = new Tabuleiro();
-
     /**
      * Lista de comandos
      */
     Comandos cmds = new Comandos();
-
     /**
      * definicao da compra automatica
      */
     private boolean compra_automatica = false;
-
     /**
      * Os donos das ferrovias
      */
     int[] DonosFerrovias = {0, 0, 0, 0, 0, 0, 0, 0};
-
     /**
      * O dinheiro do banco
      */
     private int dinheiroBanco = 0;
-
-
+    private int indiceChance = 1;
+    private int indiceChest = 1;
     /**
      * Identifica se a vez de um jogador ja terminou ou nao
      */
     private boolean terminouVez = true;
-
     /**
      * Instancia um jogo
      * @param quantidade quantidade de jogadores
@@ -83,10 +76,19 @@ public class Jogo {
      * @param cores_jogadores cores dos peoes dos jogadores
      * @throws Exception
      */
+    private CardsGame cardsGame = new CardsGame();
+
     public Jogo(int quantidade, String[] nomes_jogadores, String[] cores_jogadores) throws Exception {
 
 
         //só separei o tratamento de erros
+
+        cardsGame.initCardsCofresComunitarios();
+        cardsGame.initCardsSorteReves();
+
+        Card[] Chance = cardsGame.getSorteReves();
+        Card[] Chest = cardsGame.getCofresComunitarios();
+
         listaJogadoresFalidos.clear();
         listaJogadores.clear();
         this.tratarErrosIniciais(quantidade, nomes_jogadores, cores_jogadores);
@@ -95,15 +97,46 @@ public class Jogo {
         for (int i = 0; i < nomes_jogadores.length; i++) {
             this.listaJogadores.add(new Jogador(nomes_jogadores[i], cores_jogadores[i], i));
         }
-        
+
         status = true;
         terminouVez = true;
         dinheiroBanco = 0;
         compra_automatica = false;
+        cardShuffle = false;
 
     }
 
+    public void setCardShuffle() {
+        cardShuffle = true;
+    }
 
+    public void unsetCardShuffle() {
+        cardShuffle = false;
+    }
+
+    public void activeCards(){
+        cards = true;
+    }
+
+    public void desativeCards(){
+        cards = false;
+    }
+
+    public Card getChance(int index) throws Exception {
+        return cardsGame.getCardSorteReves(index);
+    }
+
+    public Card getChest(int index) throws Exception {
+        return cardsGame.getCardCofresComunitarios(index);
+    }
+
+    public Card getCurrentChance() throws Exception {
+        return cardsGame.getCardSorteReves(indiceChance);
+    }
+
+    public Card getCurrentChest(int index) throws Exception {
+        return cardsGame.getCardCofresComunitarios(indiceChest);
+    }
 
     /**
      * Debug para mostrar as posicoes no console
@@ -114,7 +147,6 @@ public class Jogo {
             System.out.print(posicoes[i] + "\t");
         }
     }
-    
 
     /**
      * Obtem uma lista dos jogadores 
@@ -123,7 +155,6 @@ public class Jogo {
     public List<Jogador> getListaJogadores() {
         return this.listaJogadores;
     }
-
 
     /**
      * Define os donos-padrao das propriedades
@@ -150,7 +181,6 @@ public class Jogo {
 
     }
 
-
     /**
      * Checa se uma posicao esta disponivel para compra (o banco e o dono)
      * @param posicao a posicao do lugar
@@ -165,7 +195,6 @@ public class Jogo {
         return false;
     }
 
-
     /**
      * Obtem a cor do peao de um jogador
      * @param playerName o nome do jogador
@@ -176,7 +205,6 @@ public class Jogo {
         return this.getJogadorByName(playerName).getCorPeao();
     }
 
-
     /**
      * Obtem o dinheiro de um jogador
      * @param playerName o nome do jogador
@@ -186,7 +214,6 @@ public class Jogo {
     public int getPlayerMoney(String playerName) throws Exception {
         return this.getJogadorByName(playerName).getDinheiro();
     }
-
 
     /**
      * Obtem a posicao de um jogador
@@ -203,8 +230,6 @@ public class Jogo {
         int Id = this.getJogadorByName(playerName).getId();
         return posicoes[Id];
     }
-
-
 
     /**
      * Obtem um jogador atraves de seu nome
@@ -224,15 +249,12 @@ public class Jogo {
         throw new Exception("Player doesn't exist");
     }
 
-
     /**
      * Inicia uma nova vez (jogada);
      */
-    private void iniciarNovaVez() {        
+    private void iniciarNovaVez() {
         this.terminouVez = false;
     }
-
-
 
     /**
      * Faz uma serie de verificacoes de integridade de inicializacao do jogo
@@ -309,7 +331,6 @@ public class Jogo {
         return (pos != -1);
     }
 
-
     /**
      * Checa se uma lista de nomes tem algum nome repetido
      * @param listaNomes lista de nomes
@@ -327,7 +348,6 @@ public class Jogo {
         return false;
     }
 
-
     /**
      * Checa se a lista tem algum nome de jogador invalido
      * @param n a lista de nomes de jogadores
@@ -344,13 +364,11 @@ public class Jogo {
         return invalido;
     }
 
-
     /**
      * Inicia um jogo
      */
     public void StartJogo() {
     }
-
 
     /**
      * Finaliza um jogo
@@ -361,7 +379,7 @@ public class Jogo {
             throw new Exception("There's no game to quit");
         }
 
-        
+
     }
 
     /**
@@ -377,8 +395,6 @@ public class Jogo {
 
     }
 
-
-
     /**
      * Obtem o numero de jogadores nao-falidos
      * @return o numero de jogadores nao-falidos
@@ -386,8 +402,6 @@ public class Jogo {
     public int getNumberOfPlayers() {
         return listaJogadores.size() - listaJogadoresFalidos.size();
     }
-
-    
 
     /**
      * Obtem o dono de um lugar
@@ -409,8 +423,6 @@ public class Jogo {
         }
     }
 
-
-
     /**
      * Avanca a vez para a jogada de um jogador nao-falido
      */
@@ -423,8 +435,6 @@ public class Jogo {
         }
     }
 
-    
-
     /**
      * Obtem a vez atual
      * @return a vez
@@ -433,7 +443,6 @@ public class Jogo {
 
         return vez;
     }
-
 
     /**
      * Liga a compra automatica
@@ -449,9 +458,6 @@ public class Jogo {
         this.compra_automatica = false;
     }
 
-
-
-    
     /**
      * Realiza o movimento de um jogador, junto com as devidas consequencias
      * (pagar aluguel, ferrovia etc)
@@ -479,7 +485,6 @@ public class Jogo {
 
     }
 
-
     /**
      * Realiza o pagamento pelo uso de uma ferrovia
      * @param credor id do jogador a receber o pagamento
@@ -488,7 +493,7 @@ public class Jogo {
      * @param NomePopriedade nome da propriedade
      */
     public void pagarFerrovia(int credor, int devedor, int valor, String NomePopriedade) {
-        
+
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
         if ((NomePopriedade.equals("Reading Railroad")) ||
@@ -517,7 +522,6 @@ public class Jogo {
         }
     }
 
-
     /**
      * Realiza a cobranca de aluguel
      * @param credor id do jogador a receber o aluguel
@@ -530,7 +534,7 @@ public class Jogo {
         Jogador JogadorDevedor = listaJogadores.get(devedor);
         Jogador JogadorCredor = listaJogadores.get(credor);
 
-        
+
         if (listaJogadores.get(devedor).getDinheiro() >= valor) {
             JogadorDevedor.retirarDinheiro(valor);
             JogadorCredor.addDinheiro(valor);
@@ -543,14 +547,13 @@ public class Jogo {
 
         }
 
-        
-    }
 
+    }
 
     /**
      * Marca a vez (jogada) do jogador como terminada
      */
-    public void terminarAVez(){
+    public void terminarAVez() {
 
         if (!this.jogadorTerminouAVez()) {
             do {
@@ -558,21 +561,18 @@ public class Jogo {
             } while (this.listaJogadoresFalidos.contains(listaJogadores.get(vez).getNome()));
 
         }
-        
-        this.terminouVez = true;
-        
-    }
 
+        this.terminouVez = true;
+
+    }
 
     /**
      * Checa se a vez (jogada) do jogador foi concluida (com uma compra, pagamento de imposto etc)
      * @return
      */
-    private boolean jogadorTerminouAVez(){
+    private boolean jogadorTerminouAVez() {
         return this.terminouVez;
     }
-
-    
 
     /**
      * Checa se o resultado do dado e valido
@@ -587,14 +587,12 @@ public class Jogo {
         return true;
     }
 
-
     /**
      * Seta a compra automatica para true
      */
     public void definirCompraAutomatica() {
         this.compra_automatica = true;
     }
-
 
     /**
      * Verifica se o jogador deve receber a bonificacao por passar pela casa 40
@@ -613,7 +611,6 @@ public class Jogo {
 
     }
 
-
     /**
      * Move um jogador para uma posicao do tabuleiro
      * @param jogador o id do jogador
@@ -626,6 +623,9 @@ public class Jogo {
         }
     }
 
+    private void DeslocarJogador(int jogador, int novaPosicao){
+         this.posicoes[jogador] = novaPosicao;
+    }
 
     /**
      * Tenta compra uma propriedade
@@ -656,8 +656,6 @@ public class Jogo {
         return false;
     }
 
-
-
     /**
      * Checa se a posicao e uma ferrovia
      * @param posicao a posicao
@@ -666,10 +664,6 @@ public class Jogo {
     private boolean isPosicaoFerrovia(int posicao) {
         return (posicao == 5 || posicao == 15 || posicao == 25 || posicao == 35);
     }
-
-
-
-
 
     /**
      * Realiza o pagamento de um imposto
@@ -697,9 +691,6 @@ public class Jogo {
         return false;
     }
 
-
-
-
     /**
      * Paga impostos do jogador, se for necessario
      * @param jogador o id do jogador
@@ -709,16 +700,12 @@ public class Jogo {
         boolean pagouIncomeTax = this.pagarImposto("Income Tax", 200, jogador);
         boolean pagouLuxuryTax = this.pagarImposto("Luxury Tax", 75, jogador);
 
-        if (pagouIncomeTax || pagouLuxuryTax){
+        if (pagouIncomeTax || pagouLuxuryTax) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-
-
-
 
     /**
      * Checa se nome informado e de um jogador
@@ -738,10 +725,14 @@ public class Jogo {
         return false;
     }
 
-
-
-
-
+    public void realizaProcessamentoCartao(int posicao) {
+     /*   if(posicao==7){
+            DeslocarJogador(jogadorAtual(), 40);
+            this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
+            
+        }*/
+        
+    }
 
     /**
      * Move um jogador para uma posicao, procurando pagar tributos, alugueis etc.
@@ -752,28 +743,29 @@ public class Jogo {
      */
     private void moverJogadorDaVez(int dado1, int dado2) throws Exception {
 
+         
+            int valorDados = dado1 + dado2;
 
-        int valorDados = dado1 + dado2;
-
-        int jogador = this.jogadorAtual();
-
-
-        //preciso saber se o jogador vai passar pela posição 40, o que significa
-        //ganhar dinheiro
-        this.completouVolta(jogador, valorDados);
-
-        //movendo à posição
-        this.moverJogadorAPosicao(jogador, valorDados);
-        this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
-        this.print("\tVai até a posição " + this.posicoes[jogador]);
+            int jogador = this.jogadorAtual();
 
 
+            //preciso saber se o jogador vai passar pela posição 40, o que significa
+            //ganhar dinheiro
+            this.completouVolta(jogador, valorDados);
 
-        Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
+            //movendo à posição
+            this.moverJogadorAPosicao(jogador, valorDados);
+            this.print("\tAtual dinheiro antes de ver a compra:" + this.listaJogadores.get(jogador).getDinheiro());
+            this.print("\tVai até a posição " + this.posicoes[jogador]);
 
-        if (this.isCompraAutomatica()){
-            this.realizarCompra(jogador, lugar);
-        }
+
+
+            Lugar lugar = this.tabuleiro.get(this.posicoes[jogador] - 1);//busca em -1, pois eh um vetor
+
+            
+            if (this.isCompraAutomatica()) {
+                this.realizarCompra(jogador, lugar);
+            }
 
             if (!this.posicaoCompravel(this.posicoes[jogador])) {
                 this.print("\t" + lugar.getNome() + " não está à venda!");
@@ -804,16 +796,18 @@ public class Jogo {
             }
 
 
-        this.pagarEventuaisTaxas(jogador);
+            this.pagarEventuaisTaxas(jogador);
 
-        this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
+            if(this.posicoes[this.jogadorAtual()]==7 && cards==true){
+                realizaProcessamentoCartao(this.posicoes[jogadorAtual()]);
+            }
+
+
+            this.print("\tAtual dinheiro depois:" + this.listaJogadores.get(jogador).getDinheiro());
+
+        
 
     }
-
-
-
-    
-
 
     /**
      * Muda um jogador para a lista de falidos e passa suas posses para o banco
@@ -839,7 +833,6 @@ public class Jogo {
     public boolean isCompraAutomatica() {
         return this.compra_automatica;
     }
-
 
     /**
      * Realiza a compra de uma posse pelo jogador da vez
@@ -869,29 +862,28 @@ public class Jogo {
                         nomeLugar.equals("B & O Railroad") || nomeLugar.equals("Short Line Railroad")) {
                     DonosFerrovias[jogador]++;
                 }
-                this.print("\tVocê adquiriu "+ nomeLugar + " por " + preco);
+                this.print("\tVocê adquiriu " + nomeLugar + " por " + preco);
                 this.print("\tAtual dinheiro: " + j.getDinheiro());
             } else {
                 this.print("\tNão possui dinheiro para realizar a compra!");
                 throw new Exception("Not enough money");
             }
 
-        }
-        else {
+        } else {
 
-            if (this.jaTemDono(posicoes[jogador])){
+            if (this.jaTemDono(posicoes[jogador])) {
                 throw new Exception("Deed for this place is not for sale");
             }
-            if (!posicaoCompravel){
+            if (!posicaoCompravel) {
                 throw new Exception("Place doesn't have a deed to be bought");
             }
             if (isEstatal) {
                 throw new Exception("Deed for this place is not for sale");
             }
-            
+
         }
 
-        
+
 
         return false;
 
@@ -899,16 +891,14 @@ public class Jogo {
 
     }
 
-
     /**
      * Checa se uma posicao eh uma estatal (Electric Comapny ou Water Works)
      * @param posicao
      * @return
      */
-    private boolean isPosicaoEstatal(int posicao){
+    private boolean isPosicaoEstatal(int posicao) {
         return (posicao == 12) || (posicao == 28);
     }
-
 
     /**
      * Efetua a compra de uma propriedade
@@ -942,9 +932,6 @@ public class Jogo {
 
     }
 
-
-    
-
     /**
      * Apenas um encapsulador para o System.out.println(String)
      * @param msg a mensagem a ser impressa no console
@@ -965,7 +952,6 @@ public class Jogo {
 
     }
 
-
     /**
      * Checa se algum jogador ja e dono de uma determinada posicao
      * @param posicao a posicao
@@ -974,6 +960,6 @@ public class Jogo {
     private boolean jaTemDono(int posicao) {
         String nomeDono = Donos.get(posicao).toString();
         return (this.isUmJogador(nomeDono));
-        
+
     }
 }
