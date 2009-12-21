@@ -742,6 +742,35 @@ public class Jogo {
 
        }
 
+       else if(indiceChance==4){
+           if(this.posicoes[this.jogadorAtual()]<12||this.posicoes[this.jogadorAtual()]>28){
+                DeslocarJogador(jogadorAtual(), 12);
+           }
+           else{
+               DeslocarJogador(jogadorAtual(), 28);
+           }
+       }
+
+       else if(indiceChance==5){
+           if(this.posicoes[jogadorAtual()]<5||this.posicoes[jogadorAtual()]>35)
+               DeslocarJogador(jogadorAtual(), 5);
+           else if(this.posicoes[jogadorAtual()]<15)
+               DeslocarJogador(jogadorAtual(), 15);
+           else if(this.posicoes[jogadorAtual()]<25)
+               DeslocarJogador(jogadorAtual(), 25);
+           else if(this.posicoes[jogadorAtual()]<35)
+               DeslocarJogador(jogadorAtual(), 35);
+       }
+
+       else if(indiceChance==6){
+           dinheiroBanco = dinheiroBanco - 50;
+            this.listaJogadores.get(jogadorAtual()).addDinheiro(50);
+       }
+
+       else if(indiceChance ==7){
+           DeslocarJogador(jogadorAtual(), this.posicoes[jogadorAtual()-3]);
+       }
+
         indiceChance++;
         
     }
