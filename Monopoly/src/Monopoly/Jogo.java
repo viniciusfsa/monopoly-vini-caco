@@ -725,12 +725,24 @@ public class Jogo {
         return false;
     }
 
-    public void realizaProcessamentoCartao(int posicao) {
-     /*   if(posicao==7){
+    public void realizaProcessamentoCartaoChance() {
+       if(indiceChance==1){
             DeslocarJogador(jogadorAtual(), 40);
             this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
-            
-        }*/
+           
+        }
+
+       else if(indiceChance==2){
+           DeslocarJogador(jogadorAtual(), 24);
+       }
+
+       else if(indiceChance==3){
+           DeslocarJogador(jogadorAtual(), 11);
+            this.listaJogadores.get(jogadorAtual()).addDinheiro(200);
+
+       }
+
+        indiceChance++;
         
     }
 
@@ -798,8 +810,8 @@ public class Jogo {
 
             this.pagarEventuaisTaxas(jogador);
 
-            if(this.posicoes[this.jogadorAtual()]==7 && cards==true){
-                realizaProcessamentoCartao(this.posicoes[jogadorAtual()]);
+            if((this.posicoes[this.jogadorAtual()]==7 ||this.posicoes[jogadorAtual()]==22||this.posicoes[jogadorAtual()]==36 )&& cards==true){
+                realizaProcessamentoCartaoChance();               
             }
 
 

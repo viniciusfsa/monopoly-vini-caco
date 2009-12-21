@@ -4,6 +4,7 @@
  */
 package easy;
 
+import Monopoly.Cards.Card;
 import Monopoly.Comandos;
 import Monopoly.Jogador;
 import Monopoly.Jogo;
@@ -55,6 +56,15 @@ public class UserStoriesFacade {
      */
     public int getNumberOfPlayers() {
         return jogo.getNumberOfPlayers();
+    }
+
+    public void activateChancePlaces(boolean status){
+        if(status ==true)
+            this.jogo.unsetCardShuffle();
+        else
+            this.jogo.setCardShuffle();
+
+        this.jogo.activeCards();
     }
 
 
@@ -260,5 +270,25 @@ public class UserStoriesFacade {
     public void buy() throws Exception{
         this.jogo.buy();
     }
+
+    public void forceNextChanceCard(int cardId) throws Exception{
+        this.jogo.getChance(cardId);
+    }
+
+    public void forceNextChestCard(int cardId) throws Exception{
+        this.jogo.getChance(cardId);
+    }
+
+    public int getCurrentChanceCardNumber() throws Exception{
+        Card cardChance = this.jogo.getCurrentChance();
+        return cardChance.getNumberCard();
+    }
+
+    public String getCurrentChanceCardDescription() throws Exception{
+        Card cardChance = this.jogo.getCurrentChance();
+        return cardChance.getDescricao();
+    }
+
+    
             
 }

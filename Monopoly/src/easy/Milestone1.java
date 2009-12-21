@@ -24,6 +24,7 @@ public class Milestone1 {
         files.add("us2.txt");
         files.add("us3.txt");
         files.add("us4.txt");
+        files.add("us5parte.txt");
         //Instantiate the Monopoly Game façade
         UserStoriesFacade monopolyGameFacade = new UserStoriesFacade();
         //Instantiate EasyAccept façade
