@@ -40,3 +40,31 @@ rollDice firstDieResult=6 secondDieResult=6
 rollDice firstDieResult=6 secondDieResult=6
 expect 11 getPlayerPosition playerName="player2"
 expect 1700 getPlayerMoney playerName="player2"
+
+expect 4 getCurrentChanceCardNumber
+expect "Advance Token To Nearest Utility - If unowned you may buy it from the bank. If owned, throw dice and pay owner a total ten times the amount thrown." getCurrentChanceCardDescription
+
+# player1 falls on Chance 2 and gets card 4; advances to Water Works, but nothing happens as utility rules are not implemented yet
+rollDice firstDieResult=6 secondDieResult=4
+expect 28 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+expect 5 getCurrentChanceCardNumber
+expect "Advance Token To The Nearest Railroad - Pay Owner Twice The Rental To Which He Is Otherwise entitled. If Railroad Is Unowned, You May Buy It From The Bank." getCurrentChanceCardDescription
+
+# player 2 falls on Chance 2 and gets card 5; advances to B&O Railroad and buys it
+rollDice firstDieResult=6 secondDieResult=5
+buy
+expect 25 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+expect 6 getCurrentChanceCardNumber
+expect "Bank Pays You Dividend Of - $50" getCurrentChanceCardDescription
+
+# player1 falls on Chance 3 and gets card 6
+rollDice firstDieResult=4 secondDieResult=4
+expect 36 getPlayerPosition playerName="player1"
+expect 1750 getPlayerMoney playerName="player1"
+
+expect 7 getCurrentChanceCardNumber
+expect "Go Back 3 Spaces" getCurrentChanceCardDescription
