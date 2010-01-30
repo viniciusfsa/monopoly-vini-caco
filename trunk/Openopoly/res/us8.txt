@@ -1,0 +1,993 @@
+# user story 8 - building houses
+# I've put comments on the key points
+
+######################################
+# Testing purple group of properties #
+######################################
+
+# this group's test is bigger because is also tests the error conditions for house building
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+# command activateBuild allows houses to be built
+activateBuild
+expect "{roll,status,quit}" getCommands
+# the command build must only be available when the player holds a monopoly (over any group)
+expecterror "Unavailable command" build propertyID=1
+# player1 buys Baltic Avenue
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+# player1 buys Mediterranean Avenue; now he holds a Monopoly over the purple group
+rollDice firstDieResult=5 secondDieResult=6
+buy
+expect 1580 getPlayerMoney playerName="player1"
+expect 1700 getPlayerMoney playerName="player2"
+# player2 falls on Baltic and must pay twice the regular rent (player1 holds a monopoly with no houses built)
+rollDice firstDieResult=1 secondDieResult=2
+expect 1588 getPlayerMoney playerName="player1"
+expect 1692 getPlayerMoney playerName="player2"
+# player1 falls on Oriental Avenue and buys it
+# did this to check for monopoly error later
+rollDice firstDieResult=2 secondDieResult=3
+buy
+rollDice firstDieResult=4 secondDieResult=3
+# now let's try building houses for player1
+expect "{roll,status,quit,build}" getCommands
+# first, error conditions
+expecterror "Place doesn't exist" build propertyID=0
+expecterror "Can only build on properties" build propertyID=2
+expecterror "Can only build on properties" build propertyID=4
+expecterror "Can only build on properties" build propertyID=5
+expecterror "Can only build on properties" build propertyID=7
+expecterror "Can only build on properties" build propertyID=10
+expecterror "Can only build on properties" build propertyID=12
+expecterror "Can only build on properties" build propertyID=15
+expecterror "Can only build on properties" build propertyID=17
+expecterror "Can only build on properties" build propertyID=20
+expecterror "Can only build on properties" build propertyID=22
+expecterror "Can only build on properties" build propertyID=25
+expecterror "Can only build on properties" build propertyID=28
+expecterror "Can only build on properties" build propertyID=30
+expecterror "Can only build on properties" build propertyID=33
+expecterror "Can only build on properties" build propertyID=35
+expecterror "Can only build on properties" build propertyID=36
+expecterror "Can only build on properties" build propertyID=38
+expecterror "Can only build on properties" build propertyID=40
+expecterror "Place doesn't exist" build propertyID=41
+# player1 owns Oriental Avenue (6), but doesn't hold a monopoly over its group
+expecterror "Doesn't hold monopoly for this group" build propertyID=6
+expecterror "Player is not the owner of this property" build propertyID=8
+expecterror "Player is not the owner of this property" build propertyID=9
+expecterror "Player is not the owner of this property" build propertyID=11
+expecterror "Player is not the owner of this property" build propertyID=13
+expecterror "Player is not the owner of this property" build propertyID=14
+expecterror "Player is not the owner of this property" build propertyID=16
+expecterror "Player is not the owner of this property" build propertyID=18
+expecterror "Player is not the owner of this property" build propertyID=19
+expecterror "Player is not the owner of this property" build propertyID=21
+expecterror "Player is not the owner of this property" build propertyID=23
+expecterror "Player is not the owner of this property" build propertyID=24
+expecterror "Player is not the owner of this property" build propertyID=26
+expecterror "Player is not the owner of this property" build propertyID=27
+expecterror "Player is not the owner of this property" build propertyID=29
+expecterror "Player is not the owner of this property" build propertyID=31
+expecterror "Player is not the owner of this property" build propertyID=32
+expecterror "Player is not the owner of this property" build propertyID=34
+expecterror "Player is not the owner of this property" build propertyID=37
+expecterror "Player is not the owner of this property" build propertyID=39
+# now let's build on purple properties
+# observe that build is a real command from the user story, so it doesn't end a player's turn
+# the turn only ends with a rollDice
+expect 1488 getPlayerMoney playerName="player1"
+expect 4 getPropertyRent placeID=1
+build propertyID=1
+expect 1438 getPlayerMoney playerName="player1"
+expect 10 getPropertyRent placeID=1
+# must not allow to build additional houses on Mediterranean while no house is built on Baltic
+expecterror "Uneven distribution of houses" build propertyID=1
+# so, let's first build a house on Baltic
+expect 8 getPropertyRent placeID=3
+build propertyID=3
+expect 1388 getPlayerMoney playerName="player1"
+expect 20 getPropertyRent placeID=3
+# now, an additional house can be built on Mediterranean
+build propertyID=1
+expect 1338 getPlayerMoney playerName="player1"
+expect 30 getPropertyRent placeID=1
+expecterror "Uneven distribution of houses" build propertyID=1
+build propertyID=3
+expect 1288 getPlayerMoney playerName="player1"
+expect 60 getPropertyRent placeID=3
+build propertyID=1
+expect 1238 getPlayerMoney playerName="player1"
+expect 90 getPropertyRent placeID=1
+expecterror "Uneven distribution of houses" build propertyID=1
+build propertyID=3
+expect 1188 getPlayerMoney playerName="player1"
+expect 180 getPropertyRent placeID=3
+build propertyID=1
+expect 1138 getPlayerMoney playerName="player1"
+expect 160 getPropertyRent placeID=1
+expecterror "Uneven distribution of houses" build propertyID=1
+build propertyID=3
+expect 1088 getPlayerMoney playerName="player1"
+expect 320 getPropertyRent placeID=3
+build propertyID=1
+expect 1038 getPlayerMoney playerName="player1"
+expect 250 getPropertyRent placeID=1
+# Hotel has been built on Mediterranean - no more buildings allowed
+expecterror "No further buildings on this property" build propertyID=1
+build propertyID=3
+expect 988 getPlayerMoney playerName="player1"
+expect 450 getPropertyRent placeID=3
+# Hotel has been built on Baltic - no more buildings allowed on this place; furthermore, player1 has no more properties to build on; command becomes unavailable
+expecterror "Unavailable command" build propertyID=3
+expect "{roll,status,quit}" getCommands
+# player1 finally ends his turn
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+# player2 falls on Mediterranean - let's see if the current rent is being paid (note that player2 receives $200 for passing Go)
+rollDice firstDieResult=6 secondDieResult=5
+expect 1642 getPlayerMoney playerName="player2"
+expect 1238 getPlayerMoney playerName="player1"
+# player1 falls on Go and gets $200 more
+rollDice firstDieResult=5 secondDieResult=5
+# now player2 falls on Baltic - must pay $450 due to the hotel
+rollDice firstDieResult=1 secondDieResult=1
+expect 1192 getPlayerMoney playerName="player2"
+expect 1888 getPlayerMoney playerName="player1"
+quitGame
+
+####################################################
+# Testing light blue and pink groups of properties #
+####################################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=6 secondDieResult=5
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+# although player1 has 2 properties from the light blue group, he still can't build because he doesn't hold a monopoly
+expecterror "Unavailable command" build propertyID=6
+rollDice firstDieResult=6 secondDieResult=6
+# although player2 has 2 properties from the pink group, he still can't build because he doesn't hold a monopoly
+expecterror "Unavailable command" build propertyID=11
+rollDice firstDieResult=4 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=6
+# player1 buys connecticut - now holds light blue monopoly
+rollDice firstDieResult=6 secondDieResult=3
+buy
+# player2 buys virginia - now holds pink monopoly
+rollDice firstDieResult=6 secondDieResult=6
+buy
+expect 1380 getPlayerMoney playerName="player1"
+expect 1260 getPlayerMoney playerName="player2"
+# now let's test house building on the light blue group
+expect 12 getPropertyRent placeID=6
+expect 12 getPropertyRent placeID=8
+expect 16 getPropertyRent placeID=9
+# building first house of each property
+build propertyID=6
+expect 1330 getPlayerMoney playerName="player1"
+expect 30 getPropertyRent placeID=6
+expecterror "Uneven distribution of houses" build propertyID=6
+build propertyID=8
+expect 1280 getPlayerMoney playerName="player1"
+expect 30 getPropertyRent placeID=8
+expecterror "Uneven distribution of houses" build propertyID=8
+build propertyID=9
+expect 1230 getPlayerMoney playerName="player1"
+expect 40 getPropertyRent placeID=9
+# building second house of each property
+build propertyID=6
+expect 1180 getPlayerMoney playerName="player1"
+expect 90 getPropertyRent placeID=6
+expecterror "Uneven distribution of houses" build propertyID=6
+build propertyID=8
+expect 1130 getPlayerMoney playerName="player1"
+expect 90 getPropertyRent placeID=8
+expecterror "Uneven distribution of houses" build propertyID=8
+build propertyID=9
+expect 1080 getPlayerMoney playerName="player1"
+expect 100 getPropertyRent placeID=9
+# building third house of each property
+build propertyID=6
+expect 1030 getPlayerMoney playerName="player1"
+expect 270 getPropertyRent placeID=6
+expecterror "Uneven distribution of houses" build propertyID=6
+build propertyID=8
+expect 980 getPlayerMoney playerName="player1"
+expect 270 getPropertyRent placeID=8
+expecterror "Uneven distribution of houses" build propertyID=8
+build propertyID=9
+expect 930 getPlayerMoney playerName="player1"
+expect 300 getPropertyRent placeID=9
+# building fourth house of each property
+build propertyID=6
+expect 880 getPlayerMoney playerName="player1"
+expect 400 getPropertyRent placeID=6
+expecterror "Uneven distribution of houses" build propertyID=6
+build propertyID=8
+expect 830 getPlayerMoney playerName="player1"
+expect 400 getPropertyRent placeID=8
+expecterror "Uneven distribution of houses" build propertyID=8
+build propertyID=9
+expect 780 getPlayerMoney playerName="player1"
+expect 450 getPropertyRent placeID=9
+# building a hotel on each property
+build propertyID=6
+expect 730 getPlayerMoney playerName="player1"
+expect 550 getPropertyRent placeID=6
+expecterror "No further buildings on this property" build propertyID=6
+build propertyID=8
+expect 680 getPlayerMoney playerName="player1"
+expect 550 getPropertyRent placeID=8
+expecterror "No further buildings on this property" build propertyID=8
+build propertyID=9
+expect 630 getPlayerMoney playerName="player1"
+expect 600 getPropertyRent placeID=9
+expecterror "Unavailable command" build propertyID=9
+expect "{roll,status,quit}" getCommands
+# now let's make players cycle the board for a while, because player2 will need more money to be able to max out his houses
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 830 getPlayerMoney playerName="player1"
+expect 1460 getPlayerMoney playerName="player2"
+# 1 cycle
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 1030 getPlayerMoney playerName="player1"
+expect 1660 getPlayerMoney playerName="player2"
+# ok, now let's get back to player2, and see him build some houses
+rollDice firstDieResult=5 secondDieResult=5
+# player2's turn
+expect 20 getPropertyRent placeID=11
+expect 20 getPropertyRent placeID=13
+expect 24 getPropertyRent placeID=14
+# building first house of each property
+build propertyID=11
+expect 1560 getPlayerMoney playerName="player2"
+expect 50 getPropertyRent placeID=11
+expecterror "Uneven distribution of houses" build propertyID=11
+build propertyID=13
+expect 1460 getPlayerMoney playerName="player2"
+expect 50 getPropertyRent placeID=13
+expecterror "Uneven distribution of houses" build propertyID=13
+build propertyID=14
+expect 1360 getPlayerMoney playerName="player2"
+expect 60 getPropertyRent placeID=14
+# building second house of each property
+build propertyID=11
+expect 1260 getPlayerMoney playerName="player2"
+expect 150 getPropertyRent placeID=11
+expecterror "Uneven distribution of houses" build propertyID=11
+build propertyID=13
+expect 1160 getPlayerMoney playerName="player2"
+expect 150 getPropertyRent placeID=13
+expecterror "Uneven distribution of houses" build propertyID=13
+build propertyID=14
+expect 1060 getPlayerMoney playerName="player2"
+expect 180 getPropertyRent placeID=14
+# building third house of each property
+build propertyID=11
+expect 960 getPlayerMoney playerName="player2"
+expect 450 getPropertyRent placeID=11
+expecterror "Uneven distribution of houses" build propertyID=11
+build propertyID=13
+expect 860 getPlayerMoney playerName="player2"
+expect 450 getPropertyRent placeID=13
+expecterror "Uneven distribution of houses" build propertyID=13
+build propertyID=14
+expect 760 getPlayerMoney playerName="player2"
+expect 500 getPropertyRent placeID=14
+# building fourth house of each property
+build propertyID=11
+expect 660 getPlayerMoney playerName="player2"
+expect 625 getPropertyRent placeID=11
+expecterror "Uneven distribution of houses" build propertyID=11
+build propertyID=13
+expect 560 getPlayerMoney playerName="player2"
+expect 625 getPropertyRent placeID=13
+expecterror "Uneven distribution of houses" build propertyID=13
+build propertyID=14
+expect 460 getPlayerMoney playerName="player2"
+expect 700 getPropertyRent placeID=14
+# building a hotel on each property
+build propertyID=11
+expect 360 getPlayerMoney playerName="player2"
+expect 750 getPropertyRent placeID=11
+expecterror "No further buildings on this property" build propertyID=11
+build propertyID=13
+expect 260 getPlayerMoney playerName="player2"
+expect 750 getPropertyRent placeID=13
+expecterror "No further buildings on this property" build propertyID=13
+build propertyID=14
+expect 160 getPlayerMoney playerName="player2"
+expect 900 getPropertyRent placeID=14
+expecterror "Unavailable command" build propertyID=14
+# player2 falls on a community chest (nothing happens)
+rollDice firstDieResult=1 secondDieResult=1
+# now player1 falls on Virginia and loses $900
+expect 1030 getPlayerMoney playerName="player1"
+expect 160 getPlayerMoney playerName="player2"
+rollDice firstDieResult=2 secondDieResult=2
+expect 130 getPlayerMoney playerName="player1"
+expect 1060 getPlayerMoney playerName="player2"
+# now player2 falls on Connecticut ands loses $600
+rollDice firstDieResult=4 secondDieResult=3
+expect 730 getPlayerMoney playerName="player1"
+expect 460 getPlayerMoney playerName="player2"
+quitGame
+
+###############################################
+# Testing orange and red groups of properties #
+###############################################
+
+# from this test onwards, players will need lots of money;
+# I'm fed up with those cumbersome cyclings (rollDices piling up in the screen), so
+# I've created this script command called "giveCashToPlayer" that adds the specified cash to a player
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=5 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=3
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=6 secondDieResult=6
+buy
+# ok, player1 holds monopoly on oranges, and player2 on reds
+expect 1140 getPlayerMoney playerName="player1"
+expect 1020 getPlayerMoney playerName="player2"
+# now let's check for building on oranges; let's first give player1 an extra $1000
+giveCashToPlayer playerName="player1" cash=1000
+expect 28 getPropertyRent placeID=16
+expect 28 getPropertyRent placeID=18
+expect 32 getPropertyRent placeID=19
+# building first house of each property
+build propertyID=16
+expect 2040 getPlayerMoney playerName="player1"
+expect 70 getPropertyRent placeID=16
+expecterror "Uneven distribution of houses" build propertyID=16
+build propertyID=18
+expect 1940 getPlayerMoney playerName="player1"
+expect 70 getPropertyRent placeID=18
+expecterror "Uneven distribution of houses" build propertyID=18
+build propertyID=19
+expect 1840 getPlayerMoney playerName="player1"
+expect 80 getPropertyRent placeID=19
+# building second house of each property
+build propertyID=16
+expect 1740 getPlayerMoney playerName="player1"
+expect 200 getPropertyRent placeID=16
+expecterror "Uneven distribution of houses" build propertyID=16
+build propertyID=18
+expect 1640 getPlayerMoney playerName="player1"
+expect 200 getPropertyRent placeID=18
+expecterror "Uneven distribution of houses" build propertyID=18
+build propertyID=19
+expect 1540 getPlayerMoney playerName="player1"
+expect 220 getPropertyRent placeID=19
+# building third house of each property
+build propertyID=16
+expect 1440 getPlayerMoney playerName="player1"
+expect 550 getPropertyRent placeID=16
+expecterror "Uneven distribution of houses" build propertyID=16
+build propertyID=18
+expect 1340 getPlayerMoney playerName="player1"
+expect 550 getPropertyRent placeID=18
+expecterror "Uneven distribution of houses" build propertyID=18
+build propertyID=19
+expect 1240 getPlayerMoney playerName="player1"
+expect 600 getPropertyRent placeID=19
+# building fourth house of each property
+build propertyID=16
+expect 1140 getPlayerMoney playerName="player1"
+expect 750 getPropertyRent placeID=16
+expecterror "Uneven distribution of houses" build propertyID=16
+build propertyID=18
+expect 1040 getPlayerMoney playerName="player1"
+expect 750 getPropertyRent placeID=18
+expecterror "Uneven distribution of houses" build propertyID=18
+build propertyID=19
+expect 940 getPlayerMoney playerName="player1"
+expect 800 getPropertyRent placeID=19
+# building a hotel on each property
+build propertyID=16
+expect 840 getPlayerMoney playerName="player1"
+expect 950 getPropertyRent placeID=16
+expecterror "No further buildings on this property" build propertyID=16
+build propertyID=18
+expect 740 getPlayerMoney playerName="player1"
+expect 950 getPropertyRent placeID=18
+expecterror "No further buildings on this property" build propertyID=18
+build propertyID=19
+expect 640 getPlayerMoney playerName="player1"
+expect 1000 getPropertyRent placeID=19
+expecterror "Unavailable command" build propertyID=19
+rollDice firstDieResult=2 secondDieResult=1
+# end of player1 turn; now let's put player2 to build houses on reds
+giveCashToPlayer playerName="player2" cash=2000
+expect 36 getPropertyRent placeID=21
+expect 36 getPropertyRent placeID=23
+expect 40 getPropertyRent placeID=24
+# building first house of each property
+build propertyID=21
+expect 2870 getPlayerMoney playerName="player2"
+expect 90 getPropertyRent placeID=21
+expecterror "Uneven distribution of houses" build propertyID=21
+build propertyID=23
+expect 2720 getPlayerMoney playerName="player2"
+expect 90 getPropertyRent placeID=23
+expecterror "Uneven distribution of houses" build propertyID=23
+build propertyID=24
+expect 2570 getPlayerMoney playerName="player2"
+expect 100 getPropertyRent placeID=24
+# building second house of each property
+build propertyID=21
+expect 2420 getPlayerMoney playerName="player2"
+expect 250 getPropertyRent placeID=21
+expecterror "Uneven distribution of houses" build propertyID=21
+build propertyID=23
+expect 2270 getPlayerMoney playerName="player2"
+expect 250 getPropertyRent placeID=23
+expecterror "Uneven distribution of houses" build propertyID=23
+build propertyID=24
+expect 2120 getPlayerMoney playerName="player2"
+expect 300 getPropertyRent placeID=24
+# building third house of each property
+build propertyID=21
+expect 1970 getPlayerMoney playerName="player2"
+expect 700 getPropertyRent placeID=21
+expecterror "Uneven distribution of houses" build propertyID=21
+build propertyID=23
+expect 1820 getPlayerMoney playerName="player2"
+expect 700 getPropertyRent placeID=23
+expecterror "Uneven distribution of houses" build propertyID=23
+build propertyID=24
+expect 1670 getPlayerMoney playerName="player2"
+expect 750 getPropertyRent placeID=24
+# building fourth house of each property
+build propertyID=21
+expect 1520 getPlayerMoney playerName="player2"
+expect 875 getPropertyRent placeID=21
+expecterror "Uneven distribution of houses" build propertyID=21
+build propertyID=23
+expect 1370 getPlayerMoney playerName="player2"
+expect 875 getPropertyRent placeID=23
+expecterror "Uneven distribution of houses" build propertyID=23
+build propertyID=24
+expect 1220 getPlayerMoney playerName="player2"
+expect 925 getPropertyRent placeID=24
+# building a hotel on each property
+build propertyID=21
+expect 1070 getPlayerMoney playerName="player2"
+expect 1050 getPropertyRent placeID=21
+expecterror "No further buildings on this property" build propertyID=21
+build propertyID=23
+expect 920 getPlayerMoney playerName="player2"
+expect 1050 getPropertyRent placeID=23
+expecterror "No further buildings on this property" build propertyID=23
+build propertyID=24
+expect 770 getPlayerMoney playerName="player2"
+expect 1100 getPropertyRent placeID=24
+expecterror "Unavailable command" build propertyID=24
+rollDice firstDieResult=6 secondDieResult=6
+# now let's make player1 fall on Illinois to check if hotel rent is being paid
+giveCashToPlayer playerName="player1" cash=1000
+expect 1640 getPlayerMoney playerName="player1"
+expect 770 getPlayerMoney playerName="player2"
+rollDice firstDieResult=1 secondDieResult=1
+expect 540 getPlayerMoney playerName="player1"
+expect 1870 getPlayerMoney playerName="player2"
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=6
+# now player2 falls on 19 - New York Avenue, and pays hotel rent to player1
+expect 540 getPlayerMoney playerName="player1"
+expect 2070 getPlayerMoney playerName="player2"
+rollDice firstDieResult=6 secondDieResult=6
+expect 1540 getPlayerMoney playerName="player1"
+expect 1070 getPlayerMoney playerName="player2"
+quitGame
+
+#################################################
+# Testing yellow and green groups of properties #
+#################################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=6 secondDieResult=5
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=6 secondDieResult=6
+buy
+# player1 holds monopoly on yellows, and player2 on greens
+expect 900 getPlayerMoney playerName="player1"
+expect 780 getPlayerMoney playerName="player2"
+expect 27 getPlayerPosition playerName="player1"
+expect 32 getPlayerPosition playerName="player2"
+# now let's give player1 some cash and let him max out the hotels on his properties
+giveCashToPlayer playerName="player1" cash=2000
+expect 44 getPropertyRent placeID=26
+expect 44 getPropertyRent placeID=27
+expect 48 getPropertyRent placeID=29
+# building first house of each property
+build propertyID=26
+expect 2750 getPlayerMoney playerName="player1"
+expect 110 getPropertyRent placeID=26
+expecterror "Uneven distribution of houses" build propertyID=26
+build propertyID=27
+expect 2600 getPlayerMoney playerName="player1"
+expect 110 getPropertyRent placeID=27
+expecterror "Uneven distribution of houses" build propertyID=27
+build propertyID=29
+expect 2450 getPlayerMoney playerName="player1"
+expect 120 getPropertyRent placeID=29
+# building second house of each property
+build propertyID=26
+expect 2300 getPlayerMoney playerName="player1"
+expect 330 getPropertyRent placeID=26
+expecterror "Uneven distribution of houses" build propertyID=26
+build propertyID=27
+expect 2150 getPlayerMoney playerName="player1"
+expect 330 getPropertyRent placeID=27
+expecterror "Uneven distribution of houses" build propertyID=27
+build propertyID=29
+expect 2000 getPlayerMoney playerName="player1"
+expect 360 getPropertyRent placeID=29
+# building third house of each property
+build propertyID=26
+expect 1850 getPlayerMoney playerName="player1"
+expect 800 getPropertyRent placeID=26
+expecterror "Uneven distribution of houses" build propertyID=26
+build propertyID=27
+expect 1700 getPlayerMoney playerName="player1"
+expect 800 getPropertyRent placeID=27
+expecterror "Uneven distribution of houses" build propertyID=27
+build propertyID=29
+expect 1550 getPlayerMoney playerName="player1"
+expect 850 getPropertyRent placeID=29
+# building fourth house of each property
+build propertyID=26
+expect 1400 getPlayerMoney playerName="player1"
+expect 975 getPropertyRent placeID=26
+expecterror "Uneven distribution of houses" build propertyID=26
+build propertyID=27
+expect 1250 getPlayerMoney playerName="player1"
+expect 975 getPropertyRent placeID=27
+expecterror "Uneven distribution of houses" build propertyID=27
+build propertyID=29
+expect 1100 getPlayerMoney playerName="player1"
+expect 1025 getPropertyRent placeID=29
+# building a hotel on each property
+build propertyID=26
+expect 950 getPlayerMoney playerName="player1"
+expect 1150 getPropertyRent placeID=26
+expecterror "No further buildings on this property" build propertyID=26
+build propertyID=27
+expect 800 getPlayerMoney playerName="player1"
+expect 1150 getPropertyRent placeID=27
+expecterror "No further buildings on this property" build propertyID=27
+build propertyID=29
+expect 650 getPlayerMoney playerName="player1"
+expect 1200 getPropertyRent placeID=29
+expecterror "Unavailable command" build propertyID=29
+rollDice firstDieResult=2 secondDieResult=1
+# now player2 maxes out the greens
+giveCashToPlayer playerName="player2" cash=3220
+expect 52 getPropertyRent placeID=31
+expect 52 getPropertyRent placeID=32
+expect 56 getPropertyRent placeID=34
+# building first house of each property
+build propertyID=31
+expect 3800 getPlayerMoney playerName="player2"
+expect 130 getPropertyRent placeID=31
+expecterror "Uneven distribution of houses" build propertyID=31
+build propertyID=32
+expect 3600 getPlayerMoney playerName="player2"
+expect 130 getPropertyRent placeID=32
+expecterror "Uneven distribution of houses" build propertyID=32
+build propertyID=34
+expect 3400 getPlayerMoney playerName="player2"
+expect 150 getPropertyRent placeID=34
+# building second house of each property
+build propertyID=31
+expect 3200 getPlayerMoney playerName="player2"
+expect 390 getPropertyRent placeID=31
+expecterror "Uneven distribution of houses" build propertyID=31
+build propertyID=32
+expect 3000 getPlayerMoney playerName="player2"
+expect 390 getPropertyRent placeID=32
+expecterror "Uneven distribution of houses" build propertyID=32
+build propertyID=34
+expect 2800 getPlayerMoney playerName="player2"
+expect 450 getPropertyRent placeID=34
+# building third house of each property
+build propertyID=31
+expect 2600 getPlayerMoney playerName="player2"
+expect 900 getPropertyRent placeID=31
+expecterror "Uneven distribution of houses" build propertyID=31
+build propertyID=32
+expect 2400 getPlayerMoney playerName="player2"
+expect 900 getPropertyRent placeID=32
+expecterror "Uneven distribution of houses" build propertyID=32
+build propertyID=34
+expect 2200 getPlayerMoney playerName="player2"
+expect 1000 getPropertyRent placeID=34
+# building fourth house of each property
+build propertyID=31
+expect 2000 getPlayerMoney playerName="player2"
+expect 1100 getPropertyRent placeID=31
+expecterror "Uneven distribution of houses" build propertyID=31
+build propertyID=32
+expect 1800 getPlayerMoney playerName="player2"
+expect 1100 getPropertyRent placeID=32
+expecterror "Uneven distribution of houses" build propertyID=32
+build propertyID=34
+expect 1600 getPlayerMoney playerName="player2"
+expect 1200 getPropertyRent placeID=34
+# building a hotel on each property
+build propertyID=31
+expect 1400 getPlayerMoney playerName="player2"
+expect 1275 getPropertyRent placeID=31
+expecterror "No further buildings on this property" build propertyID=31
+build propertyID=32
+expect 1200 getPlayerMoney playerName="player2"
+expect 1275 getPropertyRent placeID=32
+expecterror "No further buildings on this property" build propertyID=32
+build propertyID=34
+expect 1000 getPlayerMoney playerName="player2"
+expect 1400 getPropertyRent placeID=34
+expecterror "Unavailable command" build propertyID=34
+rollDice firstDieResult=4 secondDieResult=4
+expect 1200 getPlayerMoney playerName="player2"
+expect 650 getPlayerMoney playerName="player1"
+# now let's make player1 fall on Pennsylvania avenue and see if he pays the right rent
+giveCashToPlayer playerName="player1" cash=2000
+rollDice firstDieResult=2 secondDieResult=2
+expect 1250 getPlayerMoney playerName="player1"
+expect 2600 getPlayerMoney playerName="player2"
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=5 secondDieResult=5
+# now player2 falls on Atlantic and pays rent to player1
+expect 1450 getPlayerMoney playerName="player1"
+expect 2600 getPlayerMoney playerName="player2"
+rollDice firstDieResult=1 secondDieResult=1
+expect 2600 getPlayerMoney playerName="player1"
+expect 1450 getPlayerMoney playerName="player2"
+quitGame
+
+######################################
+# Testing indigo group of properties #
+######################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=5 secondDieResult=5
+expect 750 getPlayerMoney playerName="player1"
+expect 1700 getPlayerMoney playerName="player2"
+# player1 has a monopoly over indigo group; let's give him some cash and test
+giveCashToPlayer playerName="player1" cash=2000
+expect 70 getPropertyRent placeID=37
+expect 100 getPropertyRent placeID=39
+# first house on each property
+build propertyID=37
+expect 2550 getPlayerMoney playerName="player1"
+expect 175 getPropertyRent placeID=37
+expecterror "Uneven distribution of houses" build propertyID=37
+build propertyID=39
+expect 2350 getPlayerMoney playerName="player1"
+expect 200 getPropertyRent placeID=39
+# second house on each property
+build propertyID=37
+expect 2150 getPlayerMoney playerName="player1"
+expect 500 getPropertyRent placeID=37
+expecterror "Uneven distribution of houses" build propertyID=37
+build propertyID=39
+expect 1950 getPlayerMoney playerName="player1"
+expect 600 getPropertyRent placeID=39
+# third house on each property
+build propertyID=37
+expect 1750 getPlayerMoney playerName="player1"
+expect 1100 getPropertyRent placeID=37
+expecterror "Uneven distribution of houses" build propertyID=37
+build propertyID=39
+expect 1550 getPlayerMoney playerName="player1"
+expect 1400 getPropertyRent placeID=39
+# fourth house on each property
+build propertyID=37
+expect 1350 getPlayerMoney playerName="player1"
+expect 1300 getPropertyRent placeID=37
+expecterror "Uneven distribution of houses" build propertyID=37
+build propertyID=39
+expect 1150 getPlayerMoney playerName="player1"
+expect 1700 getPropertyRent placeID=39
+# hotel on each property
+build propertyID=37
+expect 950 getPlayerMoney playerName="player1"
+expect 1500 getPropertyRent placeID=37
+expecterror "No further buildings on this property" build propertyID=37
+build propertyID=39
+expect 750 getPlayerMoney playerName="player1"
+expect 2000 getPropertyRent placeID=39
+rollDice firstDieResult=1 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+expect 950 getPlayerMoney playerName="player1"
+giveCashToPlayer playerName="player2" cash=301
+expect 2001 getPlayerMoney playerName="player2"
+# now we make player2 fall on Boardwalk and pay the whopping $2000 to player1
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=5 secondDieResult=4
+expect 2950 getPlayerMoney playerName="player1"
+expect 1 getPlayerMoney playerName="player2"
+quitGame
+
+###########################################################
+# Testing upper limit of 32 houses and 12 hotels for sale #
+###########################################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+giveCashToPlayer playerName="player1" cash=5000
+giveCashToPlayer playerName="player2" cash=5000
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+# player1 holds monopoly over purple, pink, red and green
+# player2 hold monopoly over light blue, orange, yellow and indigo
+expect 4540 getPlayerMoney playerName="player1"
+expect 4270 getPlayerMoney playerName="player2"
+# it is player2's turn; let's put him to build 4 houses on each of his properties
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+expect 3670 getPlayerMoney playerName="player2"
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+expect 2470 getPlayerMoney playerName="player2"
+build propertyID=26
+build propertyID=27
+build propertyID=29
+build propertyID=26
+build propertyID=27
+build propertyID=29
+build propertyID=26
+build propertyID=27
+# at this point, the 32 available houses have already been sold; build should throw an exception
+expecterror "No more houses available for sale" build propertyID=29
+# if we build a hotel on Oriental avenue, the 4 houses are taken back to the bank and become available
+# let's do this now and check it out
+build propertyID=6
+build propertyID=29
+build propertyID=26
+build propertyID=27
+build propertyID=29
+# again, all houses are used; if we try to build on Park Place, an exception should be thrown
+expecterror "No more houses available for sale" build propertyID=37
+expect 620 getPlayerMoney playerName="player2"
+giveCashToPlayer playerName="player2" cash=3000
+build propertyID=8
+build propertyID=9
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=26
+build propertyID=27
+build propertyID=29
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+expect 770 getPlayerMoney playerName="player2"
+rollDice firstDieResult=1 secondDieResult=2
+# 11 hotels are built on the board; now let's try to make player1 build 2 more
+build propertyID=1
+build propertyID=3
+build propertyID=1
+build propertyID=3
+build propertyID=1
+build propertyID=3
+build propertyID=1
+build propertyID=3
+build propertyID=1
+# at this point, 12 hotels have been built; no more are available; thus, an exception should be thrown
+expecterror "No more hotels available for sale" build propertyID=3
+quitGame
+
+####################################
+# New test: chance and chest cards #
+####################################
+
+# I'll use Boardwalk and Park Place for this one
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+activateChestPlaces cardShuffle=true
+activateChancePlaces cardShuffle=true
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=5 secondDieResult=5
+expect 750 getPlayerMoney playerName="player1"
+expect 1700 getPlayerMoney playerName="player2"
+# player1 has a monopoly over indigo group; let's give him some cash and test
+giveCashToPlayer playerName="player1" cash=2000
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+build propertyID=37
+build propertyID=39
+# player1 has four houses on each property
+expect 1150 getPlayerMoney playerName="player1"
+# let's make him fall on C. Chest at position 2
+# chest card - pays $40 for each house, $115 for each hotel
+forceNextChestCard chestCardID=16
+rollDice firstDieResult=1 secondDieResult=2
+# must have paid 40x8= $320, for the houses
+expect 1030 getPlayerMoney playerName="player1"
+# player2 moves
+rollDice firstDieResult=5 secondDieResult=5
+# now, for the chance card - pays $25 for each house, $100 for each hotel
+# let's make player1 fall on position 7 - Chance
+forceNextChanceCard chanceCardID=9
+rollDice firstDieResult=3 secondDieResult=2
+# must have paid 25x8=$200, for the houses
+expect 830 getPlayerMoney playerName="player1"
+# player2 moves
+rollDice firstDieResult=5 secondDieResult=5
+# let's build a hotel for player1 - now, he holds 4 houses and a hotel
+build propertyID=39
+expect 630 getPlayerMoney playerName="player1"
+# player1 falls on Chest at position 17
+forceNextChestCard chestCardID=16
+rollDice firstDieResult=5 secondDieResult=5
+# must have paid 4x40 + 115 = $275
+expect 355 getPlayerMoney playerName="player1"
+quitGame

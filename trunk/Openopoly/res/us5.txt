@@ -1,0 +1,850 @@
+# User story 5 - Chance and Community Chest Places
+
+############################
+# testing all chance cards #
+############################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+# cardShuffle=false - cards are drawn sequentially, from 1 to 16
+# cardShuffle=true - cards are randomized in the pile
+activateChancePlaces cardShuffle=false
+
+expecterror "Card doesn't exist" forceNextChanceCard cardId=0
+expecterror "Card doesn't exist" forceNextChanceCard cardId=17
+expecterror "Card doesn't exist" forceNextChestCard cardId=0
+expecterror "Card doesn't exist" forceNextChestCard cardId=17
+
+expect 1 getCurrentChanceCardNumber
+expect "Advance To Go - Collect $200" getCurrentChanceCardDescription
+
+# player1 falls on Chance 1 and gets card 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 40 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+expect 2 getCurrentChanceCardNumber
+expect "Advance To - Illinois Avenue" getCurrentChanceCardDescription
+
+# player2 falls on Chance 1 and gets card 2 - I'm not buying automatically, so I don't want Illinois Av. deed
+rollDice firstDieResult=4 secondDieResult=3
+expect 24 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+expect 3 getCurrentChanceCardNumber
+expect "Advance To St. Charles Place - If you pass Go, Collect $200" getCurrentChanceCardDescription
+
+rollDice firstDieResult=6 secondDieResult=6
+
+# player2 falls on Chance 3 and gets card 3 - collects $200 when passing Go
+rollDice firstDieResult=6 secondDieResult=6
+expect 11 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+expect 4 getCurrentChanceCardNumber
+expect "Advance Token To Nearest Utility - If unowned you may buy it from the bank. If owned, throw dice and pay owner a total ten times the amount thrown." getCurrentChanceCardDescription
+
+# player1 falls on Chance 2 and gets card 4; advances to Water Works, but nothing happens as utility rules are not implemented yet
+rollDice firstDieResult=6 secondDieResult=4
+expect 28 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+expect 5 getCurrentChanceCardNumber
+expect "Advance Token To The Nearest Railroad - Pay Owner Twice The Rental To Which He Is Otherwise entitled. If Railroad Is Unowned, You May Buy It From The Bank." getCurrentChanceCardDescription
+
+# player 2 falls on Chance 2 and gets card 5; advances to B&O Railroad and buys it
+rollDice firstDieResult=6 secondDieResult=5
+buy
+expect 25 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+expect 6 getCurrentChanceCardNumber
+expect "Bank Pays You Dividend Of - $50" getCurrentChanceCardDescription
+
+# player1 falls on Chance 3 and gets card 6
+rollDice firstDieResult=4 secondDieResult=4
+expect 36 getPlayerPosition playerName="player1"
+expect 1750 getPlayerMoney playerName="player1"
+
+expect 7 getCurrentChanceCardNumber
+expect "Go Back 3 Spaces" getCurrentChanceCardDescription
+
+# player2 falls on Chance 3 and gets card 7 - falls on Community Chest 3
+rollDice firstDieResult=6 secondDieResult=5
+expect 33 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+expect 8 getCurrentChanceCardNumber
+expect "Go Directly To Jail - Do Not Pass Go, Do Not Collect $200" getCurrentChanceCardDescription
+
+# player1 falls on Chance 1 and gets card 8 - goes to Jail
+rollDice firstDieResult=6 secondDieResult=5
+expect 10 getPlayerPosition playerName="player1"
+expect 1950 getPlayerMoney playerName="player1"
+
+expect 9 getCurrentChanceCardNumber
+expect "Make General Repairs On All Your Property - For Each House Pay $25, For Each Hotel $100" getCurrentChanceCardDescription
+
+rollDice firstDieResult=4 secondDieResult=3
+# player1 falls on Chance 2 and gets card 9 - nothing happens yet (housing not implemented)
+rollDice firstDieResult=6 secondDieResult=6
+expect 22 getPlayerPosition playerName="player1"
+expect 1950 getPlayerMoney playerName="player1"
+
+expect 10 getCurrentChanceCardNumber
+expect "Pay Poor Tax Of - $15" getCurrentChanceCardDescription
+
+# player2 falls on Chance 1 and gets card 10
+rollDice firstDieResult=4 secondDieResult=3
+expect 7 getPlayerPosition playerName="player2"
+expect 1685 getPlayerMoney playerName="player2"
+
+expect 11 getCurrentChanceCardNumber
+expect "This Card May Be Kept Until Needed Or Sold - Get Out Of Jail Free" getCurrentChanceCardDescription
+
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=2 secondDieResult=3
+
+# player1 falls on Chance 3 and gets card 11 - nothing happens yet
+rollDice firstDieResult=3 secondDieResult=3
+expect 36 getPlayerPosition playerName="player1"
+expect 1950 getPlayerMoney playerName="player1"
+
+expect 12 getCurrentChanceCardNumber
+expect "Take A Ride On The Reading - If You Pass Go Collect $200" getCurrentChanceCardDescription
+
+# player2 falls on Chance 2 and gets card 12 - goes to Reading Railroad and gets $200
+rollDice firstDieResult=5 secondDieResult=5
+expect 5 getPlayerPosition playerName="player2"
+expect 1885 getPlayerMoney playerName="player2"
+
+expect 13 getCurrentChanceCardNumber
+expect "Take A Walk On The Board Walk - Advance Token To Board Walk" getCurrentChanceCardDescription
+
+# player1 falls on Chance 1 and gets card 13 - advances to Board Walk
+rollDice firstDieResult=6 secondDieResult=5
+expect 39 getPlayerPosition playerName="player1"
+expect 2150 getPlayerMoney playerName="player1"
+
+expect 14 getCurrentChanceCardNumber
+expect "You Have Been Elected Chairman Of The Board - Pay Each Player $50" getCurrentChanceCardDescription
+
+rollDice firstDiceResult=4 secondDieResult=3
+
+# player1 falls on Chance 1 and gets card 14 - pays player2 $50
+rollDice firstDieResult=4 secondDieResult=4
+expect 7 getPlayerPosition playerName="player1"
+expect 2300 getPlayerMoney playerName="player1"
+expect 1935 getPlayerMoney playerName="player2"
+
+expect 15 getCurrentChanceCardNumber
+expect "Your Building And Loan Matures - Collect $150" getCurrentChanceCardDescription
+
+# player2 falls on Chance 2 and gets card 15
+rollDice firstDieResult=5 secondDieResult=5
+expect 22 getPlayerPosition playerName="player2"
+expect 2085 getPlayerMoney playerName="player2"
+
+expect 16 getCurrentChanceCardNumber
+expect "Advance Token To The Nearest Railroad - Pay Owner Twice The Rental To Which He Is Otherwise entitled. If Railroad Is Unowned, You May Buy It From The Bank." getCurrentChanceCardDescription
+
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=4 secondDieResult=4
+
+# player1 falls on Chance2 and gets card 16 - falls on B & O and pays $50 to player2 (twice the value)
+rollDice firstDieResult=5 secondDieResult=5
+expect 25 getPlayerPosition playerName="player1"
+expect 2250 getPlayerMoney playerName="player1"
+expect 2135 getPlayerMoney playerName="player2"
+
+# all cards dealt - active card must be 1 now
+expect 1 getCurrentChanceCardNumber
+expect "Advance To Go - Collect $200" getCurrentChanceCardDescription
+
+quitGame
+
+#####################################
+# testing all community chest cards #
+#####################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+# cardShuffle=false - cards are drawn sequentially, from 1 to 16
+# cardShuffle=true - cards are randomized in the pile
+activateChestPlaces cardShuffle=false
+
+expect 1 getCurrentChestCardNumber
+expect "Advance To Go - Collect $200" getCurrentChestCardDescription
+
+# player1 falls on CC1 and gets card 1
+rollDice firstDieResult=1 secondDieResult=1
+expect 40 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+expect 2 getCurrentChestCardNumber
+expect "Bank Error In Your Favor - Collect $200" getCurrentChestCardDescription
+
+# player2 falls on CC1 and gets card 2
+rollDice firstDieResult=1 secondDieResult=1
+expect 2 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+expect 3 getCurrentChestCardNumber
+expect "Doctor's Fee - Pay $50" getCurrentChestCardDescription
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+
+# player1 falls on CC2 and gets card 3
+rollDice firstDieResult=4 secondDieResult=3
+expect 17 getPlayerPosition playerName="player1"
+expect 1650 getPlayerMoney playerName="player1"
+
+expect 4 getCurrentChestCardNumber
+expect "Grand Opera Opening - Collect $50 from every player for opening night seats" getCurrentChestCardDescription
+
+# player2 falls on CC2 and gets card 4
+rollDice firstDieResult=4 secondDieResult=3
+expect 17 getPlayerPosition playerName="player2"
+expect 1750 getPlayerMoney playerName="player2"
+expect 1600 getPlayerMoney playerName="player1"
+
+expect 5 getCurrentChestCardNumber
+expect "From Sale Out Of Stock - You Get $45" getCurrentChestCardDescription
+
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=5
+
+# player1 falls on CC3 and gets card 5
+rollDice firstDieResult=2 secondDieResult=3
+expect 33 getPlayerPosition playerName="player1"
+expect 1645 getPlayerMoney playerName="player1"
+
+expect 6 getCurrentChestCardNumber
+expect "Get Out Of Jail, Free - This card may be kept until needed or sold" getCurrentChestCardDescription
+
+# player2 falls on CC3 and gets card 6 - nothing happens yet
+rollDice firstDieResult=2 secondDieResult=3
+expect 33 getPlayerPosition playerName="player2"
+expect 1750 getPlayerMoney playerName="player2"
+
+expect 7 getCurrentChestCardNumber
+expect "Go To Jail - Go directly to jail - Do not pass go - Do not collect $200" getCurrentChestCardDescription
+
+# player1 falls on CC1, gets card 7 and goes to Jail
+rollDice firstDieResult=5 secondDieResult=4
+expect 10 getPlayerPosition playerName="player1"
+expect 1845 getPlayerMoney playerName="player1"
+
+expect 8 getCurrentChestCardNumber
+expect "Income Tax Refund - Collect $20" getCurrentChestCardDescription
+
+# player2 falls on CC1, gets card 8
+rollDice firstDieResult=5 secondDieResult=4
+expect 2 getPlayerPosition playerName="player2"
+expect 1970 getPlayerMoney playerName="player2"
+
+expect 9 getCurrentChestCardNumber
+expect "Life Insurance Matures - Collect $100" getCurrentChestCardDescription
+
+# player1 falls on CC2, gets card 9
+rollDice firstDieResult=4 secondDieResult=3
+expect 17 getPlayerPosition playerName="player1"
+expect 1945 getPlayerMoney playerName="player1"
+
+expect 10 getCurrentChestCardNumber
+expect "Pay Hospital - $100" getCurrentChestCardDescription
+
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=6 secondDieResult=5
+
+# player2 falls on CC2, gets card 10
+rollDice firstDieResult=4 secondDieResult=3
+expect 17 getPlayerPosition playerName="player2"
+expect 1870 getPlayerMoney playerName="player2"
+
+expect 11 getCurrentChestCardNumber
+expect "Pay School Tax - $150" getCurrentChestCardDescription
+
+# player1 falls on CC3, gets card 11
+rollDice firstDieResult=2 secondDieResult=3
+expect 33 getPlayerPosition playerName="player1"
+expect 1795 getPlayerMoney playerName="player1"
+
+expect 12 getCurrentChestCardNumber
+expect "Receive For Your Services - $25" getCurrentChestCardDescription
+
+rollDice firstDieResult=6 secondDieResult=5
+
+# player1 falls on CC1, gets card 12
+rollDice firstDieResult=5 secondDieResult=4
+expect 2 getPlayerPosition playerName="player1"
+expect 2020 getPlayerMoney playerName="player1"
+
+expect 13 getCurrentChestCardNumber
+expect "XMAS Fund Matures - Collect $100" getCurrentChestCardDescription
+
+# player2 falls on CC3, gets card 13
+rollDice firstDieResult=2 secondDieResult=3
+expect 33 getPlayerPosition playerName="player2"
+expect 1970 getPlayerMoney playerName="player2"
+
+expect 14 getCurrentChestCardNumber
+expect "You Have Won Second Prize In A Beauty Contest - Collect $10" getCurrentChestCardDescription
+
+rollDice firstDieResult=4 secondDieResult=4
+
+# player2 falls on CC1, gets card 14
+rollDice firstDieResult=5 secondDieResult=4
+expect 2 getPlayerPosition playerName="player2"
+expect 2180 getPlayerMoney playerName="player2"
+
+expect 15 getCurrentChestCardNumber
+expect "You Inherit - $100" getCurrentChestCardDescription
+
+# player1 falls on CC2, gets card 15
+rollDice firstDieResult=3 secondDieResult=4
+expect 17 getPlayerPosition playerName="player1"
+expect 2120 getPlayerMoney playerName="player1"
+
+expect 16 getCurrentChestCardNumber
+expect "You Are Assessed For Street Repairs - $40 Per House, $115 Per Hotel" getCurrentChestCardDescription
+
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=6 secondDieResult=5
+
+# player2 falls on CC2, gets card 16 - nothing happens yet
+rollDice firstDieResult=4 secondDieResult=3
+expect 17 getPlayerPosition playerName="player2"
+expect 2180 getPlayerMoney playerName="player2"
+
+expect 1 getCurrentChestCardNumber
+expect "Advance To Go - Collect $200" getCurrentChestCardDescription
+
+quitGame
+
+###########################################
+# special tests for specific chance cards #
+###########################################
+
+#################
+# chance card 1 #
+#################
+
+# checks if card 1 always returns to Go and collects $200
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=1
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 40 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=1
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 40 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=1
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 40 getPlayerPosition playerName="player1"
+expect 1900 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=1
+# Chance 1 again, after passing Go (must collect 400 in total)
+rollDice firstDieResult=6 secondDieResult=6
+expect 40 getPlayerPosition playerName="player2"
+expect 2100 getPlayerMoney playerName="player2"
+
+quitGame
+
+#################
+# chance card 2 #
+#################
+
+# checks if card 2 always moves players to Illinois avenue; must not receive $200 when passing Go
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=2
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 24 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=2
+# Chance 3; player doesn't get $200 when passing Go
+rollDice firstDieResult=6 secondDieResult=6
+expect 24 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=2
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 24 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=3
+
+forceNextChanceCard chanceCardID=2
+# Chance 1 after passing Go
+rollDice firstDieResult=6 secondDieResult=6
+expect 24 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+quitGame
+
+#################
+# chance card 3 #
+#################
+
+# checks if card 3 always moves players to St. Charles Place
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=3
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 11 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=3
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=5
+expect 11 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=3
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 11 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=4
+
+forceNextChanceCard chanceCardID=3
+# Chance 1 again
+rollDice firstDieResult=6 secondDieResult=6
+expect 11 getPlayerPosition playerName="player1"
+expect 1900 getPlayerMoney playerName="player1"
+
+quitGame
+
+#################
+# chance card 4 #
+#################
+
+# checks if card 3 always moves players to the nearest utility
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=4
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 12 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=4
+# Chance 2
+rollDice firstDieResult=5 secondDieResult=5
+expect 28 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=4
+# Chance 3; player doesn't receive $200 when passing Go
+rollDice firstDieResult=4 secondDieResult=4
+expect 12 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+quitGame
+
+#################
+# chance card 5 #
+#################
+
+# checks if card always moves players to the nearest railroad, and pays twice the value of the ride; player doesn't receibe $200 if passing Go
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=5
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+buy
+expect 15 getPlayerPosition playerName="player1"
+expect 1300 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=5
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 15 getPlayerPosition playerName="player2"
+expect 1450 getPlayerMoney playerName="player2"
+expect 1350 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=5
+# Chance 2
+rollDice firstDieResult=4 secondDieResult=3
+buy
+expect 25 getPlayerPosition playerName="player1"
+expect 1150 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=5
+# Chance 2
+rollDice firstDieResult=4 secondDieResult=3
+expect 25 getPlayerPosition playerName="player2"
+expect 1350 getPlayerMoney playerName="player2"
+expect 1250 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=5
+# Chance 3
+rollDice firstDieResult=6 secondDieResult=5
+buy
+expect 5 getPlayerPosition playerName="player1"
+expect 1050 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=5
+# Chance 3
+rollDice firstDieResult=6 secondDieResult=5
+expect 5 getPlayerPosition playerName="player2"
+expect 1200 getPlayerMoney playerName="player2"
+expect 1200 getPlayerMoney playerName="player1"
+
+quitGame
+
+#################
+# chance card 7 #
+#################
+
+# checks if card 7 always moves players back 3 spaces
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=7
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 4 getPlayerPosition playerName="player1"
+expect 1300 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=3
+
+forceNextChanceCard chanceCardID=7
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 19 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=6 seconDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=7
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 33 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+quitGame
+
+#################
+# chance card 8 #
+#################
+
+# checks if card 8 always moves players directly to Jail, without collecting 200 (unless passing Go before falling on Chance 1)
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=8
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=8
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=8
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=3 secondDieResult=2
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=8
+# Chance 1 after passing Go
+rollDice firstDieResult=6 secondDieResult=6
+expect 10 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+quitGame
+
+
+##################
+# chance card 12 #
+##################
+
+# checks if card 12 always takes players to Reading Railroad, collecting $200 on Go, but without paying twice the ride
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=12
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 5 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=2
+
+forceNextChanceCard chanceCardID=12
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 5 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=12
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 5 getPlayerPosition playerName="player1"
+expect 1900 getPlayerMoney playerName="player1"
+
+quitGame
+
+##################
+# chance card 13 #
+##################
+
+# checks if card 13 always takes players to Boardwalk
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=13
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 39 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=5
+
+forceNextChanceCard chanceCardID=13
+# Chance 2
+rollDice firstDieResult=6 secondDieResult=6
+expect 39 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChanceCard chanceCardID=13
+# Chance 3
+rollDice firstDieResult=3 secondDieResult=3
+expect 39 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+quitGame
+
+##################
+# chance card 16 #
+##################
+
+# checks if card 16 always moves players to the nearest railroad, and pays twice the value of the ride (the same as for 5); player doesn't get $200 when passing Go
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChancePlaces cardShuffle=true
+
+forceNextChanceCard chanceCardID=16
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+buy
+expect 15 getPlayerPosition playerName="player1"
+expect 1300 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=16
+# Chance 1
+rollDice firstDieResult=4 secondDieResult=3
+expect 15 getPlayerPosition playerName="player2"
+expect 1450 getPlayerMoney playerName="player2"
+expect 1350 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=16
+# Chance 2
+rollDice firstDieResult=4 secondDieResult=3
+buy
+expect 25 getPlayerPosition playerName="player1"
+expect 1150 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=16
+# Chance 2
+rollDice firstDieResult=4 secondDieResult=3
+expect 25 getPlayerPosition playerName="player2"
+expect 1350 getPlayerMoney playerName="player2"
+expect 1250 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=16
+# Chance 3
+rollDice firstDieResult=6 secondDieResult=5
+buy
+expect 5 getPlayerPosition playerName="player1"
+expect 1050 getPlayerMoney playerName="player1"
+
+forceNextChanceCard chanceCardID=16
+# Chance 3
+rollDice firstDieResult=6 secondDieResult=5
+expect 5 getPlayerPosition playerName="player2"
+expect 1200 getPlayerMoney playerName="player2"
+expect 1200 getPlayerMoney playerName="player1"
+
+quitGame
+
+####################################################
+# special tests for specific community chest cards #
+####################################################
+
+################
+# chest card 1 #
+################
+
+# checks if card 1 always returns to Go and collects $200
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChestPlaces cardShuffle=true
+
+forceNextChestCard chanceCardID=1
+# Chest 1
+rollDice firstDieResult=1 secondDieResult=1
+expect 40 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChestCard chanceCardID=1
+# Chest 2
+rollDice firstDieResult=4 secondDieResult=3
+expect 40 getPlayerPosition playerName="player2"
+expect 1700 getPlayerMoney playerName="player2"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChestCard chanceCardID=1
+# Chest 3
+rollDice firstDieResult=2 secondDieResult=1
+expect 40 getPlayerPosition playerName="player1"
+expect 1900 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChestCard chanceCardID=1
+# Chest 1 againa
+rollDice firstDieResult=6 secondDieResult=6
+expect 40 getPlayerPosition playerName="player2"
+expect 2100 getPlayerMoney playerName="player2"
+
+quitGame
+
+################
+# chest card 7 #
+################
+
+# checks if card 7 always sends players directly to Jail, without collecting $200
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateChestPlaces cardShuffle=true
+
+forceNextChestCard chestCardID=7
+# Chest 1
+rollDice firstDieResult=1 secondDieResult=1
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChestCard chestCardID=7
+# Chest 2
+rollDice firstDieResult=4 secondDieResult=3
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+forceNextChestCard chestCardID=7
+# Chest 3
+rollDice firstDieResult=2 secondDieResult=1
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+forceNextChestCard chestCardID=7
+# Chest 1 again
+rollDice firstDieResult=6 secondDieResult=6
+expect 10 getPlayerPosition playerName="player1"
+expect 1700 getPlayerMoney playerName="player1"
+
+quitGame

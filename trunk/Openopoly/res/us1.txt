@@ -1,0 +1,339 @@
+# USER STORY 1 - START A NEW GAME
+
+##########################
+# Setup error conditions #
+##########################
+
+expecterror "Invalid number of players" createGame numPlayers=1 playerNames={player1} tokenColors={black}
+expecterror "Invalid number of players" createGame numPlayers=9 playerNames={player1,player2,player3,player4,player5,player6,player7,player8,player9} tokenColors={black,white,red,green,blue,orange,yellow,pink,brown}
+expecterror "Too many player names" createGame numPlayers=2 playerNames={player1,player2,player3} tokenColors={black,white}
+expecterror "Too few player names" createGame numPlayers=2 playerNames={player1} tokenColors={black,white}
+expecterror "Too many token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white,red}
+expecterror "Too few token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black}
+expecterror "There mustn't be repeated player names" createGame numPlayers=2 playerNames={player1,player1} tokenColors={black,white}
+expecterror "There mustn't be repeated token colors" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,black}
+# player name can't be "bank" - bank may be returned as owner of a place
+expecterror "Invalid player name" createGame numPlayers=2 playerNames={bank,player1} tokenColors={black,white}
+expecterror "Invalid token color" createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,abcde}
+expecterror "There's no game to quit" quitGame
+
+####################################
+# Creating a game with two players #
+####################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+expect 2 getNumberOfPlayers
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+expect 40 getPlayerPosition playerName="player1"
+expect 40 getPlayerPosition playerName="player2"
+expect {} getPlayerDeeds playerName="player1"
+expect {} getPlayerDeeds playerName="player2"
+expect "player1" getCurrentPlayer
+expect {roll,status,quit} getCommands
+
+expecterror "Player doesn't exist" getPlayerToken playerName="abcde"
+expecterror "Player doesn't exist" getPlayerMoney playerName="abcde"
+expecterror "Player doesn't exist" getPlayerPosition playerName="abcde"
+expecterror "Player doesn't exist" getPlayerDeeds playerName="abcde"
+
+expecterror "Place doesn't exist" getPlaceName placeID=0
+expecterror "Place doesn't exist" getPlaceName placeID=41
+expecterror "Place doesn't exist" getPlaceGroup placeID=0
+expecterror "Place doesn't exist" getPlaceGroup placeID=41
+expecterror "Place doesn't exist" getPlacePrice placeID=0
+expecterror "Place doesn't exist" getPlacePrice placeID=41
+expecterror "Place doesn't exist" getPlaceOwner placeID=0
+expecterror "Place doesn't exist" getPlaceOwner placeID=41
+expecterror "Place doesn't exist" getPropertyRent placeID=0
+expecterror "Place doesn't exist" getPropertyRent placeID=41
+
+expect "Mediterranean Avenue" getPlaceName placeID=1
+expect "purple" getPlaceGroup placeID=1
+expect "bank" getPlaceOwner placeID=1
+expect 2 getPropertyRent placeID=1
+expect 60 getPlacePrice placeID=1
+
+expect "Community Chest 1" getPlaceName placeID=2
+expect "chest" getPlaceGroup placeID=2
+expecterror "This place can't be owned" getPlaceOwner placeID=2
+expecterror "This place doesn't have a rent" getPropertyRent placeID=2
+expecterror "This place can't be sold" getPlacePrice placeID=2
+
+expect "Baltic Avenue" getPlaceName placeID=3
+expect "purple" getPlaceGroup placeID=3
+expect "bank" getPlaceOwner placeID=3
+expect 4 getPropertyRent placeID=3
+expect 60 getPlacePrice placeID=3
+
+expect "Income Tax" getPlaceName placeID=4
+expect "tax" getPlaceGroup placeID=4
+expecterror "This place can't be owned" getPlaceOwner placeID=4
+expecterror "This place doesn't have a rent" getPropertyRent placeID=4
+expecterror "This place can't be sold" getPlacePrice placeID=4
+
+expect "Reading Railroad" getPlaceName placeID=5
+expect "railroad" getPlaceGroup placeID=5
+expect "bank" getPlaceOwner placeID=5
+expecterror "This place doesn't have a rent" getPropertyRent placeID=5
+expect 200 getPlacePrice placeID=5
+
+expect "Oriental Avenue" getPlaceName placeID=6
+expect "light blue" getPlaceGroup placeID=6
+expect "bank" getPlaceOwner placeID=6
+expect 6 getPropertyRent placeID=6
+expect 100 getPlacePrice placeID=6
+
+expect "Chance 1" getPlaceName placeID=7
+expect "chance" getPlaceGroup placeID=7
+expecterror "This place can't be owned" getPlaceOwner placeID=7
+expecterror "This place doesn't have a rent" getPropertyRent placeID=7
+expecterror "This place can't be sold" getPlacePrice placeID=7
+
+expect "Vermont Avenue" getPlaceName placeID=8
+expect "light blue" getPlaceGroup placeID=8
+expect "bank" getPlaceOwner placeID=8
+expect 6 getPropertyRent placeID=8
+expect 100 getPlacePrice placeID=8
+
+expect "Connecticut Avenue" getPlaceName placeID=9
+expect "light blue" getPlaceGroup placeID=9
+expect "bank" getPlaceOwner placeID=9
+expect 8 getPropertyRent placeID=9
+expect 120 getPlacePrice placeID=9
+
+expect "Jail - Just Visiting" getPlaceName placeID=10
+expect "corner" getPlaceGroup placeID=10
+expecterror "This place can't be owned" getPlaceOwner placeID=10
+expecterror "This place doesn't have a rent" getPropertyRent placeID=10
+expecterror "This place can't be sold" getPlacePrice placeID=10
+
+expect "St. Charles Place" getPlaceName placeID=11
+expect "pink" getPlaceGroup placeID=11
+expect "bank" getPlaceOwner placeID=11
+expect 10 getPropertyRent placeID=11
+expect 140 getPlacePrice placeID=11
+
+expect "Electric Company" getPlaceName placeID=12
+expect "utility" getPlaceGroup placeID=12
+expect "bank" getPlaceOwner placeID=12
+expecterror "This place doesn't have a rent" getPropertyRent placeID=12
+expect 150 getPlacePrice placeID=12
+
+expect "States Avenue" getPlaceName placeID=13
+expect "pink" getPlaceGroup placeID=13
+expect "bank" getPlaceOwner placeID=13
+expect 10 getPropertyRent placeID=13
+expect 140 getPlacePrice placeID=13
+
+expect "Virginia Avenue" getPlaceName placeID=14
+expect "pink" getPlaceGroup placeID=14
+expect "bank" getPlaceOwner placeID=14
+expect 12 getPropertyRent placeID=14
+expect 160 getPlacePrice placeID=14
+
+expect "Pennsylvania Railroad" getPlaceName placeID=15
+expect "railroad" getPlaceGroup placeID=15
+expect "bank" getPlaceOwner placeID=15
+expecterror "This place doesn't have a rent" getPropertyRent placeID=15
+expect 200 getPlacePrice placeID=15
+
+expect "St. James Place" getPlaceName placeID=16
+expect "orange" getPlaceGroup placeID=16
+expect "bank" getPlaceOwner placeID=16
+expect 14 getPropertyRent placeID=16
+expect 180 getPlacePrice placeID=16
+
+expect "Community Chest 2" getPlaceName placeID=17
+expect "chest" getPlaceGroup placeID=17
+expecterror "This place can't be owned" getPlaceOwner placeID=17
+expecterror "This place doesn't have a rent" getPropertyRent placeID=17
+expecterror "This place can't be sold" getPlacePrice placeID=17
+
+expect "Tennessee Avenue" getPlaceName placeID=18
+expect "orange" getPlaceGroup placeID=18
+expect "bank" getPlaceOwner placeID=18
+expect 14 getPropertyRent placeID=18
+expect 180 getPlacePrice placeID=18
+
+expect "New York Avenue" getPlaceName placeID=19
+expect "orange" getPlaceGroup placeID=19
+expect "bank" getPlaceOwner placeID=19
+expect 16 getPropertyRent placeID=19
+expect 200 getPlacePrice placeID=19
+
+expect "Free Parking" getPlaceName placeID=20
+expect "corner" getPlaceGroup placeID=20
+expecterror "This place can't be owned" getPlaceOwner placeID=20
+expecterror "This place doesn't have a rent" getPropertyRent placeID=20
+expecterror "This place can't be sold" getPlacePrice placeID=20
+
+expect "Kentucky Avenue" getPlaceName placeID=21
+expect "red" getPlaceGroup placeID=21
+expect "bank" getPlaceOwner placeID=21
+expect 18 getPropertyRent placeID=21
+expect 220 getPlacePrice placeID=21
+
+expect "Chance 2" getPlaceName placeID=22
+expect "chance" getPlaceGroup placeID=22
+expecterror "This place can't be owned" getPlaceOwner placeID=22
+expecterror "This place doesn't have a rent" getPropertyRent placeID=22
+expecterror "This place can't be sold" getPlacePrice placeID=22
+
+expect "Indiana Avenue" getPlaceName placeID=23
+expect "red" getPlaceGroup placeID=23
+expect "bank" getPlaceOwner placeID=23
+expect 18 getPropertyRent placeID=23
+expect 220 getPlacePrice placeID=23
+
+expect "Illinois Avenue" getPlaceName placeID=24
+expect "red" getPlaceGroup placeID=24
+expect "bank" getPlaceOwner placeID=24
+expect 20 getPropertyRent placeID=24
+expect 240 getPlacePrice placeID=24
+
+expect "B & O Railroad" getPlaceName placeID=25
+expect "railroad" getPlaceGroup placeID=25
+expect "bank" getPlaceOwner placeID=25
+expecterror "This place doesn't have a rent" getPropertyRent placeID=25
+expect 200 getPlacePrice placeID=25
+
+expect "Atlantic Avenue" getPlaceName placeID=26
+expect "yellow" getPlaceGroup placeID=26
+expect "bank" getPlaceOwner placeID=26
+expect 22 getPropertyRent placeID=26
+expect 260 getPlacePrice placeID=26
+
+expect "Ventnor Avenue" getPlaceName placeID=27
+expect "yellow" getPlaceGroup placeID=27
+expect "bank" getPlaceOwner placeID=27
+expect 22 getPropertyRent placeID=27
+expect 260 getPlacePrice placeID=27
+
+expect "Water Works" getPlaceName placeID=28
+expect "utility" getPlaceGroup placeID=28
+expect "bank" getPlaceOwner placeID=28
+expecterror "This place doesn't have a rent" getPropertyRent placeID=28
+expect 150 getPlacePrice placeID=28
+
+expect "Marvin Gardens" getPlaceName placeID=29
+expect "yellow" getPlaceGroup placeID=29
+expect "bank" getPlaceOwner placeID=29
+expect 24 getPropertyRent placeID=29
+expect 280 getPlacePrice placeID=29
+
+expect "Go To Jail" getPlaceName placeID=30
+expect "corner" getPlaceGroup placeID=30
+expecterror "This place can't be owned" getPlaceOwner placeID=30
+expecterror "This place doesn't have a rent" getPropertyRent placeID=30
+expecterror "This place can't be sold" getPlacePrice placeID=30
+
+expect "Pacific Avenue" getPlaceName placeID=31
+expect "green" getPlaceGroup placeID=31
+expect "bank" getPlaceOwner placeID=31
+expect 26 getPropertyRent placeID=31
+expect 300 getPlacePrice placeID=31
+
+expect "North Carolina Avenue" getPlaceName placeID=32
+expect "green" getPlaceGroup placeID=32
+expect "bank" getPlaceOwner placeID=32
+expect 26 getPropertyRent placeID=32
+expect 300 getPlacePrice placeID=32
+
+expect "Community Chest 3" getPlaceName placeID=33
+expect "chest" getPlaceGroup placeID=33
+expecterror "This place can't be owned" getPlaceOwner placeID=33
+expecterror "This place doesn't have a rent" getPropertyRent placeID=33
+expecterror "This place can't be sold" getPlacePrice placeID=33
+
+expect "Pennsylvania Avenue" getPlaceName placeID=34
+expect "green" getPlaceGroup placeID=34
+expect "bank" getPlaceOwner placeID=34
+expect 28 getPropertyRent placeID=34
+expect 320 getPlacePrice placeID=34
+
+expect "Short Line Railroad" getPlaceName placeID=35
+expect "railroad" getPlaceGroup placeID=35
+expect "bank" getPlaceOwner placeID=35
+expecterror "This place doesn't have a rent" getPropertyRent placeID=35
+expect 200 getPlacePrice placeID=35
+
+expect "Chance 3" getPlaceName placeID=36
+expect "chance" getPlaceGroup placeID=36
+expecterror "This place can't be owned" getPlaceOwner placeID=36
+expecterror "This place doesn't have a rent" getPropertyRent placeID=36
+expecterror "This place can't be sold" getPlacePrice placeID=36
+
+expect "Park Place" getPlaceName placeID=37
+expect "indigo" getPlaceGroup placeID=37
+expect "bank" getPlaceOwner placeID=37
+expect 35 getPropertyRent placeID=37
+expect 350 getPlacePrice placeID=37
+
+expect "Luxury Tax" getPlaceName placeID=38
+expect "tax" getPlaceGroup placeID=38
+expecterror "This place can't be owned" getPlaceOwner placeID=38
+expecterror "This place doesn't have a rent" getPropertyRent placeID=38
+expecterror "This place can't be sold" getPlacePrice placeID=38
+
+expect "Boardwalk" getPlaceName placeID=39
+expect "indigo" getPlaceGroup placeID=39
+expect "bank" getPlaceOwner placeID=39
+expect 50 getPropertyRent placeID=39
+expect 400 getPlacePrice placeID=39
+
+expect "Go" getPlaceName placeID=40
+expect "corner" getPlaceGroup placeID=40
+expecterror "This place can't be owned" getPlaceOwner placeID=40
+expecterror "This place doesn't have a rent" getPropertyRent placeID=40
+expecterror "This place can't be sold" getPlacePrice placeID=40
+
+quitGame
+
+
+######################################
+# Creating a game with eight players #
+######################################
+
+createGame numPlayers=8 playerNames={player1,player2,player3,player4,player5,player6,player7,player8} tokenColors={black,white,red,green,blue,yellow,orange,pink}
+
+expect 8 getNumberOfPlayers
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect "red" getPlayerToken playerName="player3"
+expect "green" getPlayerToken playerName="player4"
+expect "blue" getPlayerToken playerName="player5"
+expect "yellow" getPlayerToken playerName="player6"
+expect "orange" getPlayerToken playerName="player7"
+expect "pink" getPlayerToken playerName="player8"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+expect 1500 getPlayerMoney playerName="player3"
+expect 1500 getPlayerMoney playerName="player4"
+expect 1500 getPlayerMoney playerName="player5"
+expect 1500 getPlayerMoney playerName="player6"
+expect 1500 getPlayerMoney playerName="player7"
+expect 1500 getPlayerMoney playerName="player8"
+expect 40 getPlayerPosition playerName="player1"
+expect 40 getPlayerPosition playerName="player2"
+expect 40 getPlayerPosition playerName="player3"
+expect 40 getPlayerPosition playerName="player4"
+expect 40 getPlayerPosition playerName="player5"
+expect 40 getPlayerPosition playerName="player6"
+expect 40 getPlayerPosition playerName="player7"
+expect 40 getPlayerPosition playerName="player8"
+expect {} getPlayerDeeds playerName="player1"
+expect {} getPlayerDeeds playerName="player2"
+expect {} getPlayerDeeds playerName="player3"
+expect {} getPlayerDeeds playerName="player4"
+expect {} getPlayerDeeds playerName="player5"
+expect {} getPlayerDeeds playerName="player6"
+expect {} getPlayerDeeds playerName="player7"
+expect {} getPlayerDeeds playerName="player8"
+expect "player1" getCurrentPlayer
+expect {roll,status,quit} getCommands
+
+quitGame
