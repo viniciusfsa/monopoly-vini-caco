@@ -6,12 +6,12 @@ package openopoly.err;
  * @author Lucas
  * @author Sergio
  */
-public class PlayerDoesntExistException extends GameException{
+public class PlayerDoesntExistsException extends GameException{
 
     /**
      * O construtor da classe configura uma mensagem especifica da exceção
      */
-    public PlayerDoesntExistException() {
+    public PlayerDoesntExistsException() {
         super("Player doesn't exist");
     }
 

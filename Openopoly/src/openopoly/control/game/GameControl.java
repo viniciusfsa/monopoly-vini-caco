@@ -7,7 +7,7 @@ import openopoly.util.Dice;
 import java.util.ArrayList;
 import openopoly.board.Block;
 import openopoly.control.business.Bank;
-import openopoly.err.PlayerDoesntExistException;
+import openopoly.err.PlayerDoesntExistsException;
 import openopoly.util.CardEffects;
 
 /**Classe que representa o controle principal do jogo
@@ -25,6 +25,7 @@ public class GameControl {
     private BusinessManager businessManager;
     private boolean automaticBuy = false;
     private boolean doublesRule = false;
+    
 
     /**
      * O construtor da classe tem a função de preencher a lista
@@ -248,7 +249,7 @@ public class GameControl {
         }
     }
 
-    public Player getPlayer(String name) throws PlayerDoesntExistException {
+    public Player getPlayer(String name) throws PlayerDoesntExistsException {
         Player p = null;
 
         for (Player player : players) {
@@ -260,7 +261,7 @@ public class GameControl {
         if (p != null) {
             return p;
         } else {
-            throw new PlayerDoesntExistException();
+            throw new PlayerDoesntExistsException();
         }
 
     }
@@ -271,7 +272,7 @@ public class GameControl {
      * @return retorna a cor
      * @throws PlayerDoesntExistException caso o jogador não exista
      */
-    public String getPlayerColor(String name) throws PlayerDoesntExistException {
+    public String getPlayerColor(String name) throws PlayerDoesntExistsException {
         String colorToken = null;
         for (Player player : players) {
             if (player.getPlayerName().equals(name)) {
@@ -279,7 +280,7 @@ public class GameControl {
             }
         }
         if (colorToken == null) {
-            throw new PlayerDoesntExistException();
+            throw new PlayerDoesntExistsException();
         }
         return colorToken;
     }
@@ -290,7 +291,7 @@ public class GameControl {
      * @return o dinheiro do jogador
      * @throws PlayerDoesntExistException caso o jogador não exista
      */
-    public int getPlayerMoney(String name) throws PlayerDoesntExistException {
+    public int getPlayerMoney(String name) throws PlayerDoesntExistsException {
         int cash = 0;
         boolean exists = false;
         for (Player player : players) {
@@ -300,7 +301,7 @@ public class GameControl {
             }
         }
         if (!exists) {
-            throw new PlayerDoesntExistException();
+            throw new PlayerDoesntExistsException();
         }
         return (int) cash;
     }
@@ -312,7 +313,7 @@ public class GameControl {
      * @throws PlayerDoesntExistException caso o jogador não exista
      * @throws GameException caso o jogador não esteja mais no jogo
      */
-    public int getPlayerPosition(String name) throws PlayerDoesntExistException, GameException {
+    public int getPlayerPosition(String name) throws PlayerDoesntExistsException, GameException {
         int pos = 0;
         if (bankruptedPlayers.contains(name)) {
             throw new GameException("Player no longer in the game");
@@ -325,7 +326,7 @@ public class GameControl {
                 }
             }
             if (!exists) {
-                throw new PlayerDoesntExistException();
+                throw new PlayerDoesntExistsException();
             }
         }
         return (int) pos;
@@ -337,7 +338,7 @@ public class GameControl {
      * @return a lista de titulos do jogador
      * @throws PlayerDoesntExistException caso o jogador não exista
      */
-    public String getPlayerDeeds(String name) throws PlayerDoesntExistException {
+    public String getPlayerDeeds(String name) throws PlayerDoesntExistsException {
         String deeds = null;
         for (Player player : players) {
             if (player.getPlayerName().equals(name)) {
@@ -345,7 +346,7 @@ public class GameControl {
             }
         }
         if (deeds == null) {
-            throw new PlayerDoesntExistException();
+            throw new PlayerDoesntExistsException();
         }
         return deeds;
     }
@@ -416,7 +417,7 @@ public class GameControl {
      * Esse método ativa as regras da cadeia no jogo.
      */
     public void activateJail() {
-        businessManager.setActivateJail(true);
+        businessManager.setActiveJail(true);
     }
 
     /**
@@ -434,7 +435,8 @@ public class GameControl {
     }
 
     /**
-     * Esse método ativa as regras de dados iguais.
+     * Esse método ativa as regras de dados iguais para cair na prisao
+     * (três vezes jogadas iguais = prisao)
      */
     public void activateDoublesRule() {
         this.doublesRule = true;
@@ -495,4 +497,17 @@ public class GameControl {
     public void setExtraRailroadEffect() {
         businessManager.setExtraRREffect(true);
     }
+
+    public void activateMortgage() {
+        this.businessManager.setActiveMortgage(true);
+    }
+
+    public void mortgage(int placeID) throws GameException {
+//        throw new GameException("Place doesn't exist");
+        this.businessManager.mortgage(placeID);
+        
+    }
+
+
+    
 }
