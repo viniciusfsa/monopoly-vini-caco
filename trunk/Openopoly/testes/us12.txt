@@ -1,0 +1,140 @@
+# User story 12 - Avoiding bankrupcty
+
+# New script command: giveDeedToPlayer playerName=<player's name> placeID=<position of the place on the board>
+# This will make tests easier to understand and maintain
+
+# test 0 - testing the new command
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+expecterror "Place doesn't exist" giveDeedToPlayer playerName="player1" placeID=0
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=2
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=4
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=7
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=10
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=17
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=20
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=22
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=30
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=33
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=36
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=38
+expecterror "This place doesn't have a deed" giveDeedToPlayer playerName="player1" placeID=40
+expecterror "Place doesn't exist" giveDeedToPlayer playerName="player1" placeID=41
+giveDeedToPlayer playerName="player1" placeID=1
+expect "player1" getPlaceOwner placeID=1
+expecterror "Player is already owner of this deed" giveDeedToPlayer playerName="player1" placeID=1
+# deed can only be given if it is on the bank
+expecterror "Deed is already owned by a player" giveDeedToPlayer playerName="player2" placeID=1
+quitGame
+
+# test 1 - player1 has no deeds, falls below 0 - must be taken out of the game
+createGame numPlayers=3 playerNames="{player1,player2,player3}" tokenColors="{black,white,red}"
+activateAvoidingBankruptcy
+giveCashToPlayer playerName="player1" cash=-1500
+rollDice firstDieResult=3 secondDieResult=1
+# falls on income tax
+expecterror "Player no longer in the game" getPlayerPosition playerName="player1"
+expect 2 getNumberOfPlayers
+expect "player2" getCurrentPlayer
+quitGame
+
+# test 2 - player has a deed, falls below 0 - must be given the option of mortgaging the deed
+createGame numPlayers=3 playerNames="{player1,player2,player3}" tokenColors="{black,white,red}"
+activateAvoidingBankruptcy
+activateMortgage
+giveCashToPlayer playerName="player1" cash=-1500
+giveDeedToPlayer playerName="player1" placeID=1
+rollDice firstDieResult=3 secondDieResult=1
+# player is not yet out of the game; he stays until he mortgages every deed and sells every house, or issues the command "giveup"
+# observe that, although player1 is still the current player, he can't issue a roll command; this "special turn" is created
+# for him so that he can mortgage deeds and sell houses;
+# quit is the regular command to terminate the program
+# giveup is issued by the player if he doesn't want to try mortgaging everything and just wants to get out of the game
+# avoid is issued by the player when his money goes greater than 0 and he no longer wants to mortgage
+# giveup and avoid ends player1's turn
+expect "player1" getCurrentPlayer
+expect "{status,quit,mortgage,giveup}" getCommands
+expecterror "Unavailable command" avoid
+expecterror "Player can't roll dice when trying to avoid bankruptcy" rollDice firstDieResult=1 secondDieResult=1
+mortgage placeID=1
+expect "{status,quit,giveup}" getCommands
+giveUp
+expecterror "Player no longer in the game" getPlayerPosition playerName="player1"
+expect 2 getNumberOfPlayers
+quitGame
+
+# test 3 - player falls below 0, but is saved by mortgaging his deed
+createGame numPlayers=3 playerNames="{player1,player2,player3}" tokenColors="{black,white,red}"
+activateAvoidingBankruptcy
+activateMortgage
+giveCashToPlayer playerName="player1" cash=-1330
+giveDeedToPlayer playerName="player1" placeID=1
+rollDice firstDieResult=3 secondDieResult=1
+expect "player1" getCurrentPlayer
+expect "{status,quit,mortgage,giveup}" getCommands
+mortgage placeID=1
+expect "{status,quit,avoid}" getCommands
+avoid
+expect 4 getPlayerPosition playerName="player1"
+expect 0 getPlayerMoney playerName="player1"
+expect 3 getNumberOfPlayers
+expect "player2" getCurrentPlayer
+quitGame
+
+# test 4 - player falls below 0, but is saved by selling houses
+createGame numPlayers=3 playerNames="{player1,player2,player3}" tokenColors="{black,white,red}"
+activateAvoidingBankruptcy
+activateMortgage
+activateBuild
+activateSell
+giveDeedToPlayer playerName="player1" placeID=1
+giveDeedToPlayer playerName="player1" placeID=3
+build placeID=1
+build placeID=3
+build placeID=1
+build placeID=3
+giveCashToPlayer playerName="player1" cash=-1200
+rollDice firstDieResult=3 secondDieResult=1
+expect "player1" getCurrentPlayer
+# mortgage is unavailable for player1 because all of his deeds have houses built
+expect "{status,quit,sell,giveup}" getCommands
+sell placeID=1
+sell placeID=3
+sell placeID=1
+expect "{status,quit,sell,mortgage,giveup}" getCommands
+sell placeID=3
+expect "{status,quit,mortgage,avoid}" getCommands
+avoid
+expect 4 getPlayerPosition playerName="player1"
+expect 0 getPlayerMoney playerName="player1"
+expect 3 getNumberOfPlayers
+expect "player2" getCurrentPlayer
+quitGame
+
+# test 5 - when giving up, all belongings must be returned to the bank
+createGame numPlayers=3 playerNames="{player1,player2,player3}" tokenColors="{black,white,red}"
+activateAvoidingBankruptcy
+activateMortgage
+activateBuild
+activateSell
+giveDeedToPlayer playerName="player1" placeID=1
+giveDeedToPlayer playerName="player1" placeID=3
+build placeID=1
+build placeID=3
+build placeID=1
+build placeID=3
+giveCashToPlayer playerName="player1" cash=-1200
+rollDice firstDieResult=3 secondDieResult=1
+expect "player1" getCurrentPlayer
+expect "{status,quit,sell,giveup}" getCommands
+giveUp
+expect "player2" getCurrentPlayer
+expecterror "Player no longer in the game" getPlayerPosition playerName="player1"
+expect 2 getNumberOfPlayers
+expect "bank" getPlaceOwner placeID=1
+expect "bank" getPlaceOwner placeID=3
+expect 2 getPropertyRent propertyID=1
+expect 4 getPropertyRent propertyID=3
+# new commands below: getBankHouses and getBankHotels
+expect 32 getBankHouses
+expect 12 getBankHotels
+quitGame

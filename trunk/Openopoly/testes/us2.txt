@@ -1,0 +1,891 @@
+# User story 2 - Monopoly turn
+
+################################
+# Testing rules with 8 players #
+################################
+
+createGame numPlayers=8 playerNames={player1,player2,player3,player4,player5,player6,player7,player8} tokenColors={black,white,red,green,blue,yellow,orange,pink}
+setAutomaticBuying auto=true
+
+# testing throw with invalid die results
+expecterror "Invalid die result" rollDice firstDieResult=0 secondDieResult=1
+expecterror "Invalid die result" rollDice firstDieResult=7 secondDieResult=1
+expecterror "Invalid die result" rollDice firstDieResult=1 secondDieResult=0
+expecterror "Invalid die result" rollDice firstDieResult=1 secondDieResult=7
+
+# 1st round
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=2
+rollDice firstDieResult=1 secondDieResult=3
+rollDice firstDieResult=1 secondDieResult=4
+rollDice firstDieResult=1 secondDieResult=5
+rollDice firstDieResult=1 secondDieResult=6
+rollDice firstDieResult=2 secondDieResult=6
+rollDice firstDieResult=3 secondDieResult=6
+
+# 2nd round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 3rd round
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 4th round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 5th round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+
+# all places bought, all taxes fallen on, "Go" fallen on and passed
+
+expect "player6" getCurrentPlayer
+expect 810 getPlayerMoney playerName="player1"
+expect 865 getPlayerMoney playerName="player2"
+expect 460 getPlayerMoney playerName="player3"
+expect 820 getPlayerMoney playerName="player4"
+expect 1100 getPlayerMoney playerName="player5"
+expect 800 getPlayerMoney playerName="player6"
+expect 940 getPlayerMoney playerName="player7"
+expect 940 getPlayerMoney playerName="player8"
+expect "{St. Charles Place,New York Avenue,Park Place}" getPlayerDeeds playerName="player1"
+expect "{Baltic Avenue,Kentucky Avenue,Marvin Gardens}" getPlayerDeeds playerName="player2"
+expect "{States Avenue,Pacific Avenue,Boardwalk}" getPlayerDeeds playerName="player3"
+expect "{Reading Railroad,Virginia Avenue,Indiana Avenue,North Carolina Avenue}" getPlayerDeeds playerName="player4"
+expect "{Oriental Avenue,Pennsylvania Railroad,Illinois Avenue,Mediterranean Avenue}" getPlayerDeeds playerName="player5"
+expect "{St. James Place,B & O Railroad,Pennsylvania Avenue}" getPlayerDeeds playerName="player6"
+expect "{Vermont Avenue,Atlantic Avenue,Short Line Railroad}" getPlayerDeeds playerName="player7"
+expect "{Connecticut Avenue,Tennessee Avenue,Ventnor Avenue}" getPlayerDeeds playerName="player8"
+
+# now let's test if rents are being paid appropriately
+rollDice firstDieResult=4 secondDieResult=3
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+expect 810 getPlayerMoney playerName="player1"
+expect 869 getPlayerMoney playerName="player2"
+expect 460 getPlayerMoney playerName="player3"
+expect 820 getPlayerMoney playerName="player4"
+expect 1108 getPlayerMoney playerName="player5"
+expect 998 getPlayerMoney playerName="player6"
+expect 1136 getPlayerMoney playerName="player7"
+expect 1134 getPlayerMoney playerName="player8"
+
+# 6th round
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+expect 1012 getPlayerMoney playerName="player1"
+expect 1069 getPlayerMoney playerName="player2"
+expect 670 getPlayerMoney playerName="player3"
+expect 820 getPlayerMoney playerName="player4"
+expect 1108 getPlayerMoney playerName="player5"
+expect 988 getPlayerMoney playerName="player6"
+expect 1136 getPlayerMoney playerName="player7"
+expect 1132 getPlayerMoney playerName="player8"
+
+# 7th round
+rollDice firstDieResult=3 secondDieResult=1
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=3
+expect 1018 getPlayerMoney playerName="player1"
+expect 1073 getPlayerMoney playerName="player2"
+expect 666 getPlayerMoney playerName="player3"
+expect 822 getPlayerMoney playerName="player4"
+expect 1090 getPlayerMoney playerName="player5"
+expect 984 getPlayerMoney playerName="player6"
+expect 1136 getPlayerMoney playerName="player7"
+expect 1146 getPlayerMoney playerName="player8"
+
+# 8th round
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=6 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 998 getPlayerMoney playerName="player1"
+expect 1075 getPlayerMoney playerName="player2"
+expect 668 getPlayerMoney playerName="player3"
+expect 822 getPlayerMoney playerName="player4"
+expect 1084 getPlayerMoney playerName="player5"
+expect 984 getPlayerMoney playerName="player6"
+expect 1158 getPlayerMoney playerName="player7"
+expect 1146 getPlayerMoney playerName="player8"
+
+#9th round
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=3
+
+# testing if all rents have been paid
+expect "player5" getCurrentPlayer
+expect 1033 getPlayerMoney playerName="player1"
+expect 1047 getPlayerMoney playerName="player2"
+expect 683 getPlayerMoney playerName="player3"
+expect 772 getPlayerMoney playerName="player4"
+expect 1084 getPlayerMoney playerName="player5"
+expect 1012 getPlayerMoney playerName="player6"
+expect 1158 getPlayerMoney playerName="player7"
+expect 1146 getPlayerMoney playerName="player8"
+
+# now let's start to remove players from the game.
+# every turn, all players fall on income tax and luxury tax
+
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+
+#10th round
+rollDice firstDieResult=6 secondDieResult=6
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=2 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=2
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+
+#11th round
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=2 secondDieResult=2
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=1
+expect 1033 getPlayerMoney playerName="player1"
+expect 1047 getPlayerMoney playerName="player2"
+expect 683 getPlayerMoney playerName="player3"
+expect 772 getPlayerMoney playerName="player4"
+expect 1084 getPlayerMoney playerName="player5"
+expect 1012 getPlayerMoney playerName="player6"
+expect 1158 getPlayerMoney playerName="player7"
+expect 1146 getPlayerMoney playerName="player8"
+
+
+# cycling to spend players' money - everyone is now on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 958 getPlayerMoney playerName="player1"
+expect 972 getPlayerMoney playerName="player2"
+expect 608 getPlayerMoney playerName="player3"
+expect 697 getPlayerMoney playerName="player4"
+expect 1009 getPlayerMoney playerName="player5"
+expect 937 getPlayerMoney playerName="player6"
+expect 1083 getPlayerMoney playerName="player7"
+expect 1071 getPlayerMoney playerName="player8"
+
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 358 getPlayerMoney playerName="player1"
+expect 372 getPlayerMoney playerName="player2"
+expect 8 getPlayerMoney playerName="player3"
+expect 97 getPlayerMoney playerName="player4"
+expect 409 getPlayerMoney playerName="player5"
+expect 337 getPlayerMoney playerName="player6"
+expect 483 getPlayerMoney playerName="player7"
+expect 471 getPlayerMoney playerName="player8"
+
+#back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+# player 3 must be bankrupt
+expecterror "Player no longer in the game" getPlayerPosition playerName="player3"
+expect "bank" getPlaceOwner placeID=13
+expect "bank" getPlaceOwner placeID=31
+expect "bank" getPlaceOwner placeID=39
+expect "player4" getCurrentPlayer
+expect 7 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 283 getPlayerMoney playerName="player1"
+expect 297 getPlayerMoney playerName="player2"
+expect 22 getPlayerMoney playerName="player4"
+expect 334 getPlayerMoney playerName="player5"
+expect 262 getPlayerMoney playerName="player6"
+expect 408 getPlayerMoney playerName="player7"
+expect 396 getPlayerMoney playerName="player8"
+
+#back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player4"
+expect "bank" getPlaceOwner placeID=5
+expect "bank" getPlaceOwner placeID=14
+expect "bank" getPlaceOwner placeID=23
+expect "bank" getPlaceOwner placeID=32
+expect "player5" getCurrentPlayer
+expect 6 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 208 getPlayerMoney playerName="player1"
+expect 222 getPlayerMoney playerName="player2"
+expect 259 getPlayerMoney playerName="player5"
+expect 187 getPlayerMoney playerName="player6"
+expect 333 getPlayerMoney playerName="player7"
+expect 321 getPlayerMoney playerName="player8"
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 58 getPlayerMoney playerName="player1"
+expect 72 getPlayerMoney playerName="player2"
+expect 109 getPlayerMoney playerName="player5"
+expect 37 getPlayerMoney playerName="player6"
+expect 183 getPlayerMoney playerName="player7"
+expect 171 getPlayerMoney playerName="player8"
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player1"
+expect "bank" getPlaceOwner placeID=11
+expect "bank" getPlaceOwner placeID=19
+expect "bank" getPlaceOwner placeID=37
+expect "player2" getCurrentPlayer
+expect 5 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player2"
+expect "bank" getPlaceOwner placeID=3
+expect "bank" getPlaceOwner placeID=21
+expect "bank" getPlaceOwner placeID=29
+expect "player5" getCurrentPlayer
+expect 4 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player6"
+expect "bank" getPlaceOwner placeID=16
+expect "bank" getPlaceOwner placeID=25
+expect "bank" getPlaceOwner placeID=34
+expect "player7" getCurrentPlayer
+expect 3 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 34 getPlayerMoney playerName="player5"
+expect 108 getPlayerMoney playerName="player7"
+expect 96 getPlayerMoney playerName="player8"
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player5"
+expect "bank" getPlaceOwner placeID=1
+expect "bank" getPlaceOwner placeID=6
+expect "bank" getPlaceOwner placeID=15
+expect "bank" getPlaceOwner placeID=24
+expect "player7" getCurrentPlayer
+expect 2 getNumberOfPlayers
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+expect 33 getPlayerMoney playerName="player7"
+expect 21 getPlayerMoney playerName="player8"
+
+# back on income tax
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=3 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+expecterror "Player no longer in the game" getPlayerPosition playerName="player7"
+expect "bank" getPlaceOwner placeID=8
+expect "bank" getPlaceOwner placeID=26
+expect "bank" getPlaceOwner placeID=35
+expect "player8" getCurrentPlayer
+expect 1 getNumberOfPlayers
+expect true gameIsOver
+quitGame
+
+#########################
+# Railroad ride testing #
+#########################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+setAutomaticBuying auto=true
+rollDice firstDieResult=2 secondDieResult=3
+rollDice firstDieResult=2 secondDieResult=3
+expect 1325 getPlayerMoney playerName="player1"
+expect 1475 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 1175 getPlayerMoney playerName="player1"
+expect 1425 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 1050 getPlayerMoney playerName="player1"
+expect 1350 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 950 getPlayerMoney playerName="player1"
+expect 1250 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 1250 getPlayerMoney playerName="player1"
+expect 1350 getPlayerMoney playerName="player2"
+quitGame
