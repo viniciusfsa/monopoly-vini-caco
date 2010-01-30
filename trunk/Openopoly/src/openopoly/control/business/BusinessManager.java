@@ -603,14 +603,13 @@ public class BusinessManager {
 
         if (block.isMortgageable()){
             if (block.getOwner()==currentPlayer){
-                
+                throw new UnavailableCommandException();
             }
             else{
                 throw new UnavailableCommandException();
             }
         }
         else{
-//            throw new UnmortgageablePlaceException();
             throw new UnavailableCommandException();
         }
 
