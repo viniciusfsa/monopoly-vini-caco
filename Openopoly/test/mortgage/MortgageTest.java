@@ -46,6 +46,22 @@ public class MortgageTest extends TestCase {
         startGame(2,players, colors);
     }
 
+    protected void moveCurrentPlayer(int pos1, int pos2) throws GameException{
+        this.game.roll(pos1, pos2);
+    }
+
+    protected void buyCurrentPlayerPosition() throws GameException{
+        this.game.buy();
+    }
+
+    protected void nextPlayer(){
+        this.game.nextPlayer();
+    }
+
+    protected void mortgageCurrentPlace() throws GameException {
+        this.game.mortgage(this.game.getCurrentPlayer().getPosGBoard());
+    }
+
 
     protected void mortgagePlaceAtStart(int placeID, String message){
         this.startGame2PLayers();
@@ -59,9 +75,6 @@ public class MortgageTest extends TestCase {
         }
         
         assertEquals(exceptionMessage, message);
-
-        
-        
     }
     
     
@@ -101,6 +114,20 @@ public class MortgageTest extends TestCase {
 
     public void testAllMortgageNoDeeds(){
         this.mortgagePlacesAtStart(this.mortgageablePlaces, "Unavailable command");
+    }
+
+
+
+    //testes com compra de terreno
+
+    public void testMortgageBuy() throws GameException{
+        this.startGame2PLayers();
+        this.moveCurrentPlayer(1,2);
+        this.buyCurrentPlayerPosition();
+        this.mortgageCurrentPlace();
+        this.nextPlayer();
+        
+        
     }
 
 
