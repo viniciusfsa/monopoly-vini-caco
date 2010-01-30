@@ -32,6 +32,7 @@ public class BusinessManager {
     private boolean activeUtilityPlaces;
     private boolean activeBuild;
     private boolean activeSell;
+    private boolean activeMortgage;
     private Bank bank;
     private boolean extraRREffect;
     private int lastDiceResult;
@@ -510,7 +511,7 @@ public class BusinessManager {
     }
 
     //Setters and Getters
-    public void setActivateJail(boolean activateJail) {
+    public void setActiveJail(boolean activateJail) {
         this.activeJail = activateJail;
     }
 
@@ -524,6 +525,10 @@ public class BusinessManager {
 
     public void setActiveUtilityPlaces(boolean activeUtilityPlaces) {
         this.activeUtilityPlaces = activeUtilityPlaces;
+    }
+
+    public void setActiveMortgage(boolean activeMortgage){
+        this.activeMortgage = activeMortgage;
     }
 
     public GameBoard getGameBoard() {
@@ -584,5 +589,18 @@ public class BusinessManager {
 
     public void setLastDiceResult(int lastDiceResult) {
         this.lastDiceResult = lastDiceResult;
+    }
+
+
+    //Hipoteca
+    public void mortgage(int placeID) throws GameException{
+        throw new GameException("Place doesn't exist");
+    }
+
+    /**
+     * @return the activeMortgage
+     */
+    public boolean isActiveMortgage() {
+        return activeMortgage;
     }
 }

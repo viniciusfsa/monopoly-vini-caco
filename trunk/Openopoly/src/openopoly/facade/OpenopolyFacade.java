@@ -5,7 +5,7 @@ import openopoly.control.game.GameChanceStack;
 import openopoly.control.game.GameChestStack;
 import openopoly.err.GameException;
 import openopoly.err.PlaceDoesntExistException;
-import openopoly.err.PlayerDoesntExistException;
+import openopoly.err.PlayerDoesntExistsException;
 
 /**
  *
@@ -29,19 +29,19 @@ public class OpenopolyFacade {
         return openopoly.getGameControl().getNumberOfPlayers();
     }
 
-    public String getPlayerToken(String playerName) throws PlayerDoesntExistException {
+    public String getPlayerToken(String playerName) throws PlayerDoesntExistsException {
         return openopoly.getGameControl().getPlayerColor(playerName);
     }
 
-    public int getPlayerMoney(String playerName) throws PlayerDoesntExistException {
+    public int getPlayerMoney(String playerName) throws PlayerDoesntExistsException {
         return openopoly.getGameControl().getPlayerMoney(playerName);
     }
 
-    public int getPlayerPosition(String playerName) throws PlayerDoesntExistException, GameException {
+    public int getPlayerPosition(String playerName) throws PlayerDoesntExistsException, GameException {
         return openopoly.getGameControl().getPlayerPosition(playerName);
     }
 
-    public String getPlayerDeeds(String playerName) throws PlayerDoesntExistException {
+    public String getPlayerDeeds(String playerName) throws PlayerDoesntExistsException {
         return openopoly.getGameControl().getPlayerDeeds(playerName);
     }
 
@@ -142,7 +142,7 @@ public class OpenopolyFacade {
         openopoly.getGameControl().activateJail();
     }
 
-    public boolean playerIsOnJail(String playerName) throws PlayerDoesntExistException{
+    public boolean playerIsOnJail(String playerName) throws PlayerDoesntExistsException{
         return openopoly.getGameControl().getPlayer(playerName).isJailed();
     }
 
@@ -172,7 +172,7 @@ public class OpenopolyFacade {
         openopoly.getGameControl().build(propertyID);
     }
 
-    public void giveCashToPlayer(String playerName, int cash) throws PlayerDoesntExistException{
+    public void giveCashToPlayer(String playerName, int cash) throws PlayerDoesntExistsException{
         int oldCash = openopoly.getGameControl().getPlayer(playerName).getCash();
         openopoly.getGameControl().getPlayer(playerName).setCash(oldCash + cash);
     }
@@ -185,5 +185,15 @@ public class OpenopolyFacade {
     public void sell(int propertyID) throws GameException{
         openopoly.getGameControl().sell(propertyID);
     }
+
+
+    //user story 10
+    public void activateMortgage(){
+        openopoly.getGameControl().activateMortgage();
+    }
+
+//    public void mortgage(int placeID){
+//        openopoly.getGameControl().
+//    }
 
 }
