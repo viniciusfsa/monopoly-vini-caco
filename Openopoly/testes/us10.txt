@@ -1,0 +1,349 @@
+# user story 10 - mortgaging
+
+##########################################
+# mortgage commands and error conditions #
+##########################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+# command activateMortgage allows properties, railroads and utilities to be mortgaged
+activateMortgage
+activateUtilityPlaces
+activateBuild
+activateSell
+expect "{roll,status,quit}" getCommands
+# the command mortgage must only be available when the player holds a title deed
+expecterror "Unavailable command" mortgage placeID=1
+# player1 buys Baltic Avenue
+rollDice firstDieResult=1 secondDieResult=2
+buy
+# player2 buys Reading Railroad
+rollDice firstDieResult=2 secondDieResult=3
+buy
+# player1 buys Electric Company
+rollDice firstDieResult=5 secondDieResult=4
+buy
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=2 secondDieResult=3
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=2 secondDieResult=3
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=2 secondDieResult=3
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=3 secondDieResult=2
+# player1 buys Mediterranean Avenue; now holds monopoly over purple group and indigo
+rollDice firstDieResult=1 secondDieResult=1
+buy
+expect 680 getPlayerMoney playerName="player1"
+expect 1300 getPlayerMoney playerName="player2"
+# checking error conditions for mortgage and isMortgaged command; it is player2's turn
+expect "{roll,status,quit,mortgage}" getCommands
+expecterror "Place doesn't exist" mortgage placeID=0
+expecterror "This place can't be mortgaged" mortgage placeID=2
+expecterror "This place can't be mortgaged" mortgage placeID=4
+expecterror "This place can't be mortgaged" mortgage placeID=7
+expecterror "This place can't be mortgaged" mortgage placeID=10
+expecterror "This place can't be mortgaged" mortgage placeID=17
+expecterror "This place can't be mortgaged" mortgage placeID=20
+expecterror "This place can't be mortgaged" mortgage placeID=22
+expecterror "This place can't be mortgaged" mortgage placeID=30
+expecterror "This place can't be mortgaged" mortgage placeID=33
+expecterror "This place can't be mortgaged" mortgage placeID=36
+expecterror "This place can't be mortgaged" mortgage placeID=38
+expecterror "This place can't be mortgaged" mortgage placeID=40
+expecterror "Place doesn't exist" mortgage placeID=41
+expecterror "Place doesn't exist" mortgage placeID=0
+expecterror "This place can't be mortgaged" isMortgaged placeID=2
+expecterror "This place can't be mortgaged" isMortgaged placeID=4
+expecterror "This place can't be mortgaged" isMortgaged placeID=7
+expecterror "This place can't be mortgaged" isMortgaged placeID=10
+expecterror "This place can't be mortgaged" isMortgaged placeID=17
+expecterror "This place can't be mortgaged" isMortgaged placeID=20
+expecterror "This place can't be mortgaged" isMortgaged placeID=22
+expecterror "This place can't be mortgaged" isMortgaged placeID=30
+expecterror "This place can't be mortgaged" isMortgaged placeID=33
+expecterror "This place can't be mortgaged" isMortgaged placeID=36
+expecterror "This place can't be mortgaged" isMortgaged placeID=38
+expecterror "This place can't be mortgaged" isMortgaged placeID=40
+expecterror "Place doesn't exist" mortgage placeID=41
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=1
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=3
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=6
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=8
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=9
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=11
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=12
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=13
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=14
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=15
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=16
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=18
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=19
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=21
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=23
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=24
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=25
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=26
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=27
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=28
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=29
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=31
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=32
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=34
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=35
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=37
+expecterror "Player doesn't hold the deed for this place" mortgage placeID=39
+expect false isMortgaged placeID=1
+expect false isMortgaged placeID=3
+expect false isMortgaged placeID=5
+expect false isMortgaged placeID=6
+expect false isMortgaged placeID=8
+expect false isMortgaged placeID=9
+expect false isMortgaged placeID=11
+expect false isMortgaged placeID=12
+expect false isMortgaged placeID=13
+expect false isMortgaged placeID=14
+expect false isMortgaged placeID=15
+expect false isMortgaged placeID=16
+expect false isMortgaged placeID=18
+expect false isMortgaged placeID=19
+expect false isMortgaged placeID=21
+expect false isMortgaged placeID=23
+expect false isMortgaged placeID=24
+expect false isMortgaged placeID=25
+expect false isMortgaged placeID=26
+expect false isMortgaged placeID=27
+expect false isMortgaged placeID=28
+expect false isMortgaged placeID=29
+expect false isMortgaged placeID=31
+expect false isMortgaged placeID=32
+expect false isMortgaged placeID=34
+expect false isMortgaged placeID=35
+expect false isMortgaged placeID=37
+expect false isMortgaged placeID=39
+# now let's see mortgage working
+mortgage placeID=5
+expect true isMortgaged placeID=5
+expect 1400 getPlayerMoney playerName="player2"
+# can't mortgage twice
+expecterror "Unavailable command" mortgage placeID=5
+rollDice firstDieResult=5 secondDieResult=5
+expect 1600 getPlayerMoney playerName="player2"
+# player1's turn; let's check some more error conditions
+# first off, properties with houses built can't be mortgaged
+build propertyID=1
+expect 630 getPlayerMoney playerName="player1"
+expecterror "Can't mortgage a property with houses built" mortgage placeID=1
+sell propertyID=1
+expect 655 getPlayerMoney playerName="player1"
+# now, player1 can mortgage Mediterranean Avenue
+mortgage placeID=1
+expect true isMortgaged placeID=1
+expect 685 getPlayerMoney playerName="player1"
+# building on mortgaged properties must throw an exception
+expecterror "Can't build on mortgaged properties" build placeID=1
+# building on properties of a group that has mortgaged properties must also throw an exception
+expecterror "Group has mortgaged properties" build placeID=3
+# let's check if Reading Railroad (possession of player2) is generating income (shouldn't, as it is mortgaged)
+rollDice firstDieResult=2 secondDieResult=2
+expect 685 getPlayerMoney playerName="player1"
+expect 1600 getPlayerMoney playerName="player2"
+# player2's turn; let's check if the double rent rule for monopoly is still working (falls on Baltic, must pay twice the rent)
+rollDice firstDieResult=1 secondDieResult=2
+expect 693 getPlayerMoney playerName="player1"
+expect 1592 getPlayerMoney playerName="player2"
+# player1's turn; mortgaging the rest of his deeds
+mortgage placeID=3
+expect 723 getPlayerMoney playerName="player1"
+mortgage placeID=12
+expect 798 getPlayerMoney playerName="player1"
+mortgage placeID=37
+expect 973 getPlayerMoney playerName="player1"
+mortgage placeID=39
+expect 1173 getPlayerMoney playerName="player1"
+# as player1 has nothing else to mortgage, the command must become unavailable
+expecterror "Unavailable command" mortgage placeID=1
+# build must also become unavailable, as all of his monopolies have mortgaged properties
+expecterror "Unavailable command" build propertyID=1
+rollDice firstDieResult=2 secondDieResult=3
+# player2 falls on Electric Company; as it is mortgaged, nothing happens
+rollDice firstDieResult=4 secondDieResult=5
+expect 1173 getPlayerMoney playerName="player1"
+expect 1592 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+# player2 falls on Mediterranean Avenue; nothing happens (it is mortgaged)
+rollDice firstDieResult=6 secondDieResult=5
+expect 1373 getPlayerMoney playerName="player1"
+expect 1792 getPlayerMoney playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+# player2 falls on Baltic Avenue; nothing happens (it is mortgaged)
+rollDice firstDieResult=1 secondDieResult=1
+expect 1373 getPlayerMoney playerName="player1"
+expect 1792 getPlayerMoney playerName="player2"
+quitGame
+
+###########################
+# mortgage values testing #
+###########################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateMortgage
+activateUtilityPlaces
+# buying all deeds
+giveCashToPlayer playerName="player1" cash=1500
+giveCashToPlayer playerName="player2" cash=1500
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=3 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=1 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+# what has been bought:
+# player1: 3,6,9,12,14,16,19,23,25,27,29,32,35,39 for a total of $2830
+# player2: 5,8,11,13,15,18,21,24,26,28,31,34,37,1 for a total of $2860
+expect 170 getPlayerMoney playerName="player1"
+expect 340 getPlayerMoney playerName="player2"
+# player1's turn
+mortgage placeID=3
+expect true isMortgaged placeID=3
+expect 200 getPlayerMoney playerName="player1"
+mortgage placeID=6
+expect true isMortgaged placeID=6
+expect 250 getPlayerMoney playerName="player1"
+mortgage placeID=9
+expect true isMortgaged placeID=9
+expect 310 getPlayerMoney playerName="player1"
+mortgage placeID=12
+expect true isMortgaged placeID=12
+expect 385 getPlayerMoney playerName="player1"
+mortgage placeID=14
+expect true isMortgaged placeID=14
+expect 465 getPlayerMoney playerName="player1"
+mortgage placeID=16
+expect true isMortgaged placeID=16
+expect 555 getPlayerMoney playerName="player1"
+mortgage placeID=19
+expect true isMortgaged placeID=19
+expect 655 getPlayerMoney playerName="player1"
+mortgage placeID=23
+expect true isMortgaged placeID=23
+expect 765 getPlayerMoney playerName="player1"
+mortgage placeID=25
+expect true isMortgaged placeID=25
+expect 865 getPlayerMoney playerName="player1"
+mortgage placeID=27
+expect true isMortgaged placeID=27
+expect 995 getPlayerMoney playerName="player1"
+mortgage placeID=29
+expect true isMortgaged placeID=29
+expect 1135 getPlayerMoney playerName="player1"
+mortgage placeID=32
+expect true isMortgaged placeID=32
+expect 1285 getPlayerMoney playerName="player1"
+mortgage placeID=35
+expect true isMortgaged placeID=35
+expect 1385 getPlayerMoney playerName="player1"
+mortgage placeID=39
+expect true isMortgaged placeID=39
+expect 1585 getPlayerMoney playerName="player1"
+rollDice firstDieResult=6 secondDieResult=5
+# player2's turn
+mortgage placeID=1
+expect true isMortgaged placeID=1
+expect 370 getPlayerMoney playerName="player2"
+mortgage placeID=5
+expect true isMortgaged placeID=5
+expect 470 getPlayerMoney playerName="player2"
+mortgage placeID=8
+expect true isMortgaged placeID=8
+expect 520 getPlayerMoney playerName="player2"
+mortgage placeID=11
+expect true isMortgaged placeID=11
+expect 590 getPlayerMoney playerName="player2"
+mortgage placeID=13
+expect true isMortgaged placeID=13
+expect 660 getPlayerMoney playerName="player2"
+mortgage placeID=15
+expect true isMortgaged placeID=15
+expect 760 getPlayerMoney playerName="player2"
+mortgage placeID=18
+expect true isMortgaged placeID=18
+expect 850  getPlayerMoney playerName="player2"
+mortgage placeID=21
+expect true isMortgaged placeID=21
+expect 960 getPlayerMoney playerName="player2"
+mortgage placeID=24
+expect true isMortgaged placeID=24
+expect 1080 getPlayerMoney playerName="player2"
+mortgage placeID=26
+expect true isMortgaged placeID=26
+expect 1210 getPlayerMoney playerName="player2"
+mortgage placeID=28
+expect true isMortgaged placeID=28
+expect 1285 getPlayerMoney playerName="player2"
+mortgage placeID=31
+expect true isMortgaged placeID=31
+expect 1435 getPlayerMoney playerName="player2"
+mortgage placeID=34
+expect true isMortgaged placeID=34
+expect 1595 getPlayerMoney playerName="player2"
+mortgage placeID=37
+expect true isMortgaged placeID=37
+expect 1770 getPlayerMoney playerName="player2"
+quitGame

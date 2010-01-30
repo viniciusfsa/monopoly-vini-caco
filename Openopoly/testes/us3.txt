@@ -1,0 +1,90 @@
+# User story 3 - Status
+
+#############################################################################################
+# Playing a few rounds and checking if getters needed for status display work appropriately #
+#############################################################################################
+
+createGame numPlayers=8 playerNames={player1,player2,player3,player4,player5,player6,player7,player8} tokenColors={black,white,red,green,blue,yellow,orange,pink}
+setAutomaticBuying auto=true
+
+# 1st round
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=1 secondDieResult=2
+rollDice firstDieResult=1 secondDieResult=3
+rollDice firstDieResult=1 secondDieResult=4
+rollDice firstDieResult=1 secondDieResult=5
+rollDice firstDieResult=1 secondDieResult=6
+rollDice firstDieResult=2 secondDieResult=6
+rollDice firstDieResult=3 secondDieResult=6
+
+# 2nd round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 3rd round
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 4th round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+
+# 5th round
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=4 secondDieResult=4
+
+# Checking everything needed for a correct status display
+expect "black" getPlayerToken playerName="player1"
+expect "white" getPlayerToken playerName="player2"
+expect "red" getPlayerToken playerName="player3"
+expect "green" getPlayerToken playerName="player4"
+expect "blue" getPlayerToken playerName="player5"
+expect "yellow" getPlayerToken playerName="player6"
+expect "orange" getPlayerToken playerName="player7"
+expect "pink" getPlayerToken playerName="player8"
+expect 810 getPlayerMoney playerName="player1"
+expect 37 getPlayerPosition playerName="player1"
+expect 865 getPlayerMoney playerName="player2"
+expect 38 getPlayerPosition playerName="player2"
+expect 460 getPlayerMoney playerName="player3"
+expect 39 getPlayerPosition playerName="player3"
+expect 820 getPlayerMoney playerName="player4"
+expect 40 getPlayerPosition playerName="player4"
+expect 1100 getPlayerMoney playerName="player5"
+expect 1 getPlayerPosition playerName="player5"
+expect 800 getPlayerMoney playerName="player6"
+expect 34 getPlayerPosition playerName="player6"
+expect 940 getPlayerMoney playerName="player7"
+expect 35 getPlayerPosition playerName="player7"
+expect 940 getPlayerMoney playerName="player8"
+expect 36 getPlayerPosition playerName="player8"
+expect "{St. Charles Place,New York Avenue,Park Place}" getPlayerDeeds playerName="player1"
+expect "{Baltic Avenue,Kentucky Avenue,Marvin Gardens}" getPlayerDeeds playerName="player2"
+expect "{States Avenue,Pacific Avenue,Boardwalk}" getPlayerDeeds playerName="player3"
+expect "{Reading Railroad,Virginia Avenue,Indiana Avenue,North Carolina Avenue}" getPlayerDeeds playerName="player4"
+expect "{Oriental Avenue,Pennsylvania Railroad,Illinois Avenue,Mediterranean Avenue}" getPlayerDeeds playerName="player5"
+expect "{St. James Place,B & O Railroad,Pennsylvania Avenue}" getPlayerDeeds playerName="player6"
+expect "{Vermont Avenue,Atlantic Avenue,Short Line Railroad}" getPlayerDeeds playerName="player7"
+expect "{Connecticut Avenue,Tennessee Avenue,Ventnor Avenue}" getPlayerDeeds playerName="player8"
+quitGame

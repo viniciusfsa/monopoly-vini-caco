@@ -1,0 +1,265 @@
+# User story 6 - Jail Rules
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateJail
+
+############################################################
+# checking if new commands generate the appropriate errors #
+############################################################
+
+expect false playerIsOnJail playerName="player1"
+expect false playerIsOnJail playerName="player2"
+expect "{roll,status,quit}" getCommands
+expecterror "player is not on jail" pay
+expecterror "player is not on jail" useCard cardType="chest"
+expecterror "player is not on jail" useCard cardType="chance"
+
+##################################################
+# checking a simple fall on Jail - Just Visiting #
+##################################################
+
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+expect false playerIsOnJail playerName="player1"
+expect false playerIsOnJail playerName="player2"
+expect "{roll,status,quit}" getCommands
+expecterror "player is not on jail" pay
+expecterror "player is not on jail" useCard cardType="chest"
+expecterror "player is not on jail" useCard cardType="chance"
+
+######################################
+# checking if Go To Jail Place works #
+######################################
+
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+rollDice firstDieResult=4 secondDieResult=6
+expect true playerIsOnJail playerName="player1"
+expect true playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player1"
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player1"
+expect 1500 getPlayerMoney playerName="player2"
+
+##################################################
+# checking if rules for getting out of jail work #
+##################################################
+
+# player1 doesn't throw doubles, so he mustn't get out
+expect "{roll,status,quit,pay}" getCommands
+expecterror "Player doesn't have this card to use" useCard cardType="chest"
+expecterror "Player doesn't have this card to use" useCard cardType="chance"
+rollDice firstDieResult=4 secondDieResult=6
+expect true playerIsOnJail playerName="player1"
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+# player2 throws doubles; thus, must be set free; he doesn't play again
+rollDice firstDieResult=5 secondDieResul=5
+expect false playerIsOnJail playerName="player2"
+expect 20 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+expect "player1" getCurrentPlayer
+# player1 still doesn't throw doubles, so he mustn't get out
+expect "{roll,status,quit,pay}" getCommands
+rollDice firstDieResult=4 secondDieResult=6
+expect true playerIsOnJail playerName="player1"
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+# player2 falls again on Go To Jail
+rollDice firstDieResult=4 secondDieResul=6
+expect true playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+# player1 still doesn't throw doubles, but he is freed anyway amd pays $50
+rollDice firstDieResult=4 secondDieResult=6
+expect false playerIsOnJail playerName="player1"
+expect 20 getPlayerPosition playerName="player1"
+expect 1450 getPlayerMoney playerName="player1"
+# player2 pays $50, and is freed from Jail
+pay
+expect false playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player2"
+expect 1450 getPlayerMoney playerName="player2"
+rollDice firstDieResult=4 secondDieResul=6
+expect 20 getPlayerPosition playerName="player2"
+quitGame
+
+#################################################################
+# activating and checking for extra turn after throwing doubles #
+#################################################################
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+
+activateJail
+activateDoublesRule
+
+rollDice firstDieResult=5 secondDieResult=5
+expect "player1" getCurrentPlayer
+expect 10 getPlayerPosition playerName="player1"
+expect false playerIsOnJail playerName="player1"
+rollDice firstDieResult=5 secondDieResult=5
+expect "player1" getCurrentPlayer
+expect 20 getPlayerPosition playerName="player1"
+rollDice firstDieResult=1 secondDieResult=2
+expect "player2" getCurrentPlayer
+
+#############################################################
+# checking if three successive doubles sends player to jail #
+#############################################################
+
+rollDice firstDieResult=5 secondDieResult=5
+expect "player2" getCurrentPlayer
+expect 10 getPlayerPosition playerName="player2"
+expect false playerIsOnJail playerName="player2"
+rollDice firstDieResult=5 secondDieResult=5
+expect "player2" getCurrentPlayer
+expect 20 getPlayerPosition playerName="player2"
+rollDice firstDieResult=1 secondDieResult=1
+# must be sent immediately to jail
+expect true playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+expect "player1" getCurrentPlayer
+quitGame
+
+#####################################
+# Testing Go Directly to Jail cards #
+#####################################
+
+createGame numPlayers=2 playerNames={player1,player2} tokenColors={black,white}
+
+activateJail
+activateChancePlaces cardShuffle=false
+activateChestPlaces cardShuffle=false
+
+forceNextChestCard cardID=7
+rollDice firstDieResult=1 secondDieResult=1
+forceNextChanceCard cardID=8
+rollDice firstDieResult=4 secondDieResult=3
+
+expect true playerIsOnJail playerName="player1"
+expect 10 getPlayerPosition playerName="player1"
+expect 1500 getPlayerMoney playerName="player1"
+expect true playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+#########################################
+# testing of Get Out Of Jail Free cards #
+#########################################
+
+forceNextChestCard cardID=6
+pay
+rollDice firstDieResult=4 secondDieResult=3
+forceNextChanceCard cardID=11
+rollDice firstDieResult=6 secondDieResult=6
+
+expecterror "This card is already possessed by a player" forceNextChestCard cardID=6
+expecterror "This card is already possessed by a player" forceNextChanceCard cardID=11
+
+expect false playerIsOnJail playerName="player1"
+expect 17 getPlayerPosition playerName="player1"
+expect 1450 getPlayerMoney playerName="player1"
+expect false playerIsOnJail playerName="player2"
+expect 22 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+# now let's put both players again on jail
+rollDice firstDieResult=2 secondDieResult=1
+rollDice firstDieResult=4 secondDieResult=4
+rollDice firstDieResult=5 secondDieResult=5
+
+expect true playerIsOnJail playerName="player1"
+expect 10 getPlayerPosition playerName="player1"
+expect 1450 getPlayerMoney playerName="player1"
+expect true playerIsOnJail playerName="player2"
+expect 10 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+
+# player2's turn; let's check if he can get out with a chance card
+expecterror "Player doesn't have this card to use" useCard cardType="chest"
+useCard cardType="chance"
+rollDice firstDieResult=3 secondDieResult=2
+
+expect false playerIsOnJail playerName="player2"
+expect 15 getPlayerPosition playerName="player2"
+expect 1500 getPlayerMoney playerName="player2"
+expect "player1" getCurrentPlayer
+
+# player1's turn; let's check if he can get out with a chest card
+expecterror "Player doesn't have this card to use" useCard cardType="chance"
+useCard cardType="chest"
+rollDice firstDieResult=3 secondDieResult=2
+
+expect false playerIsOnJail playerName="player1"
+expect 15 getPlayerPosition playerName="player1"
+expect 1450 getPlayerMoney playerName="player1"
+expect "player2" getCurrentPlayer
+
+# now let's see if cards can be forced again (have returned to the corresponding pile)
+forceNextChestCard cardID=6
+forceNextChanceCard cardID=11
+
+# now let's check if the same player can have both cards
+rollDice firstDieResult=1 secondDieResult=1
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=3 secondDieResult=2
+rollDice firstDieResult=5 secondDieResult=5
+rollDice firstDieResult=4 secondDieResult=4
+# both are on jail
+
+# player1 doesn't have cards
+expecterror "Player doesn't have this card to use" useCard cardType="chance"
+expecterror "Player doesn't have this card to use" useCard cardType="chest"
+rollDice firstDieResult=1 secondDieResult=1
+
+# player2 uses a card, falls on chest with a Go To Jail card, and uses the other
+forceNextChestCard cardID=7
+useCard cardType="chest"
+rollDice firstDieResult=4 secondDieResult=3
+expect true playerIsOnJail playerName="player2"
+
+# player1 again, can't get out
+rollDice firstDieResult=1 secondDieResult=2
+
+# now let's see if player2 can use the other card
+useCard cardType="chance"
+rollDice firstDieResult=3 secondDieResult=2
+expect false playerIsOnJail playerName="player2"
+expect 15 getPlayerPosition playerName="player2"
+quitGame
+
+############################################################
+# testing if players on jail still receive rents and rides #
+############################################################
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+
+activateJail
+activateDoublesRule
+
+# player1 buys some deeds and goes to jail by throwing three doubles in a row
+rollDice firstDieResult=2 secondDieResult=3
+buy
+rollDice firstDieResult=2 secondDieResult=1
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=2
+
+expect true playerIsOnJail playerName="player1"
+expect 10 getPlayerPosition playerName="player1"
+expect 1020 getPlayerMoney playerName="player1"
+expect "{Reading Railroad,St. Charles Place,States Avenue}" getPlayerDeeds playerName="player1"
+
+# now let's see if player1 can still receive money for a ride and for a rent
+rollDice firstDieResult=1 secondDieResult=1
+expect 1475 getPlayerMoney playerName="player2"
+expect 1045 getPlayerMoney playerName="player1"
+rollDice firstDieResult=3 secondDieResult=3
+expect 1465 getPlayerMoney playerName="player2"
+expect 1055 getPlayerMoney playerName="player1"
+
+quitGame
