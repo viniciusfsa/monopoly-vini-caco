@@ -155,6 +155,10 @@ public class Property implements Block {
         return false;
     }
 
+    public boolean isMortgageable() {
+        return true;
+    }
+
 
 
 }

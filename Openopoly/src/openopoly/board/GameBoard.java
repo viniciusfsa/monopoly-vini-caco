@@ -4,7 +4,8 @@ import java.util.Hashtable;
 import openopoly.Player;
 import openopoly.control.business.Bank;
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
+import openopoly.err.UnmortgageablePlaceException;
 
 /**Classe que representa o tabuleiro de jogo
  *
@@ -92,7 +93,7 @@ public class GameBoard {
      * @param pos posiçao do tabuleiro solicitada
      * @return o nome do bloco
      */
-    public String getBlockName(int pos) throws PlaceDoesntExistException {
+    public String getBlockName(int pos) throws PlaceDoesntExistsException {
         return getBlock(pos).getPropName();
     }
 
@@ -102,7 +103,7 @@ public class GameBoard {
      * @param pos posiçao do tabuleiro solicitada
      * @return o grupo
      */
-    public String getBlockGroup(int pos) throws PlaceDoesntExistException {
+    public String getBlockGroup(int pos) throws PlaceDoesntExistsException {
         return getBlock(pos).getGroup();
     }
 
@@ -114,7 +115,7 @@ public class GameBoard {
      * @return o nome do dono do bloco
      * @throws GameException caso o bloco não possa ter dono
      */
-    public String getBlockOwnerName(int pos) throws PlaceDoesntExistException, GameException{
+    public String getBlockOwnerName(int pos) throws PlaceDoesntExistsException, GameException{
         if(cannotBeBought(pos) || isTax(pos)){
             throw new GameException("This place can't be owned");
         }else{
@@ -129,7 +130,7 @@ public class GameBoard {
      * @return o valor do aluguel
      * @throws GameException caso o bloco não tenha um aluguel
      */
-    public int getPropertyRent(int pos) throws PlaceDoesntExistException, GameException{
+    public int getPropertyRent(int pos) throws PlaceDoesntExistsException, GameException{
         if(!isProperty(pos)){
             throw new GameException("This place doesn't have a rent");
         }else{
@@ -145,7 +146,7 @@ public class GameBoard {
      * @return o valor do aluguel
      * @throws GameException caso o bloco não tenha um aluguel
      */
-    public int getPropertyRentBuildRules(int pos) throws PlaceDoesntExistException, GameException{
+    public int getPropertyRentBuildRules(int pos) throws PlaceDoesntExistsException, GameException{
         if(!isProperty(pos)){
             throw new GameException("This place doesn't have a rent");
         }else{
@@ -161,7 +162,7 @@ public class GameBoard {
      * @return o valor do preço
      * @throws GameException caso o bloco não possa ser vendido
      */
-    public int getPlacePrice(int pos) throws PlaceDoesntExistException, GameException{
+    public int getPlacePrice(int pos) throws PlaceDoesntExistsException, GameException{
         if(getBlock(pos).getPrice()== -1){
             throw new GameException("This place can't be sold");
         }else{
@@ -174,13 +175,13 @@ public class GameBoard {
      * referente à posição indicada.
      * @param pos posiçao do tabuleiro solicitada
      * @return o bloco
-     * @throws PlaceDoesntExistException caso o lugar referente a posição solicitada não exista
+     * @throws PlaceDoesntExistsException caso o lugar referente a posição solicitada não exista
      */
-    public Block getBlock(int pos) throws PlaceDoesntExistException{
+    public Block getBlock(int pos) throws PlaceDoesntExistsException{
         if(pos > 0 && pos < 41){
             return slots.get(pos);
         }else{
-            throw new PlaceDoesntExistException();
+            throw new PlaceDoesntExistsException();
         }
     }
 
@@ -189,7 +190,7 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      */
-    public boolean isRailRoad(int pos) throws PlaceDoesntExistException{
+    public boolean isRailRoad(int pos) throws PlaceDoesntExistsException{
         return getBlock(pos).getGroup().equals("railroad");
     }
 
@@ -198,7 +199,7 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      */
-    public boolean isProperty(int pos) throws PlaceDoesntExistException{
+    public boolean isProperty(int pos) throws PlaceDoesntExistsException{
         boolean check = false;
         if(!isRailRoad(pos) && !isTax(pos) && !isUtility(pos) && !cannotBeBought(pos)){
             check = true;
@@ -211,7 +212,7 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      */
-    public boolean isTax(int pos) throws PlaceDoesntExistException{
+    public boolean isTax(int pos) throws PlaceDoesntExistsException{
         return getBlock(pos).getGroup().equals("tax");
     }
     /**
@@ -219,7 +220,7 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      */
-    public boolean isUtility(int pos) throws PlaceDoesntExistException{
+    public boolean isUtility(int pos) throws PlaceDoesntExistsException{
         return getBlock(pos).getGroup().equals("utility");
     }
 
@@ -228,7 +229,7 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      */
-    public boolean cannotBeBought(int pos) throws PlaceDoesntExistException{
+    public boolean cannotBeBought(int pos) throws PlaceDoesntExistsException{
         boolean check = false;
         if(getBlock(pos).getGroup().equals("corner") || getBlock(pos).getGroup().equals("chance") || getBlock(pos).getGroup().equals("chest")){
             check = true;
@@ -241,9 +242,9 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      * @return true caso o lugar seja um "Go to Jail", false caso contrário
-     * @throws PlaceDoesntExistException caso a posição solicitada não exista.
+     * @throws PlaceDoesntExistsException caso a posição solicitada não exista.
      */
-    public boolean isCorner(int pos) throws PlaceDoesntExistException{
+    public boolean isCorner(int pos) throws PlaceDoesntExistsException{
         return getBlock(pos).getGroup().equals("corner");
     }
     
@@ -252,17 +253,17 @@ public class GameBoard {
      * na posição indicada.
      * @param pos posição do tabuleiro solicitada
      * @return true caso o lugar seja um "Go to Jail", false caso contrário
-     * @throws PlaceDoesntExistException caso a posição solicitada não exista.
+     * @throws PlaceDoesntExistsException caso a posição solicitada não exista.
      */
-    public boolean isGoToJail(int pos)throws PlaceDoesntExistException{
+    public boolean isGoToJail(int pos)throws PlaceDoesntExistsException{
         return getBlock(pos).isGoToJail();
     }
 
-    public boolean isChance(int pos) throws PlaceDoesntExistException {
+    public boolean isChance(int pos) throws PlaceDoesntExistsException {
         return getBlock(pos).getGroup().equals("chance");
     }
 
-    public boolean isChest(int pos) throws PlaceDoesntExistException{
+    public boolean isChest(int pos) throws PlaceDoesntExistsException{
         return getBlock(pos).getGroup().equals("chest");
     }
 
@@ -283,7 +284,7 @@ public class GameBoard {
         instance = null;
     }
 
-    public int searchBlock(String group, int actualPos) throws PlaceDoesntExistException{
+    public int searchBlock(String group, int actualPos) throws PlaceDoesntExistsException{
         for(int i = actualPos; ;i++){
             if(i > 40){
                 i = i - 40;
@@ -294,12 +295,17 @@ public class GameBoard {
         }
     }
 
-    public int nextRailroad(int actualPos) throws PlaceDoesntExistException{
+    public int nextRailroad(int actualPos) throws PlaceDoesntExistsException{
         return searchBlock("railroad", actualPos);
     }
 
-    public int nextUtility(int actualPos) throws PlaceDoesntExistException{
+    public int nextUtility(int actualPos) throws PlaceDoesntExistsException{
         return searchBlock("utility", actualPos);
     }
+
+
+    
+
+
     
 }

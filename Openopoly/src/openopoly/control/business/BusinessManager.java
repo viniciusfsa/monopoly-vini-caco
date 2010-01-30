@@ -10,7 +10,9 @@ import openopoly.board.Utility;
 import openopoly.control.game.GameChanceStack;
 import openopoly.control.game.GameChestStack;
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
+import openopoly.err.UnavailableCommandException;
+import openopoly.err.UnmortgageablePlaceException;
 
 /** Classe que representa o Gerenciador de Negócios, ao qual
  *  controla as transações financeiras do jogo
@@ -279,7 +281,7 @@ public class BusinessManager {
         int price = b.getPrice();
 
         getCurrentBlock().setOwner(currentPlayer);
-        currentPlayer.addTitle(getCurrentPlayer().getPosGBoard());
+        currentPlayer.addPossession(getCurrentPlayer().getPosGBoard());
         currentPlayer.setCash(cash - price);
     }
 
@@ -351,17 +353,17 @@ public class BusinessManager {
      * @param propertyID ID da propriedade
      * @param currentPlayer o player que esta sendo verificado
      * @return true caso todas as condições forem aceitas
-     * @throws PlaceDoesntExistException caso não exista o bloco
+     * @throws PlaceDoesntExistsException caso não exista o bloco
      * @throws GameException caso não exista o comando build, caso o jogador deseje construir fora de uma propriedade e caso o jogador não for o dono da propriedade
      */
-    public boolean checkBuildPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistException, GameException {
+    public boolean checkBuildPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistsException, GameException {
         if (!currentPlayer.getMenu().isOption("build")) {
             throw new GameException("Unavailable command");
         } else {
             if (!getGameBoard().isProperty(propertyID)) {
                 throw new GameException("Can only build on properties");
             } else {
-                if (!currentPlayer.getTitles().contains(getGameBoard().getBlock(propertyID))) {
+                if (!currentPlayer.getPossessions().contains(getGameBoard().getBlock(propertyID))) {
                     throw new GameException("Player is not the owner of this property");
                 } else {
                     if (!currentPlayer.hasMonopolyGroup(getGameBoard().getBlockGroup(propertyID))) {
@@ -384,17 +386,17 @@ public class BusinessManager {
      * @param propertyID ID da propriedade
      * @param currentPlayer o player que esta sendo verificado
      * @return true caso todas as condições forem aceitas
-     * @throws PlaceDoesntExistException caso não exista o bloco
+     * @throws PlaceDoesntExistsException caso não exista o bloco
      * @throws GameException caso não exista o comando sell, caso o jogador deseje construir fora de uma propriedade e caso o jogador não for o dono da propriedade
      */
-    public boolean checkSellPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistException, GameException {
+    public boolean checkSellPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistsException, GameException {
         if (!currentPlayer.getMenu().isOption("sell")) {
             throw new GameException("Unavailable command");
         } else {
             if (!getGameBoard().isProperty(propertyID)) {
                 throw new GameException("Can only sell houses built on properties");
             } else {
-                if (!currentPlayer.getTitles().contains(getGameBoard().getBlock(propertyID))) {
+                if (!currentPlayer.getPossessions().contains(getGameBoard().getBlock(propertyID))) {
                     throw new GameException("Player is not the owner of this property");
                 } else {
                     return true;
@@ -416,49 +418,49 @@ public class BusinessManager {
     /**
      * Esse método testa se o bloco atual é uma propriedade
      */
-    private boolean isProperty() throws PlaceDoesntExistException {
+    private boolean isProperty() throws PlaceDoesntExistsException {
         return getGameBoard().isProperty(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é uma ferrovia
      */
-    private boolean isRailRoad() throws PlaceDoesntExistException {
+    private boolean isRailRoad() throws PlaceDoesntExistsException {
         return getGameBoard().isRailRoad(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é um imposto
      */
-    private boolean isTax() throws PlaceDoesntExistException {
+    private boolean isTax() throws PlaceDoesntExistsException {
         return getGameBoard().isTax(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é um serviço publico
      */
-    private boolean isUtility() throws PlaceDoesntExistException {
+    private boolean isUtility() throws PlaceDoesntExistsException {
         return getGameBoard().isUtility(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é do tipo Chance
      */
-    private boolean isChance() throws PlaceDoesntExistException {
+    private boolean isChance() throws PlaceDoesntExistsException {
         return getGameBoard().isChance(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é do tipo Chest
      */
-    private boolean isChest() throws PlaceDoesntExistException {
+    private boolean isChest() throws PlaceDoesntExistsException {
         return getGameBoard().isChest(getCurrentPlayer().getPosGBoard());
     }
 
     /**
      * Esse método testa se o bloco atual é  Cadeia
      */
-    private boolean isGoToJail() throws PlaceDoesntExistException {
+    private boolean isGoToJail() throws PlaceDoesntExistsException {
         return getGameBoard().isGoToJail(getCurrentPlayer().getPosGBoard());
     }
 
@@ -593,9 +595,28 @@ public class BusinessManager {
 
 
     //Hipoteca
-    public void mortgage(int placeID) throws GameException{
-        throw new GameException("Place doesn't exist");
+
+
+    public void mortgage(int placeID) throws PlaceDoesntExistsException, UnmortgageablePlaceException, UnavailableCommandException{
+
+        Block block = this.getGameBoard().getBlock(placeID);
+
+        if (block.isMortgageable()){
+            if (block.getOwner()==currentPlayer){
+                
+            }
+            else{
+                throw new UnavailableCommandException();
+            }
+        }
+        else{
+//            throw new UnmortgageablePlaceException();
+            throw new UnavailableCommandException();
+        }
+
     }
+
+
 
     /**
      * @return the activeMortgage

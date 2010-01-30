@@ -4,7 +4,7 @@ import openopoly.Openopoly;
 import openopoly.control.game.GameChanceStack;
 import openopoly.control.game.GameChestStack;
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
 import openopoly.err.PlayerDoesntExistsException;
 
 /**
@@ -49,19 +49,19 @@ public class OpenopolyFacade {
         return openopoly.getGameControl().getCurrentPlayerName();
     }
 
-    public String getPlaceName(int placeID) throws PlaceDoesntExistException {
+    public String getPlaceName(int placeID) throws PlaceDoesntExistsException {
         return openopoly.getGameBoard().getBlockName(placeID);
     }
 
-    public String getPlaceGroup(int placeID) throws PlaceDoesntExistException {
+    public String getPlaceGroup(int placeID) throws PlaceDoesntExistsException {
         return openopoly.getGameBoard().getBlockGroup(placeID);
     }
 
-    public String getPlaceOwner(int placeID) throws PlaceDoesntExistException, GameException {
+    public String getPlaceOwner(int placeID) throws PlaceDoesntExistsException, GameException {
         return openopoly.getGameBoard().getBlockOwnerName(placeID);
     }
 
-    public int getPropertyRent(int placeID) throws PlaceDoesntExistException, GameException {
+    public int getPropertyRent(int placeID) throws PlaceDoesntExistsException, GameException {
         if(openopoly.getGameControl().isActivateBuild()){
             return openopoly.getGameBoard().getPropertyRentBuildRules(placeID);
         }else{
@@ -69,7 +69,7 @@ public class OpenopolyFacade {
         }
     }
 
-    public int getPlacePrice(int placeID) throws PlaceDoesntExistException, GameException {
+    public int getPlacePrice(int placeID) throws PlaceDoesntExistsException, GameException {
         return openopoly.getGameBoard().getPlacePrice(placeID);
     }
 
@@ -138,7 +138,7 @@ public class OpenopolyFacade {
     }
 
     //User Story 6
-    public void activateJail() throws PlaceDoesntExistException{
+    public void activateJail() throws PlaceDoesntExistsException{
         openopoly.getGameControl().activateJail();
     }
 

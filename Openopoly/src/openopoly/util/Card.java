@@ -1,7 +1,7 @@
 package openopoly.util;
 
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
 
 /**
  *
@@ -28,7 +28,7 @@ public class Card {
         this.effParam2 = effParam2;
     }
 
-    public void effect() throws PlaceDoesntExistException, GameException {
+    public void effect() throws PlaceDoesntExistsException, GameException {
         if (type == Type.GOTO) {
             CardEffects.getInstance().goTo(effParam1);
         } else if (type == Type.GOUNTIL) {

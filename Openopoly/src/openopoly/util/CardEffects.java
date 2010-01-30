@@ -7,7 +7,7 @@ import openopoly.control.game.GameChanceStack;
 import openopoly.control.game.GameChestStack;
 import openopoly.control.game.GameControl;
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
 
 /**
  *
@@ -93,7 +93,7 @@ public class CardEffects {
         control.movePlay(moveBlocks);
     }
 
-    public void repair(int house, int hotel) throws PlaceDoesntExistException{
+    public void repair(int house, int hotel) throws PlaceDoesntExistsException{
         modifyCash(-(house*control.getCurrentPlayer().getPlayersHouse()));
         modifyCash(-(hotel*control.getCurrentPlayer().getPlayersHotel()));
     }
