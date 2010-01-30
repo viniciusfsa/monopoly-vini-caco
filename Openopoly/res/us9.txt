@@ -1,0 +1,329 @@
+# user story 9 - selling houses and hotels
+
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+# activateSell makes the command sell available whenever a player houses or hotels built
+activateSell
+expecterror "Unavailable command" sell propertyID=1
+# let's use part of the last test for us8 to buy all properties and give monopolies to player1 and player2
+giveCashToPlayer playerName="player1" cash=5000
+giveCashToPlayer playerName="player2" cash=5000
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+# player1 holds monopoly over purple, pink, red and green
+# player2 hold monopoly over light blue, orange, yellow and indigo
+expect 4540 getPlayerMoney playerName="player1"
+expect 4270 getPlayerMoney playerName="player2"
+# player2's turn
+build propertyID=6
+expect 4220 getPlayerMoney playerName="player2"
+# now sell must become available
+expect "{roll,status,quit,build,sell}" getCommands
+expecterror "Place doesn't exist" sell propertyID=0
+expecterror "Can only sell houses built on properties" sell propertyID=2
+expecterror "Can only sell houses built on properties" sell propertyID=4
+expecterror "Can only sell houses built on properties" sell propertyID=5
+expecterror "Can only sell houses built on properties" sell propertyID=7
+expecterror "Can only sell houses built on properties" sell propertyID=10
+expecterror "Can only sell houses built on properties" sell propertyID=12
+expecterror "Can only sell houses built on properties" sell propertyID=15
+expecterror "Can only sell houses built on properties" sell propertyID=17
+expecterror "Can only sell houses built on properties" sell propertyID=20
+expecterror "Can only sell houses built on properties" sell propertyID=22
+expecterror "Can only sell houses built on properties" sell propertyID=25
+expecterror "Can only sell houses built on properties" sell propertyID=28
+expecterror "Can only sell houses built on properties" sell propertyID=30
+expecterror "Can only sell houses built on properties" sell propertyID=33
+expecterror "Can only sell houses built on properties" sell propertyID=35
+expecterror "Can only sell houses built on properties" sell propertyID=36
+expecterror "Can only sell houses built on properties" sell propertyID=38
+expecterror "Can only sell houses built on properties" sell propertyID=40
+expecterror "Place doesn't exist" sell propertyID=41
+expecterror "No house is built on this property" sell propertyID=8
+expecterror "No house is built on this property" sell propertyID=9
+expecterror "Player is not the owner of this property" sell propertyID=11
+expecterror "Player is not the owner of this property" sell propertyID=13
+expecterror "Player is not the owner of this property" sell propertyID=14
+expecterror "No house is built on this property" sell propertyID=16
+expecterror "No house is built on this property" sell propertyID=18
+expecterror "No house is built on this property" sell propertyID=19
+expecterror "Player is not the owner of this property" sell propertyID=21
+expecterror "Player is not the owner of this property" sell propertyID=23
+expecterror "Player is not the owner of this property" sell propertyID=24
+expecterror "No house is built on this property" sell propertyID=26
+expecterror "No house is built on this property" sell propertyID=27
+expecterror "No house is built on this property" sell propertyID=29
+expecterror "Player is not the owner of this property" sell propertyID=31
+expecterror "Player is not the owner of this property" sell propertyID=32
+expecterror "Player is not the owner of this property" sell propertyID=34
+expecterror "No house is built on this property" sell propertyID=37
+expecterror "No house is built on this property" sell propertyID=39
+# now let's use a sell command that works
+# player2 gets $25 for the sell (half the amount paid)
+sell propertyID=6
+expect 4245 getPlayerMoney playerName="player2"
+# as all houses have been sold, the command sell must become unavailable
+expecterror "Unavailable command" sell propertyID=6
+expect "{roll,status,quit,build}" getCommands
+# now let's max out a group of properties to later sell all buildings
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+# hotels on all three properties; let's see how we can sell them
+expect 3495 getPlayerMoney playerName="player2"
+sell propertyID=9
+# must sell all nth houses built before sell any (n-1)th house
+expecterror "Uneven distribution of houses" sell propertyID=9
+sell propertyID=8
+sell propertyID=6
+sell propertyID=9
+# must sell all nth houses built before sell any (n-1)th house
+expecterror "Uneven distribution of houses" sell propertyID=9
+sell propertyID=8
+sell propertyID=6
+sell propertyID=9
+# must sell all nth houses built before sell any (n-1)th house
+expecterror "Uneven distribution of houses" sell propertyID=9
+sell propertyID=8
+sell propertyID=6
+sell propertyID=9
+# must sell all nth houses built before sell any (n-1)th house
+expecterror "Uneven distribution of houses" sell propertyID=9
+sell propertyID=8
+sell propertyID=6
+sell propertyID=9
+expecterror "No house is built on this property" sell propertyID=9
+sell propertyID=8
+sell propertyID=6
+expecterror "Unavailable command" sell propertyID=6
+expect "{roll,status,quit,build}" getCommands
+expect 3870 getPlayerMoney playerName="player2"
+# now let's test if half the original price is being paid for the remaining properties
+build propertyID=16
+sell propertyID=16
+expect 3820 getPlayerMoney playerName="player2"
+build propertyID=18
+sell propertyID=18
+expect 3770 getPlayerMoney playerName="player2"
+build propertyID=19
+sell propertyID=19
+expect 3720 getPlayerMoney playerName="player2"
+build propertyID=26
+sell propertyID=26
+expect 3645 getPlayerMoney playerName="player2"
+build propertyID=27
+sell propertyID=27
+expect 3570 getPlayerMoney playerName="player2"
+build propertyID=29
+sell propertyID=29
+expect 3495 getPlayerMoney playerName="player2"
+build propertyID=37
+sell propertyID=37
+expect 3395 getPlayerMoney playerName="player2"
+build propertyID=39
+sell propertyID=39
+expect 3295 getPlayerMoney playerName="player2"
+rollDice firstDieResult=2 secondDieResult=1
+# now let's check player1's properties
+expect 4540 getPlayerMoney playerName="player1"
+build propertyID=1
+sell propertyID=1
+expect 4515 getPlayerMoney playerName="player1"
+build propertyID=3
+sell propertyID=3
+expect 4490 getPlayerMoney playerName="player1"
+build propertyID=11
+sell propertyID=11
+expect 4440 getPlayerMoney playerName="player1"
+build propertyID=13
+sell propertyID=13
+expect 4390 getPlayerMoney playerName="player1"
+build propertyID=14
+sell propertyID=14
+expect 4340 getPlayerMoney playerName="player1"
+build propertyID=21
+sell propertyID=21
+expect 4265 getPlayerMoney playerName="player1"
+build propertyID=23
+sell propertyID=23
+expect 4190 getPlayerMoney playerName="player1"
+build propertyID=24
+sell propertyID=24
+expect 4115 getPlayerMoney playerName="player1"
+build propertyID=31
+sell propertyID=31
+expect 4015 getPlayerMoney playerName="player1"
+build propertyID=32
+sell propertyID=32
+expect 3915 getPlayerMoney playerName="player1"
+build propertyID=34
+sell propertyID=34
+expect 3815 getPlayerMoney playerName="player1"
+quitGame
+
+#####################################################################################
+# New Test: trying to sell a hotel when not enough houses are available on the Bank #
+#####################################################################################
+
+# first part of the test is the same as above
+createGame numPlayers=2 playerNames="{player1,player2}" tokenColors="{black,white}"
+activateBuild
+activateSell
+giveCashToPlayer playerName="player1" cash=5000
+giveCashToPlayer playerName="player2" cash=5000
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=3 secondDieResult=3
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=2 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=3
+buy
+rollDice firstDieResult=1 secondDieResult=1
+buy
+rollDice firstDieResult=4 secondDieResult=5
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=2 secondDieResult=2
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=5 secondDieResult=5
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+rollDice firstDieResult=4 secondDieResult=4
+buy
+# player1 holds monopoly over purple, pink, red and green
+# player2 hold monopoly over light blue, orange, yellow and indigo
+expect 4540 getPlayerMoney playerName="player1"
+expect 4270 getPlayerMoney playerName="player2"
+# it is player2's turn; let's put him to build 4 houses on each of his properties
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+build propertyID=6
+build propertyID=8
+build propertyID=9
+# 12 houses built
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+build propertyID=16
+build propertyID=18
+build propertyID=19
+# 24 houses built
+build propertyID=26
+build propertyID=27
+build propertyID=29
+build propertyID=26
+build propertyID=27
+build propertyID=29
+build propertyID=26
+build propertyID=27
+# 32 houses built; now, let's build a hotel on property 6 - this returns 4 houses to the Bank
+build propertyID=6
+# now, let's build four additional houses
+build propertyID=29
+build propertyID=26
+build propertyID=27
+build propertyID=29
+# now, 32 houses are built (4 houses on 8 properties), plus a hotel on property 6; let's try to sell this hotel
+expecterror "Not enough houses on the bank" sell propertyID=6
+# if we sell four houses, though, we must be able to sell the hotel again
+sell propertyID=29
+sell propertyID=27
+sell propertyID=26
+sell propertyID=29
+# must now throw exception now
+sell propertyID=6
+quitGame
