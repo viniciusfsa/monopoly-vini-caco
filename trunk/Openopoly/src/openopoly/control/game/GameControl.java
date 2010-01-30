@@ -243,7 +243,7 @@ public class GameControl {
      * @param player jogador falido
      */
     private void freeProperties(Player player) {
-        ArrayList<Block> titles = player.getTitles();
+        ArrayList<Block> titles = player.getPossessions();
         for (Block b : titles) {
             b.setOwner(Bank.getBank());
         }
@@ -502,10 +502,8 @@ public class GameControl {
         this.businessManager.setActiveMortgage(true);
     }
 
-    public void mortgage(int placeID) throws GameException {
-//        throw new GameException("Place doesn't exist");
+    public void mortgage(int placeID) throws GameException, PlayerDoesntExistsException {
         this.businessManager.mortgage(placeID);
-        
     }
 
 

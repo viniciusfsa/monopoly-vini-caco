@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import openopoly.board.Property;
 import openopoly.control.game.GameMenuOptions;
 import openopoly.err.GameException;
-import openopoly.err.PlaceDoesntExistException;
+import openopoly.err.PlaceDoesntExistsException;
 
 /**Classe que representa o jogador
  *
@@ -24,7 +24,7 @@ public class Player {
     private boolean isAtGo = true;
     private boolean needSallary = false;
     private boolean bankrupt = false;
-    private ArrayList<Block> titles = new ArrayList<Block>();
+    private ArrayList<Block> possessions = new ArrayList<Block>();
     private ArrayList<Property> listProperty = new ArrayList<Property>();
     private boolean jailed = false;
     private GameMenuOptions menu;
@@ -64,8 +64,8 @@ public class Player {
      */
     public String getDeeds() {
         String deeds = "{";
-        if (!titles.isEmpty()) {
-            for (Block block : titles) {
+        if (!possessions.isEmpty()) {
+            for (Block block : possessions) {
                 deeds = deeds.concat(block.getPropName() + ",");
             }
             deeds = deeds.substring(0, deeds.length() - 1);
@@ -77,11 +77,11 @@ public class Player {
      * Esse método adiciona à lista de titulos do jogador
      * @param pos posição do titulo no tabuleiro
      */
-    public void addTitle(int pos) throws GameException {
+    public void addPossession(int pos) throws GameException {
         if (getGameBoard().isRailRoad(pos)) {
             railroadsNum++;
         }
-        titles.add(getGameBoard().getBlock(pos));
+        possessions.add(getGameBoard().getBlock(pos));
     }
 
     /**
@@ -126,12 +126,12 @@ public class Player {
     /**
      * Esse método obtem a quantidade de casas que o jogador possui
      * @return a quantidade de casas
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public int getPlayersHouse() throws PlaceDoesntExistException {
+    public int getPlayersHouse() throws PlaceDoesntExistsException {
         int numHouses = 0;
         Property p;
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (getGameBoard().isProperty(block.getPosGB())) {
                 p = (Property) block;
                 if (!p.hasHotel()) {
@@ -145,12 +145,12 @@ public class Player {
     /**
      * Esse método obtem a quantidade de hoteis que o jogador possui
      * @return a quantidade de hoteis
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public int getPlayersHotel() throws PlaceDoesntExistException {
+    public int getPlayersHotel() throws PlaceDoesntExistsException {
         int numHotels = 0;
         Property p;
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (getGameBoard().isProperty(block.getPosGB())) {
                 p = (Property) block;
                 if (p.hasHotel()) {
@@ -181,13 +181,13 @@ public class Player {
      * @param group o tipo do grupo
      * @param numProperty a quantidade de propriedades por grupo
      * @return true caso o jogador tenha o monopolio do grupo, false caso contrário
-     * @throws PlaceDoesntExistException caso o lugar não exista
+     * @throws PlaceDoesntExistsException caso o lugar não exista
      */
-    private boolean checkGroupMonopoly(String group, int numProperty) throws PlaceDoesntExistException {
+    private boolean checkGroupMonopoly(String group, int numProperty) throws PlaceDoesntExistsException {
         Property p;
         int countProperty = 0;
 
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (getGameBoard().isProperty(block.getPosGB())) {
                 p = (Property) block;
                 if (p.getGroup().equals(group)) {
@@ -205,9 +205,9 @@ public class Player {
 
     /**
      * Esse método verifica se o jogador possui algum monopoly
-     * @throws PlaceDoesntExistException caso lugar não exista.
+     * @throws PlaceDoesntExistsException caso lugar não exista.
      */
-    public void checkPlayerMonopoly() throws PlaceDoesntExistException {
+    public void checkPlayerMonopoly() throws PlaceDoesntExistsException {
         purpleMonopoly = checkGroupMonopoly("purple", 2);
         lightBlueMonopoly = checkGroupMonopoly("light blue", 3);
         pinkMonopoly = checkGroupMonopoly("pink", 3);
@@ -250,11 +250,11 @@ public class Player {
      * de um grupo
      * @param group grupo a ser pesquisada
      * @return a maior quantidade de casas entre o grupo
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    private int getMaxNumHouses(String group) throws PlaceDoesntExistException {
+    private int getMaxNumHouses(String group) throws PlaceDoesntExistsException {
         int maxNumHouses = 0;
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (GameBoard.getInstance().isProperty(block.getPosGB())) {
                 Property p = (Property) block;
                 if (p.getGroup().equals(group)) {
@@ -272,12 +272,12 @@ public class Player {
      * propriedades de um grupo
      * @param group grupo a ser verificado
      * @return true caso exista má distribuição
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public boolean hasBadHabDistribution(String group) throws PlaceDoesntExistException {
+    public boolean hasBadHabDistribution(String group) throws PlaceDoesntExistsException {
         int maxNumHouses = getMaxNumHouses(group);
 
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (GameBoard.getInstance().isProperty(block.getPosGB())) {
                 Property p = (Property) block;
                 if (p.getGroup().equals(group)) {
@@ -296,10 +296,10 @@ public class Player {
      * Esse método verifica se o jogador ja fez todas as construções possíveis
      * em um determinado grupo.
      * @param group o grupo a ser pesquisado
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public boolean checkFullBuild(String group) throws PlaceDoesntExistException {
-        ArrayList<Property> list = getListTitlesGroup(group);
+    public boolean checkFullBuild(String group) throws PlaceDoesntExistsException {
+        ArrayList<Property> list = getListPossessionsGroup(group);
         int countHotel = 0;
         for (int i = 0; i < list.size(); i++) {
             Property property = list.get(i);
@@ -320,12 +320,12 @@ public class Player {
      * Esse método retorna uma lista de propriedades do mesmo grupo
      * @param group o grupo a ser pesquisado
      * @return lista de priedades do mesmo grupo
-     * @throws PlaceDoesntExistException caso o bloco não exista
+     * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public ArrayList getListTitlesGroup(String group) throws PlaceDoesntExistException {
+    public ArrayList getListPossessionsGroup(String group) throws PlaceDoesntExistsException {
         listProperty.clear();
 
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (GameBoard.getInstance().isProperty(block.getPosGB())) {
                 Property p = (Property) block;
                 if (p.getGroup().equals(group)) {
@@ -354,7 +354,7 @@ public class Player {
     /**
      * Configura a opção de vender no menu
      */
-    public void configureSellMenu() throws PlaceDoesntExistException {
+    public void configureSellMenu() throws PlaceDoesntExistsException {
         if (ownHousesBuilt()) {
             menu.addSellOption();
         } else {
@@ -437,8 +437,8 @@ public class Player {
         this.bankrupt = bankrupt;
     }
 
-    public ArrayList<Block> getTitles() {
-        return titles;
+    public ArrayList<Block> getPossessions() {
+        return possessions;
     }
 
     public GameMenuOptions getMenu() {
@@ -545,9 +545,9 @@ public class Player {
         this.yellowMonopoly = yellowMonopoly;
     }
 
-    private boolean ownHousesBuilt() throws PlaceDoesntExistException {
+    private boolean ownHousesBuilt() throws PlaceDoesntExistsException {
         int house = 0;
-        for (Block block : titles) {
+        for (Block block : possessions) {
             if (GameBoard.getInstance().isProperty(block.getPosGB())) {
                 Property p = (Property) block;
                 house += p.getHouseQtd();

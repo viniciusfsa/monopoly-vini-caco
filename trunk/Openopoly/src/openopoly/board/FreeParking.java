@@ -75,4 +75,8 @@ public class FreeParking implements Block {
         return goToJail;
     }
 
+    public boolean isMortgageable() {
+        return false;
+    }
+
 }

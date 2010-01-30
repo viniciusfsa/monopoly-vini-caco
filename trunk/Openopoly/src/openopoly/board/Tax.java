@@ -71,4 +71,8 @@ public class Tax implements Block{
     public boolean isGoToJail() {
         return false;
     }
+
+    public boolean isMortgageable() {
+        return false;
+    }
 }

@@ -82,4 +82,8 @@ public class Railroad implements Block{
         return false;
     }
 
+    public boolean isMortgageable() {
+        return true;
+    }
+
 }

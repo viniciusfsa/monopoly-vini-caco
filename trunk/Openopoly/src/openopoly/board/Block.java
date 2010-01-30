@@ -58,5 +58,12 @@ public interface Block {
      * @param p grupo do bloco
      */
     public void setGroup(String group);
+
+
+    /**
+     * Se o bloco é hipotecavel ou nao
+     * @return true se for hipotecavel, false caso contrario
+     */
+    public boolean isMortgageable();
 }
     

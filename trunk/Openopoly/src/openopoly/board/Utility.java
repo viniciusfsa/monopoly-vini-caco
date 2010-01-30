@@ -41,7 +41,7 @@ public class Utility implements Block {
     }
 
     public int getMultiplier(){
-        ArrayList<Block> t =  owner.getTitles();
+        ArrayList<Block> t =  owner.getPossessions();
         int numberOfUtilities = 0;
         for (Block block : t) {
             if(block.getGroup().equals("utility")){
@@ -88,5 +88,9 @@ public class Utility implements Block {
 
     public boolean isGoToJail() {
         return false;
+    }
+
+    public boolean isMortgageable() {
+        return true;
     }
 }
