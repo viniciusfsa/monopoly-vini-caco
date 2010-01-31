@@ -127,7 +127,6 @@ public class MortgageTest extends TestCase {
         this.mortgageCurrentPlace();
         this.nextPlayer();
         
-        
     }
 
 
