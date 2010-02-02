@@ -11,7 +11,7 @@ activateUtilityPlaces
 activateBuild
 activateSell
 expect "{roll,status,quit}" getCommands
-# the command mortgage must only be available when the player holds a title deed //mas aqui ele dá erro não porque ninguém pode possuir o tal lugar placeID=1
+# the command mortgage must only be available when the player holds a title deed
 expecterror "Unavailable command" mortgage placeID=1
 # player1 buys Baltic Avenue
 rollDice firstDieResult=1 secondDieResult=2
