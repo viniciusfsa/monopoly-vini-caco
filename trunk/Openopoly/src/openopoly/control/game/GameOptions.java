@@ -7,82 +7,82 @@ import java.util.LinkedList;
  * @author Lucas
  * @author Sergio
  */
-public class GameMenuOptions {
+public class GameOptions {
 
-    LinkedList menu;
+    LinkedList options;
 
     /**
-     * O construtor da classe instancia o vetor das opções iniciais do menu
+     * O construtor da classe instancia o vetor das opções iniciais da lista de opções
      */
-    public GameMenuOptions() {
-        menu = new LinkedList();
-        setBasicMenu();
+    public GameOptions() {
+        options = new LinkedList();
+        setBasicOptions();
     }
 
     /**
      * Configura o menu com as funcionalidades básicas
      */
-    public void setBasicMenu() {
-        menu.clear();
-        menu.add("roll");
-        menu.add("status");
-        menu.add("quit");
+    public void setBasicOptions() {
+        options.clear();
+        options.add("roll");
+        options.add("status");
+        options.add("quit");
     }
 
     //Comandos de manipulação da lista de comandos
     public void addPayOption() {
-        menu.addLast("pay");
+        options.addLast("pay");
     }
 
     public void removePayOption() {
-        menu.remove("pay");
+        options.remove("pay");
     }
 
     public void addCard() {
-        menu.addFirst("card");
+        options.addFirst("card");
     }
 
     public void removeCardOption() {
-        menu.remove("card");
+        options.remove("card");
     }
 
     public void addBuildOption() {
-        if(!menu.contains("build")){
-            menu.addLast("build");
+        if(!options.contains("build")){
+            options.addLast("build");
         }
     }
 
     public void removeBuildOption() {
-        if(menu.contains("build")){
-            menu.remove("build");
+        if(options.contains("build")){
+            options.remove("build");
         }
     }
     public void addSellOption() {
-        if(!menu.contains("sell")){
-            menu.addLast("sell");
+        if(!options.contains("sell")){
+            options.addLast("sell");
         }
     }
 
     public void removeSellOption() {
-        if(menu.contains("sell")){
-            menu.remove("sell");
+        if(options.contains("sell")){
+            options.remove("sell");
         }
     }
 
     public void addMortgageOption() {
-        menu.addFirst("hipotecar");
+        options.addLast("mortgage");
     }
 
     public void removeMortgageOption() {
-        menu.remove("hipotecar");
+        options.remove("mortgage");
     }
 
     public void addUnMortgageOption() {
-        menu.addFirst("desipotecar");
+        options.addFirst("desipotecar");
     }
 
     public void removeUnMortgageOption() {
-        menu.remove("desipotecar");
+        options.remove("desipotecar");
     }
 
     /**
@@ -90,11 +90,12 @@ public class GameMenuOptions {
      * para uma String
      * @return as opções do menu
      */
-    public String getMenu() {
+    @Override
+    public String toString() {
         String options = "{";
-        if (menu != null) {
-            for (int i = 0; i < menu.size(); i++) {
-                options = options.concat((String) menu.get(i) + ",");
+        if (this.options != null) {
+            for (int i = 0; i < this.options.size(); i++) {
+                options = options.concat((String) this.options.get(i) + ",");
             }
             options = options.substring(0, options.length()-1);
         }
@@ -107,6 +108,6 @@ public class GameMenuOptions {
      * @return true caso a opção exista no menu, false caso contrário
      */
     public boolean isOption(String menuOption){
-        return menu.contains(menuOption);
+        return options.contains(menuOption);
     }
 }

@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.UnmortgageablePlaceException;
 
 
 /**Classe que representa a ferrovia
@@ -14,6 +15,7 @@ public class Railroad implements Block{
     private String propName, group;
     private Player owner;
     private int price, mortgage;
+    private boolean mortgaged;
     
     /**
      * O construtor da classe tem a função de inicializar
@@ -30,6 +32,7 @@ public class Railroad implements Block{
         this.price = 200;
         this.mortgage = 100;
         this.group = group;
+        this.mortgaged = false;
     }
 
 
@@ -84,6 +87,14 @@ public class Railroad implements Block{
 
     public boolean isMortgageable() {
         return true;
+    }
+
+    public boolean isMortgaged() throws UnmortgageablePlaceException {
+        return this.mortgaged;
+    }
+
+    public boolean isOwnerAPlayer(){
+        return !this.owner.isBank();
     }
 
 }

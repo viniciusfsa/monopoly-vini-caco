@@ -3,6 +3,8 @@ package openopoly.control.game;
 import openopoly.control.business.BusinessManager;
 import openopoly.*;
 import openopoly.err.GameException;
+import openopoly.err.PlaceDoesntExistsException;
+import openopoly.err.UnmortgageablePlaceException;
 import openopoly.util.Dice;
 import java.util.ArrayList;
 import openopoly.board.Block;
@@ -467,7 +469,7 @@ public class GameControl {
     }
 
     public String getCommands() {
-        return currentPlayer.getMenu().getMenu();
+        return currentPlayer.getOptions().toString();
     }
 
     public boolean getGameIsOver() {
@@ -504,6 +506,10 @@ public class GameControl {
 
     public void mortgage(int placeID) throws GameException, PlayerDoesntExistsException {
         this.businessManager.mortgage(placeID);
+    }
+
+    public boolean isMortagged(int placeID) throws PlaceDoesntExistsException, UnmortgageablePlaceException {
+        return this.businessManager.getGameBoard().isMortgaged(placeID);
     }
 
 

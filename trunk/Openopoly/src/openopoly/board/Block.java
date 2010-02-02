@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.UnmortgageablePlaceException;
 
 
 /**Classe que representa um bloco do tabuleiro
@@ -65,5 +66,13 @@ public interface Block {
      * @return true se for hipotecavel, false caso contrario
      */
     public boolean isMortgageable();
+
+    /**
+     * Se o bloco esta hipotecada ou nao
+     * @return true se for hipotecavel, false caso contrario
+     */
+    public boolean isMortgaged() throws UnmortgageablePlaceException;
+
+    public boolean isOwnerAPlayer();
 }
     

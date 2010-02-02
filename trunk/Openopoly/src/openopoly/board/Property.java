@@ -16,6 +16,7 @@ public class Property implements Block {
     private String group;
     private int houseQtd = 0;
     private boolean hotel = false;
+    private boolean mortgaged = false;
 
     /**
      * O construtor da classe tem a função de inicializar
@@ -50,6 +51,7 @@ public class Property implements Block {
         this.mortgage = mortgage;
         this.house = house;
         this.group = group;
+        this.mortgaged = false;
     }
 
     /**
@@ -158,6 +160,17 @@ public class Property implements Block {
     public boolean isMortgageable() {
         return true;
     }
+
+    public boolean isMortgaged() {
+        return this.mortgaged;
+    }
+
+    
+    public boolean isOwnerAPlayer(){
+        return !this.owner.isBank();
+    }
+
+    
 
 
 
