@@ -196,9 +196,12 @@ public class OpenopolyFacade {
         openopoly.getGameControl().mortgage(placeID);
     }
 
-    public void isMortgaged(int placeID) throws GameException{
-//        openopoly.getGameControl().mortgage(placeID);
-        openopoly.getGameControl().isMortagged(placeID);
+    public boolean isMortgaged(int placeID) throws GameException{
+        return openopoly.getGameControl().isMortagged(placeID);
+    }
+
+    public void nextPlayer(){
+        this.openopoly.getGameControl().nextPlayer();
     }
 
 }

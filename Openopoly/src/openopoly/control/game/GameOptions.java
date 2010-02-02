@@ -70,7 +70,9 @@ public class GameOptions {
     }
 
     public void addMortgageOption() {
-        options.addLast("mortgage");
+        if(!options.contains("mortgage")){
+            options.addLast("mortgage");
+        }
     }
 
     public void removeMortgageOption() {
@@ -92,14 +94,14 @@ public class GameOptions {
      */
     @Override
     public String toString() {
-        String options = "{";
+        String strOptions = "{";
         if (this.options != null) {
             for (int i = 0; i < this.options.size(); i++) {
-                options = options.concat((String) this.options.get(i) + ",");
+                strOptions = strOptions.concat((String) this.options.get(i) + ",");
             }
-            options = options.substring(0, options.length()-1);
+            strOptions = strOptions.substring(0, strOptions.length()-1);
         }
-        return options.concat("}");
+        return strOptions.concat("}");
     }
 
     /**
