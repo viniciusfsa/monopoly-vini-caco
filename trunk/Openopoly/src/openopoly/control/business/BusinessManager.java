@@ -611,6 +611,7 @@ public class BusinessManager {
                 if (block.getOwner() == currentPlayer) {
                     //agora eu testo
 //                    throw new UnavailableCommandException();
+                    throw new GameException("Player doesn't hold the deed for this place");
                     
                 } else {
                     throw new GameException("Player doesn't hold the deed for this place");
