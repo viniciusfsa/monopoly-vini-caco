@@ -1,6 +1,7 @@
-package userstories;
+package openopoly.tests;
 
 
+//import userstories.*;
 import easyaccept.EasyAcceptFacade;
 import java.util.ArrayList;
 import java.util.List;
