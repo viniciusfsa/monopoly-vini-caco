@@ -15,11 +15,15 @@ public class Bank {
      */
     public Bank() {
         bank = new Player("bank", "");
+        bank.setIsBank(true);
     }
 
     public static Player getBank() {
         return bank;
     }
+
+
+    
 
     
 }

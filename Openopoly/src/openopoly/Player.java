@@ -6,7 +6,7 @@ import openopoly.board.GameBoard;
 import openopoly.board.Block;
 import java.util.ArrayList;
 import openopoly.board.Property;
-import openopoly.control.game.GameMenuOptions;
+import openopoly.control.game.GameOptions;
 import openopoly.err.GameException;
 import openopoly.err.PlaceDoesntExistsException;
 
@@ -27,7 +27,7 @@ public class Player {
     private ArrayList<Block> possessions = new ArrayList<Block>();
     private ArrayList<Property> listProperty = new ArrayList<Property>();
     private boolean jailed = false;
-    private GameMenuOptions menu;
+    private GameOptions options;
     private boolean chancePrisonCard = false;
     private boolean chestPrisonCard = false;
     private int jailCount = 1;
@@ -41,6 +41,7 @@ public class Player {
     private boolean redMonopoly = false;
     private boolean greenMonopoly = false;
     private boolean indigoMonopoly = false;
+    private boolean isBank = false;
 
     /**
      * O construtor da classe tem a função de inicializar
@@ -54,7 +55,7 @@ public class Player {
         setCash(1500);
         setRailroadsNum(0);
         setPosGameBoard(40);
-        menu = new GameMenuOptions();
+        options = new GameOptions();
     }
 
     /**
@@ -111,7 +112,7 @@ public class Player {
      */
     public void goToJail() {
         setJailed(true);
-        menu.addPayOption();
+        options.addPayOption();
         setPosGameBoard(10);
     }
 
@@ -309,7 +310,7 @@ public class Player {
         }
 
         if (countHotel == list.size()) {
-            menu.removeBuildOption();
+            options.removeBuildOption();
             return true;
         } else {
             return false;
@@ -337,28 +338,41 @@ public class Player {
     }
 
     /**
-     * Configura a opção de construir no menu
+     * Configura a opção de construir na lista de opções
      */
-    public void configureBuildMenu() {
+    public void configureBuildOption() {
         if (hasGreenMonopoly() || hasIndigoMonopoly() || hasLightBlueMonopoly() ||
                 hasOrangeMonopoly() || hasPinkMonopoly() || hasPurpleMonopoly() ||
                 hasYellowMonopoly() || hasRedMonopoly()) {
 
-            menu.addBuildOption();
+            options.addBuildOption();
 
         } else {
-            menu.removeBuildOption();
+            options.removeBuildOption();
         }
     }
 
+
+    public void configureMortgageOption(){
+        //adicionar opção de mortgage
+        if (hasMortgageableProperties()){
+            this.options.addMortgageOption();
+        }
+        else{
+            this.options.removeMortgageOption();
+        }
+    }
+
+
+
     /**
-     * Configura a opção de vender no menu
+     * Configura a opção de vender na lista de opções
      */
-    public void configureSellMenu() throws PlaceDoesntExistsException {
+    public void configureSellOption() throws PlaceDoesntExistsException {
         if (ownHousesBuilt()) {
-            menu.addSellOption();
+            options.addSellOption();
         } else {
-            menu.removeSellOption();
+            options.removeSellOption();
         }
     }
 
@@ -441,8 +455,8 @@ public class Player {
         return possessions;
     }
 
-    public GameMenuOptions getMenu() {
-        return menu;
+    public GameOptions getOptions() {
+        return options;
     }
 
     public boolean isJailed() {
@@ -558,5 +572,26 @@ public class Player {
         } else {
             return false;
         }
+    }
+
+    private boolean hasMortgageableProperties() {
+
+        for (Block possession: possessions){
+            if (possession.isMortgageable()){
+                return true;
+            }
+        }
+
+        return false;
+//        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void setIsBank(boolean b) {
+//        return this.isBankrupt();
+        this.isBank = true;
+    }
+
+    public boolean isBank(){
+        return this.isBank;
     }
 }

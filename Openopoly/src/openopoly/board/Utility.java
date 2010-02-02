@@ -14,6 +14,7 @@ public class Utility implements Block {
     private String propName, group;
     private Player owner;
     private int price, mortgage;
+    private boolean mortgaged = false;
 
     /**
      * o construtor da classe tem a função de inicializar
@@ -31,6 +32,7 @@ public class Utility implements Block {
         this.price = 150;
         this.mortgage = 75;
         this.group = group;
+        this.mortgaged = false;
     }
 
 
@@ -92,5 +94,13 @@ public class Utility implements Block {
 
     public boolean isMortgageable() {
         return true;
+    }
+
+    public boolean isMortgaged() {
+        return this.mortgaged;
+    }
+
+    public boolean isOwnerAPlayer(){
+        return !this.owner.isBank();
     }
 }

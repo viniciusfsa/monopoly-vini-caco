@@ -12,7 +12,6 @@ import openopoly.control.game.GameChestStack;
 import openopoly.err.GameException;
 import openopoly.err.PlaceDoesntExistsException;
 import openopoly.err.UnavailableCommandException;
-import openopoly.err.UnmortgageablePlaceException;
 
 /** Classe que representa o Gerenciador de Negócios, ao qual
  *  controla as transações financeiras do jogo
@@ -132,7 +131,7 @@ public class BusinessManager {
             if (hasCash(price, currentPlayer)) {
                 property.addHouses();
                 if (activeSell) {
-                    currentPlayer.configureSellMenu();
+                    currentPlayer.configureSellOption();
                 }
                 checkEnoughHabToBuild(property);
                 if (currentPlayer.hasBadHabDistribution(property.getGroup())) {
@@ -169,7 +168,7 @@ public class BusinessManager {
                     throw new GameException("Uneven distribution of houses");
                 } else {
                     currentPlayer.setCash(cash + price / 2);
-					currentPlayer.configureSellMenu();
+					currentPlayer.configureSellOption();
                 }
             } else {
                 throw new GameException("Not enough houses on the bank");
@@ -283,6 +282,10 @@ public class BusinessManager {
         getCurrentBlock().setOwner(currentPlayer);
         currentPlayer.addPossession(getCurrentPlayer().getPosGBoard());
         currentPlayer.setCash(cash - price);
+
+        if (b.isMortgageable()){
+            currentPlayer.configureMortgageOption();
+        }
     }
 
     /**
@@ -299,7 +302,7 @@ public class BusinessManager {
                 requestToBuy();
                 if (activeBuild) {
                     currentPlayer.checkPlayerMonopoly();
-                    currentPlayer.configureBuildMenu();
+                    currentPlayer.configureBuildOption();
                 }
             }
         } else if (isUtility()) {
@@ -357,7 +360,7 @@ public class BusinessManager {
      * @throws GameException caso não exista o comando build, caso o jogador deseje construir fora de uma propriedade e caso o jogador não for o dono da propriedade
      */
     public boolean checkBuildPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistsException, GameException {
-        if (!currentPlayer.getMenu().isOption("build")) {
+        if (!currentPlayer.getOptions().isOption("build")) {
             throw new GameException("Unavailable command");
         } else {
             if (!getGameBoard().isProperty(propertyID)) {
@@ -390,7 +393,7 @@ public class BusinessManager {
      * @throws GameException caso não exista o comando sell, caso o jogador deseje construir fora de uma propriedade e caso o jogador não for o dono da propriedade
      */
     public boolean checkSellPreConditions(int propertyID, Player currentPlayer) throws PlaceDoesntExistsException, GameException {
-        if (!currentPlayer.getMenu().isOption("sell")) {
+        if (!currentPlayer.getOptions().isOption("sell")) {
             throw new GameException("Unavailable command");
         } else {
             if (!getGameBoard().isProperty(propertyID)) {
@@ -597,20 +600,28 @@ public class BusinessManager {
     //Hipoteca
 
 
-    public void mortgage(int placeID) throws PlaceDoesntExistsException, UnmortgageablePlaceException, UnavailableCommandException{
+    public void mortgage(int placeID) throws PlaceDoesntExistsException, UnavailableCommandException,GameException {
 
+        //lança PlaceDoesntExistsException apropriadamente
         Block block = this.getGameBoard().getBlock(placeID);
 
-        if (block.isMortgageable()){
-            if (block.getOwner()==currentPlayer){
+        if (block.isMortgageable()) {
+
+            if (block.isOwnerAPlayer()) {
+                if (block.getOwner() == currentPlayer) {
+                    //agora eu testo
+//                    throw new UnavailableCommandException();
+                    
+                } else {
+                    throw new GameException("Player doesn't hold the deed for this place");
+                }
+            } else {
                 throw new UnavailableCommandException();
             }
-            else{
-                throw new UnavailableCommandException();
-            }
-        }
-        else{
-            throw new UnavailableCommandException();
+
+
+        } else {
+            throw new GameException("This place can't be mortgaged");
         }
 
     }

@@ -303,6 +303,11 @@ public class GameBoard {
         return searchBlock("utility", actualPos);
     }
 
+    public boolean isMortgaged(int placeID) throws PlaceDoesntExistsException, UnmortgageablePlaceException {
+        Block b = GameBoard.getInstance().getBlock(placeID);
+        return b.isMortgaged();
+    }
+
 
     
 

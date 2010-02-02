@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.UnmortgageablePlaceException;
 /**
  *
  * @author Lucas
@@ -76,6 +77,14 @@ public class FreeParking implements Block {
     }
 
     public boolean isMortgageable() {
+        return false;
+    }
+
+    public boolean isMortgaged() throws UnmortgageablePlaceException {
+        throw new UnmortgageablePlaceException();
+    }
+
+    public boolean isOwnerAPlayer(){
         return false;
     }
 
