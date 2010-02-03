@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.Player;
+import openopoly.err.HousesNotBuildableException;
 import openopoly.err.UnmortgageablePlaceException;
 /**Classe que representa o imposto
  *
@@ -83,4 +84,25 @@ public class Tax implements Block{
     public boolean isOwnerAPlayer(){
         return false;
     }
+
+	@Override
+	public void setMortgaged(boolean mortgaged) throws UnmortgageablePlaceException {
+		throw new UnmortgageablePlaceException();
+		
+	}
+
+	@Override
+	public boolean hasHousesBuilt(){
+		return false;
+	}
+	
+	@Override
+	public int getMortgagePrice() {
+		return 0;
+	}
+	
+	@Override
+	public int getUnmortgagePrice() {
+		return 0;
+	}
 }

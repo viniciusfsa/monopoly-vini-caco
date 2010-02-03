@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.HousesNotBuildableException;
 import openopoly.err.UnmortgageablePlaceException;
 
 
@@ -74,5 +75,14 @@ public interface Block {
     public boolean isMortgaged() throws UnmortgageablePlaceException;
 
     public boolean isOwnerAPlayer();
+
+	public void setMortgaged(boolean mortgaged) throws UnmortgageablePlaceException;
+	
+	public boolean hasHousesBuilt() throws HousesNotBuildableException;
+
+	public int getMortgagePrice();
+	
+	public int getUnmortgagePrice();
+	
 }
     

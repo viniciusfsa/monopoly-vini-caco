@@ -200,8 +200,22 @@ public class OpenopolyFacade {
         return openopoly.getGameControl().isMortagged(placeID);
     }
 
-    public void nextPlayer(){
-        this.openopoly.getGameControl().nextPlayer();
+    //us11
+    public void activateUnMortgage(){
+        openopoly.getGameControl().activateUnmortgage();
     }
+    
+    public void unmortgage(int placeID) throws GameException{
+        openopoly.getGameControl().unmortgage(placeID);
+    }
+    
+    //us12
+    public void giveDeedToPlayer(String playerName, int placeID) throws GameException{
+        openopoly.getGameControl().giveDeedToPlayer(playerName, placeID);
+    }
+    public void activateAvoidingBankruptcy(){
+    	openopoly.getGameControl().activateAvoidingBankruptcy();
+    }
+    
 
 }

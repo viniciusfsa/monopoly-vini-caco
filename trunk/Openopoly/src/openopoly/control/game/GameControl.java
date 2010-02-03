@@ -8,6 +8,8 @@ import openopoly.err.UnmortgageablePlaceException;
 import openopoly.util.Dice;
 import java.util.ArrayList;
 import openopoly.board.Block;
+import openopoly.board.GameBoard;
+import openopoly.board.Property;
 import openopoly.control.business.Bank;
 import openopoly.err.PlayerDoesntExistsException;
 import openopoly.util.CardEffects;
@@ -27,6 +29,7 @@ public class GameControl {
     private BusinessManager businessManager;
     private boolean automaticBuy = false;
     private boolean doublesRule = false;
+	private boolean activateAvoidingBankruptcy;
     
 
     /**
@@ -189,6 +192,7 @@ public class GameControl {
      */
     public void movePlay(int qtdMovement) throws GameException {
         currentPlayer.move(qtdMovement);
+//        System.out.println(currentPlayer.getPlayerName()+ " ("+ qtdMovement +") moves to " + GameBoard.getInstance().getBlock(currentPlayer.getPosGBoard()).getPropName() + "("+ currentPlayer.getPosGBoard()+")");
         businessManager.setCurrentPlayer(currentPlayer);
         businessManager.checkPlayerPassedByGo();
         businessManager.setLastDiceResult(qtdMovement);
@@ -503,15 +507,61 @@ public class GameControl {
     public void activateMortgage() {
         this.businessManager.setActiveMortgage(true);
     }
+    
+    public void activateUnmortgage() {
+        this.businessManager.setActiveUnmortgage(false);
+    }
 
     public void mortgage(int placeID) throws GameException, PlayerDoesntExistsException {
-        this.businessManager.mortgage(placeID);
+    	this.businessManager.setCurrentPlayer(currentPlayer);
+    	this.businessManager.mortgage(placeID);
+    }
+    
+    public void unmortgage(int placeID) throws GameException, PlayerDoesntExistsException {
+    	this.businessManager.setCurrentPlayer(currentPlayer);
+    	this.businessManager.unmortgage(placeID);
     }
 
     public boolean isMortagged(int placeID) throws PlaceDoesntExistsException, UnmortgageablePlaceException {
         return this.businessManager.getGameBoard().isMortgaged(placeID);
     }
+    
+    public void giveDeedToPlayer(String playerName, int placeID) throws GameException{
+    	if (checkGivableDeed(playerName, placeID)){
+    		this.getPlayer(playerName).addPossession(placeID);
+    		GameBoard.getInstance().getBlock(placeID).setOwner(this.getPlayer(playerName));
+    	}
+    }
+    
+    //us12
 
+    public boolean checkGivableDeed(String playerName, int placeID) throws GameException{
+    	Block b = GameBoard.getInstance().getBlock(placeID);
+    	Player player = this.getPlayer(playerName);
+    	
+    	if(!b.isMortgageable()){
+    		throw new GameException("This place doesn't have a deed");
+    	}
+    	else{
+    		if (player.equals(b.getOwner())){
+    			throw new GameException("Player is already owner of this deed");
+    		}
+    		else{
+    			if (!b.getOwner().isBank()){
+    				throw new GameException("Deed is already owned by a player");
+    			}
+    			else{
+    				return true;
+    			}
+    			
+    		}
+    		
+    	}
+    }
+
+	public void activateAvoidingBankruptcy() {
+		this.activateAvoidingBankruptcy = true;
+	}
 
     
 }

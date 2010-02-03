@@ -9,13 +9,13 @@ import java.util.LinkedList;
  */
 public class GameOptions {
 
-    LinkedList options;
+    LinkedList<String> options;
 
     /**
      * O construtor da classe instancia o vetor das opções iniciais da lista de opções
      */
     public GameOptions() {
-        options = new LinkedList();
+        options = new LinkedList<String>();
         setBasicOptions();
     }
 
@@ -74,17 +74,18 @@ public class GameOptions {
             options.addLast("mortgage");
         }
     }
+    
+    public void addUnmortgageOption() {
+        if(!options.contains("unmortgage")){
+            options.addLast("unmortgage");
+        }
+    }
 
     public void removeMortgageOption() {
         options.remove("mortgage");
     }
-
-    public void addUnMortgageOption() {
-        options.addFirst("desipotecar");
-    }
-
-    public void removeUnMortgageOption() {
-        options.remove("desipotecar");
+    public void removeUnmortgageOption() {
+        options.remove("unmortgage");
     }
 
     /**
