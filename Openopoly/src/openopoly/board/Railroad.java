@@ -1,7 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
-import openopoly.err.UnmortgageablePlaceException;
+import openopoly.err.HousesNotBuildableException;
 
 
 /**Classe que representa a ferrovia
@@ -9,13 +9,8 @@ import openopoly.err.UnmortgageablePlaceException;
  * @author Lucas
  * @author Sergio
  */
-public class Railroad implements Block{
-
-    private int posGBoard;
-    private String propName, group;
-    private Player owner;
-    private int price, mortgage;
-    private boolean mortgaged;
+//public class Railroad implements Block{
+public class Railroad extends MortgageableProperty{	
     
     /**
      * O construtor da classe tem a função de inicializar
@@ -44,57 +39,15 @@ public class Railroad implements Block{
         return 25*getOwnerRailRoadNum();
     }
 
-    //Getters and Setters
-    public int getPrice() {
-        return price;
-    }
-
-    public int getMortgage() {
-        return mortgage;
-    }
-
-    public Player getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
 
     public int getOwnerRailRoadNum(){
         return getOwner().getRailroadsNum();
     }
-
-    public String getPropName() {
-        return propName;
-    }
-
-    public int getPosGB() {
-        return posGBoard;
-    }
-
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-       this.group = group;
-    }
-
-    public boolean isGoToJail() {
-        return false;
-    }
-
-    public boolean isMortgageable() {
-        return true;
-    }
-
-    public boolean isMortgaged() throws UnmortgageablePlaceException {
-        return this.mortgaged;
-    }
-
-    public boolean isOwnerAPlayer(){
-        return !this.owner.isBank();
-    }
+    
+	@Override
+	public boolean hasHousesBuilt() throws HousesNotBuildableException {
+		return false;
+	}
+	
 
 }

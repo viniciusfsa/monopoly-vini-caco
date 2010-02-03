@@ -1,23 +1,19 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.HousesNotBuildableException;
 
 /**Classe que representa uma propriedade do tabuleiro
  *
  * @author Lucas
  * @author Sergio
  */
-public class Property implements Block {
-
-    private String propName;
-    private int posGB;
-    private Player owner;
-    private int price, rent[], mortgage, house;
-    private String group;
-    private int houseQtd = 0;
+//public class Property implements Block {
+public class Property extends MortgageableProperty {
+    
     private boolean hotel = false;
-    private boolean mortgaged = false;
-
+    private int rent[], house;
+    private int houseQtd = 0;
     /**
      * O construtor da classe tem a função de inicializar
      * os atributos da propriedade.
@@ -37,7 +33,7 @@ public class Property implements Block {
      * @param group grupo
      */
     public Property(int posGBoard, String propName, Player owner, int price, int rent0, int rent1, int rent2, int rent3, int rent4, int rentHotel, int mortgage, int house, String group) {
-        this.posGB = posGBoard;
+        this.posGBoard = posGBoard;
         this.propName = propName;
         this.owner = owner;
         rent = new int[6];
@@ -104,42 +100,16 @@ public class Property implements Block {
         }
     }
 
-    //Getters and Setters
-    public String getGroup() {
-        return group;
-    }
 
     public int getHouse() {
         return house;
     }
 
-    public int getMortgage() {
-        return mortgage;
-    }
-
-    public int getPrice() {
-        return price;
-    }
 
     public int[] getRent() {
         return rent;
     }
 
-    public Player getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Player owner) {
-        this.owner = owner;
-    }
-
-    public String getPropName() {
-        return propName;
-    }
-
-    public int getPosGB() {
-        return posGB;
-    }
 
     public int getHouseQtd() {
         return houseQtd;
@@ -149,26 +119,24 @@ public class Property implements Block {
         return hotel;
     }
 
-    public void setGroup(String group) {
-       this.group = group;
-    }
-
-    public boolean isGoToJail() {
-        return false;
-    }
-
-    public boolean isMortgageable() {
-        return true;
-    }
-
-    public boolean isMortgaged() {
-        return this.mortgaged;
-    }
-
     
-    public boolean isOwnerAPlayer(){
-        return !this.owner.isBank();
-    }
+	@Override
+	public boolean hasHousesBuilt(){
+		// TODO Auto-generated method stub
+		return this.houseQtd > 0 ;
+	}
+
+	
+//	@Override
+//	public int getMortgagePrice() {
+//		return 0;
+//	}
+//	
+//	@Override
+//	public int getUnmortgagePrice() {
+//		return 0;
+//	}
+	
 
     
 

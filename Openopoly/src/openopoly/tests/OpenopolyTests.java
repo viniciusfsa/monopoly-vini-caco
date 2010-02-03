@@ -13,15 +13,13 @@ public class OpenopolyTests {
 
         List<String> files = new ArrayList<String>();
 
-        //Put the us1.txt file into the "test scripts" list
-
         //Milestone 1
 //        files.add("res/us01.txt");
 //        files.add("res/us02.txt");
 //        files.add("res/us03.txt");
 //        files.add("res/us04.txt");
-
-        //Milestone 2
+//
+//        //Milestone 2
 //        files.add("res/us05.txt");
 //        files.add("res/us06.txt");
 //        files.add("res/us07.txt");
@@ -30,7 +28,8 @@ public class OpenopolyTests {
 
         //Milestone 3
         files.add("res/us10.txt");
-
+        files.add("res/us11.txt");
+        files.add("res/us12.txt");
 
 
         //Instantiate the Monopoly Game façade

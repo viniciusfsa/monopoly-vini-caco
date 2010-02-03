@@ -1,6 +1,7 @@
 package openopoly.board;
 
 import openopoly.*;
+import openopoly.err.HousesNotBuildableException;
 import openopoly.err.UnmortgageablePlaceException;
 /**
  *
@@ -87,5 +88,26 @@ public class FreeParking implements Block {
     public boolean isOwnerAPlayer(){
         return false;
     }
+
+
+	@Override
+	public void setMortgaged(boolean mortgaged) throws UnmortgageablePlaceException {
+		throw new UnmortgageablePlaceException();
+	}
+	
+	@Override
+	public boolean hasHousesBuilt() throws HousesNotBuildableException {
+		throw new HousesNotBuildableException();
+	}
+	
+	@Override
+	public int getMortgagePrice() {
+		return 0;
+	}
+	
+	@Override
+	public int getUnmortgagePrice() {
+		return 0;
+	}
 
 }

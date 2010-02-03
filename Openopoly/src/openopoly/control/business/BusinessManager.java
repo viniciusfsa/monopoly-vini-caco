@@ -39,6 +39,7 @@ public class BusinessManager {
     private int lastDiceResult;
     private int numHouses = 32;
     private int numHotel = 12;
+	private boolean activeUnmortgage = false;
 
     /**
      * O construtor da classe cria um Bank
@@ -169,6 +170,8 @@ public class BusinessManager {
                 } else {
                     currentPlayer.setCash(cash + price / 2);
 					currentPlayer.configureSellOption();
+//					currentPlayer.configureMortgageOption();
+//					currentPlayer.configureUnmortgageOption()
                 }
             } else {
                 throw new GameException("Not enough houses on the bank");
@@ -223,33 +226,37 @@ public class BusinessManager {
      * ao dono da propriedade
      */
     private void payRent() throws GameException {
-        if (!(getCurrentBlock().getOwner() == currentPlayer)) {
-            int payerCash = currentPlayer.getCash();
-            int paymentValor = 0;
-            int paymentModifier = 1;
-            if (isProperty()) {
-                p = (Property) getCurrentBlock();
-                if (isActiveBuild()) {
-                    paymentValor = p.getCurrentRentBuildRules();
-                } else {
-                    paymentValor = p.getCurrentRent();
-                }
-
-            } else if (isRailRoad()) {
-                if (extraRREffect) {
-                    paymentModifier = 2;
-                }
-                r = (Railroad) getCurrentBlock();
-                paymentValor = r.getCurrentRide() * paymentModifier;
-                extraRREffect = false;
-            } else if (isUtility() && isActiveUtilityPlaces()) {
-                u = (Utility) getCurrentBlock();
-                paymentValor = lastDiceResult * u.getMultiplier();
-            }
-
-            checkBankruptcy(payerCash, paymentValor);
-
-        }
+    	//não é cobrado o aluguel de propriedades hipotecadas
+    	if(!getCurrentBlock().isMortgaged()){
+    		
+	        if (!(getCurrentBlock().getOwner() == currentPlayer)) {
+	            int payerCash = currentPlayer.getCash();
+	            int paymentValor = 0;
+	            int paymentModifier = 1;
+	            if (isProperty()) {
+	                p = (Property) getCurrentBlock();
+	                if (isActiveBuild()) {
+	                    paymentValor = p.getCurrentRentBuildRules();
+	                } else {
+	                    paymentValor = p.getCurrentRent();
+	                }
+	
+	            } else if (isRailRoad()) {
+	                if (extraRREffect) {
+	                    paymentModifier = 2;
+	                }
+	                r = (Railroad) getCurrentBlock();
+	                paymentValor = r.getCurrentRide() * paymentModifier;
+	                extraRREffect = false;
+	            } else if (isUtility() && isActiveUtilityPlaces()) {
+	                u = (Utility) getCurrentBlock();
+	                paymentValor = lastDiceResult * u.getMultiplier();
+	            }
+	
+	            checkBankruptcy(payerCash, paymentValor);
+	
+	        }
+    	}
 
     }
 
@@ -283,10 +290,21 @@ public class BusinessManager {
         currentPlayer.addPossession(getCurrentPlayer().getPosGBoard());
         currentPlayer.setCash(cash - price);
 
-        if (b.isMortgageable()){
+        if (this.isActiveMortgage()){
             currentPlayer.configureMortgageOption();
         }
+        if (this.isActiveUnmortgage()){
+        	currentPlayer.configureUnmortgageOption();
+        }
     }
+    
+//    public void giveDeedToPlayer(int placeID) throws GameException{
+//    	Block b = getGameBoard().getBlock(placeID);
+//        currentPlayer.addPossession(placeID);
+//    	this.get
+//    }
+    
+    
 
     /**
      * Esse método executa verificação da disponibilidade do titulo de
@@ -375,7 +393,19 @@ public class BusinessManager {
                         if (currentPlayer.checkFullBuild(getGameBoard().getBlockGroup(propertyID))) {
                             throw new GameException("Unavailable command");
                         } else {
-                            return true;
+
+                    		if (getGameBoard().getBlock(propertyID).isMortgaged()){
+                        		throw new GameException("Can't build on mortgaged properties");
+                        	}
+                        	else{
+                       		
+                    			String group = getGameBoard().getBlock(propertyID).getGroup();
+                    			if (getGameBoard().hasMortgagedPropertiesInGroup(group)){
+                        			throw new GameException("Group has mortgaged properties");
+                        		}
+                        		return true;
+                        		
+                        	}
                         }
                     }
                 }
@@ -535,6 +565,10 @@ public class BusinessManager {
     public void setActiveMortgage(boolean activeMortgage){
         this.activeMortgage = activeMortgage;
     }
+    
+    public void setActiveUnmortgage(boolean activeUnmortgage){
+        this.activeUnmortgage  = activeUnmortgage;
+    }
 
     public GameBoard getGameBoard() {
         return GameBoard.getInstance();
@@ -601,38 +635,141 @@ public class BusinessManager {
 
 
     public void mortgage(int placeID) throws PlaceDoesntExistsException, UnavailableCommandException,GameException {
-
-        //lança PlaceDoesntExistsException apropriadamente
+    	
+    	
+    	//lança PlaceDoesntExistsException apropriadamente
         Block block = this.getGameBoard().getBlock(placeID);
-
-        if (block.isMortgageable()) {
-
-            if (block.isOwnerAPlayer()) {
-                if (block.getOwner() == currentPlayer) {
-                    //agora eu testo
-//                    throw new UnavailableCommandException();
-                    throw new GameException("Player doesn't hold the deed for this place");
-                    
-                } else {
-                    throw new GameException("Player doesn't hold the deed for this place");
-                }
-            } else {
-                throw new UnavailableCommandException();
-            }
-
-
-        } else {
-            throw new GameException("This place can't be mortgaged");
+        boolean canMortgage = checkMortgagingConditions(currentPlayer, block);
+        
+        if (canMortgage){
+        	block.setMortgaged(true);
+        	currentPlayer.addCash(block.getMortgagePrice());
         }
+        
+        if (this.activeUnmortgage){
+        	currentPlayer.configureUnmortgageOption();
+        }
+//        if (this.activeMortgage){
+//        	currentPlayer.configureMortgageOption();
+//        }
+        
+
+    }
+    
+    public void unmortgage(int placeID) throws PlaceDoesntExistsException, UnavailableCommandException,GameException {
+    	
+    	
+    	//lança PlaceDoesntExistsException apropriadamente
+        Block block = this.getGameBoard().getBlock(placeID);
+        boolean canUnmortgage = checkUnmortgagingConditions(currentPlayer, block);
+        
+        if (canUnmortgage){
+        	block.setMortgaged(false);
+        	currentPlayer.removeCash(block.getUnmortgagePrice());
+        	currentPlayer.configureMortgageOption();
+        }
+        
+        if (this.activeMortgage){
+        	currentPlayer.configureMortgageOption();
+        }
+//        if (this.activeUnmortgage){
+//        	currentPlayer.configureUnmortgageOption();
+//        }
+        
 
     }
 
 
 
-    /**
+    private boolean checkMortgagingConditions(Player player, Block block) throws PlaceDoesntExistsException, UnavailableCommandException,GameException  {
+    	//se pode ser hipotecada
+    	if (player.hasMortgageableProperties()){
+        if (block.isMortgageable()){
+        		//se eu posso hipotecar alguém 
+        		if (player.hasMortgageableProperties()){
+        			//se esse alguém que eu posso hipotecar é o bloquinho solicitado 
+        			if (block.getOwner() == player){
+        				//não pode hipotecar duas vezes
+        				if (block.isMortgaged()){
+        					throw new UnavailableCommandException();
+        				}
+        				else{
+        					if (block.hasHousesBuilt()){
+        						throw new GameException("Can't mortgage a property with houses built");
+        					}
+        					else{
+        						return true;
+        					}
+        				}
+        			}
+        			//eu não sou o dono
+        			else{
+//        				if (block.getOwner().isBank()){
+//        					throw new UnavailableCommandException();
+//        				}
+//        				else{
+//        					throw new GameException("Player doesn't hold the deed for this place");
+//        				}
+        				if (player.hasMortgageableProperties()){
+        					throw new GameException("Player doesn't hold the deed for this place");
+        				}
+        				else{
+        					throw new UnavailableCommandException();
+        				}
+        				
+        			}
+        		}
+        		//não posso hipotecar ninguém
+        		else{
+        			throw new UnavailableCommandException();
+        		}
+        }
+        //isso não pode ser hipotecado
+        else{
+        	throw new GameException("This place can't be mortgaged");
+    	}
+    	}
+    	else{
+    		throw new UnavailableCommandException();
+    	}
+	}
+    
+    
+    
+    private boolean checkUnmortgagingConditions(Player player, Block block) throws PlaceDoesntExistsException, UnavailableCommandException,GameException  {
+    	
+    	if(player.hasMortgageableProperties()){
+    		if (!block.isMortgaged()){
+//    			return true;
+    			throw new GameException("Deed is not mortgaged");
+    		}
+    		else{
+    			if (block.getOwner()!=currentPlayer){
+    				throw new GameException("Unavailable command");
+    			}
+    			else{
+    				return true;
+    			}
+//    			throw new UnavailableCommandException();
+    			
+    		}
+    	}
+    	else {
+    		throw new UnavailableCommandException();
+    	}
+    	
+	}
+
+	/**
      * @return the activeMortgage
      */
     public boolean isActiveMortgage() {
         return activeMortgage;
     }
+    
+    public boolean isActiveUnmortgage() {
+        return activeUnmortgage;
+    }
+    
+    
 }

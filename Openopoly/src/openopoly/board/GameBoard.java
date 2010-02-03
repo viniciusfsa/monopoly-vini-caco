@@ -309,6 +309,23 @@ public class GameBoard {
     }
 
 
+	public boolean hasMortgagedPropertiesInGroup(String group) {
+			for (int i=0; i<slots.size();i++){
+				Block b = this.slots.get(new Integer(i));
+				try{
+					if (b.isMortgaged()&&b.getGroup().equals(group)){
+						return true;
+					}
+				}
+				catch (Exception e){
+					//do nothing
+				}
+				
+	        }
+			return false;
+    }
+
+
     
 
 

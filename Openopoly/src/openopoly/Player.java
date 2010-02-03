@@ -9,6 +9,7 @@ import openopoly.board.Property;
 import openopoly.control.game.GameOptions;
 import openopoly.err.GameException;
 import openopoly.err.PlaceDoesntExistsException;
+import openopoly.err.UnmortgageablePlaceException;
 
 /**Classe que representa o jogador
  *
@@ -42,6 +43,8 @@ public class Player {
     private boolean greenMonopoly = false;
     private boolean indigoMonopoly = false;
     private boolean isBank = false;
+    
+    
 
     /**
      * O construtor da classe tem a função de inicializar
@@ -323,7 +326,7 @@ public class Player {
      * @return lista de priedades do mesmo grupo
      * @throws PlaceDoesntExistsException caso o bloco não exista
      */
-    public ArrayList getListPossessionsGroup(String group) throws PlaceDoesntExistsException {
+    public ArrayList<Property> getListPossessionsGroup(String group) throws PlaceDoesntExistsException {
         listProperty.clear();
 
         for (Block block : possessions) {
@@ -355,12 +358,18 @@ public class Player {
 
     public void configureMortgageOption(){
         //adicionar opção de mortgage
-        if (hasMortgageableProperties()){
-            this.options.addMortgageOption();
-        }
-        else{
-            this.options.removeMortgageOption();
-        }
+    	try{
+            if (hasUnmortgagedProperties()){
+                this.options.addMortgageOption();
+            }
+            else{
+                this.options.removeMortgageOption();
+            }
+
+    	}
+    	catch(Exception e){
+    		//:D
+    	}
     }
 
 
@@ -455,11 +464,21 @@ public class Player {
         return possessions;
     }
 
-    public GameOptions getOptions() {
+    public GameOptions getOptions(){
+    	
+//    	try{
+//    		System.out.println("Hipotecaveis: " + getMortgageableProperties());
+//    		System.out.println("Hipotecadas : " + getMortgagedProperties());
+//    	}
+//    	catch (Exception e){
+//    		//:D
+//    	}
+    	
         return options;
     }
 
-    public boolean isJailed() {
+
+	public boolean isJailed() {
         return jailed;
     }
 
@@ -573,8 +592,42 @@ public class Player {
             return false;
         }
     }
+    
+    public ArrayList<String> getMortgageableProperties() throws UnmortgageablePlaceException{
+    	ArrayList<String> mortgageableProps = new ArrayList<String>();
+    	for (Block possession: possessions){
+            if (!possession.isMortgaged()){
+            	mortgageableProps.add(possession.getPropName());
+            }
+        }
 
-    private boolean hasMortgageableProperties() {
+        return mortgageableProps;
+    }
+    
+
+    private ArrayList<String> getMortgagedProperties() throws UnmortgageablePlaceException {
+    	ArrayList<String> mortgageableProps = new ArrayList<String>();
+    	for (Block possession: possessions){
+            if (possession.isMortgaged()){
+            	mortgageableProps.add(possession.getPropName());
+            }
+        }
+
+        return mortgageableProps;
+	}
+
+    public boolean hasUnmortgagedProperties() throws UnmortgageablePlaceException {
+
+        for (Block possession: possessions){
+            if (possession.isMortgageable()&&!possession.isMortgaged()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public boolean hasMortgageableProperties() throws UnmortgageablePlaceException {
 
         for (Block possession: possessions){
             if (possession.isMortgageable()){
@@ -583,15 +636,81 @@ public class Player {
         }
 
         return false;
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void setIsBank(boolean b) {
-//        return this.isBankrupt();
         this.isBank = true;
     }
 
     public boolean isBank(){
         return this.isBank;
     }
+
+	public void addCash(int extraCash) {
+		this.cash += extraCash;
+	}
+	
+	public ArrayList<String> getMonopolies() throws PlaceDoesntExistsException{
+		ArrayList<String> monops = new ArrayList<String>();
+		checkPlayerMonopoly();
+	    //burrice
+		if(purpleMonopoly) monops.add ("purple");
+	    if(lightBlueMonopoly) monops.add ("light");
+	    if(yellowMonopoly) monops.add ("monops");
+	    if(pinkMonopoly) monops.add ("pink");
+	    if(orangeMonopoly) monops.add ("orange");
+	    if(redMonopoly) monops.add ("red");
+	    if(greenMonopoly) monops.add ("green");
+	    if(indigoMonopoly) monops.add ("indigo");
+		return monops;
+	}
+	
+	public boolean allPlayerMonopoliesHasMortgagedProperties() throws PlaceDoesntExistsException{
+		
+		ArrayList<String> monopolyGroups = getMonopolies();
+		int monopolyCount = 0;
+		for (String group: monopolyGroups){
+            if (groupHasMortgagedProperties(group)){
+            	monopolyCount++;
+            }
+        }
+		
+		return (monopolyCount==monopolyGroups.size());
+	}
+	
+	public boolean groupHasMortgagedProperties(String groupName){
+		for (Block possession: possessions){
+			if (possession.getGroup().equals(groupName)){
+				return true;
+			}
+        }
+		return false;
+	}
+
+	public void configureUnmortgageOption() throws UnmortgageablePlaceException {
+        //adicionar opção de mortgage
+        if (hasMortgagedProperties()){
+            this.options.addUnmortgageOption();
+        }
+        else{
+            this.options.removeUnmortgageOption();
+        }
+		
+	}
+
+	private boolean hasMortgagedProperties() throws UnmortgageablePlaceException {
+		for (Block possession: possessions){
+            if (possession.isMortgaged()){
+                return true;
+            }
+        }
+		return false;
+	}
+
+	public void removeCash(int debitCash) {
+		this.cash -= debitCash;
+	}
+	
+	
+
 }
