@@ -1,0 +1,1 @@
+This project is a work for the class of Design Patterns and Frameworks.
